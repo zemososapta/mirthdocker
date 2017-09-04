@@ -6,7 +6,7 @@ ENV MIRTH_CONNECT_VERSION 3.5.0.8232.b2153
 # Install Nginx
 
 # Add application repository URL to the default sources
-RUN echo "deb http://archive.ubuntu.com/ubuntu/ raring main universe" >> /etc/apt/sources.list
+RUN echo "deb http://old-releases.ubuntu.com/ubuntu/ raring main universe" >> /etc/apt/sources.list
 # Update the repository
 RUN apt-get update
 
