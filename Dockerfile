@@ -51,7 +51,7 @@ RUN \
 
 WORKDIR /opt/mirth-connect
 
-EXPOSE 8888 8443 80
+EXPOSE 8888 8443 80 443
 ADD test.xml /
 COPY /docker-entrypoint.sh /
 ENTRYPOINT ["/docker-entrypoint.sh"]
