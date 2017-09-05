@@ -136,7 +136,7 @@
           <reattachAttachments>true</reattachAttachments>
         </destinationConnectorProperties>
         <scheme>FILE</scheme>
-        <host>/home/zemoso</host>
+        <host>/</host>
         <outputPattern>test</outputPattern>
         <anonymous>true</anonymous>
         <username>anonymous</username>
