@@ -3,7 +3,7 @@
   <nextMetaDataId>6</nextMetaDataId>
   <name>HL7-Inbound</name>
   <description></description>
-  <revision>16</revision>
+  <revision>54</revision>
   <sourceConnector version="3.5.0">
     <metaDataId>0</metaDataId>
     <name>sourceConnector</name>
@@ -50,7 +50,54 @@
       <staticResources/>
     </properties>
     <transformer version="3.5.0">
-      <elements/>
+      <elements>
+        <com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
+          <sequenceNumber>0</sequenceNumber>
+          <script>var date = msg[&apos;PID&apos;][&apos;PID.7&apos;][&apos;PID.7.1&apos;].toString();
+
+var Patient = {};
+
+Patient.resourceType = &quot;Patient&quot;;
+Patient.gender = msg[&apos;PID&apos;][&apos;PID.8&apos;][&apos;PID.8.1&apos;].toString();
+Patient.birthDate = date.substr(0,4) + &quot;-&quot; + date.substr(4,2) + &quot;-&quot; + date.substr(6,2);
+Patient.identifier = [{
+     &quot;use&quot;: &quot;usual&quot;,
+     &quot;type&quot;: {
+       &quot;coding&quot;: [
+         {
+           &quot;system&quot;: &quot;http://hl7.org/fhir/v2/0203&quot;,
+           &quot;code&quot;: &quot;MR&quot;
+         }
+       ]
+     },
+     &quot;value&quot;: msg[&apos;PID&apos;][&apos;PID.3&apos;][&apos;PID.3.1&apos;].toString()
+   }];
+
+
+
+var humanName = {
+	family: [msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.1&apos;].toString()],
+	given: [msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.2&apos;].toString()],
+	text: msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.2&apos;].toString() + &apos; &apos; + msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.1&apos;].toString()
+};
+Patient.name = [humanName];
+
+
+
+var messageHeader = {};
+
+messageHeader.resourceType = &quot;MessageHeader&quot;;
+messageHeader.source = {
+	name: msg[&apos;MSH&apos;][&apos;MSH.3&apos;][&apos;MSH.3.1&apos;].toString()
+}
+messageHeader.destination = [{
+	name: &apos;Meteor App&apos;
+}]
+messageHeader.data = [Patient];
+
+msg = JSON.stringify(messageHeader);</script>
+        </com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
+      </elements>
       <inboundTemplate encoding="base64"></inboundTemplate>
       <outboundTemplate encoding="base64"></outboundTemplate>
       <inboundDataType>HL7V2</inboundDataType>
@@ -137,7 +184,7 @@
         </destinationConnectorProperties>
         <scheme>FILE</scheme>
         <host>/</host>
-        <outputPattern>test</outputPattern>
+        <outputPattern>testSpringbootHL7toFHIR.txt</outputPattern>
         <anonymous>true</anonymous>
         <username>anonymous</username>
         <password>anonymous</password>
@@ -153,8 +200,15 @@
         <template>${message.encodedData}</template>
       </properties>
       <transformer version="3.5.0">
-        <elements/>
+        <elements>
+          <com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
+            <name>HL72 to FHRE</name>
+            <sequenceNumber>0</sequenceNumber>
+            <script></script>
+          </com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
+        </elements>
         <inboundTemplate encoding="base64"></inboundTemplate>
+        <outboundTemplate encoding="base64"></outboundTemplate>
         <inboundDataType>JSON</inboundDataType>
         <outboundDataType>JSON</outboundDataType>
         <inboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="3.5.0">
@@ -172,6 +226,8 @@
       </transformer>
       <responseTransformer version="3.5.0">
         <elements/>
+        <inboundTemplate encoding="base64"></inboundTemplate>
+        <outboundTemplate encoding="base64"></outboundTemplate>
         <inboundDataType>JSON</inboundDataType>
         <outboundDataType>JSON</outboundDataType>
         <inboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="3.5.0">
@@ -248,7 +304,7 @@ return;</undeployScript>
     <metadata>
       <enabled>true</enabled>
       <lastModified>
-        <time>1501251669237</time>
+        <time>1504602672368</time>
         <timezone>Asia/Kolkata</timezone>
       </lastModified>
       <pruningSettings>
