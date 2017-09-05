@@ -51,11 +51,11 @@ RUN \
 
 WORKDIR /opt/mirth-connect
 
-EXPOSE 8888 8443 80 
+EXPOSE 8888 8443 80 3000 9661
 ADD test.xml /
 COPY /docker-entrypoint.sh /
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
-CMD ["java", "-jar", "mirth-server-launcher.jar", "service nginx start"]
+CMD ./mirthconnect-wrapper.sh
 
 
