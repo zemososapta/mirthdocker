@@ -56,6 +56,6 @@ ADD test.xml /
 COPY /docker-entrypoint.sh /
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
-CMD ["java", "-jar", "mirth-server-launcher.jar"]
-CMD service nginx start
+CMD ["java", "-jar", "mirth-server-launcher.jar", "service nginx start"]
+
 
