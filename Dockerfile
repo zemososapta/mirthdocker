@@ -31,7 +31,7 @@ WORKDIR /opt/mirth-connect
 
 EXPOSE 9661 8443 80 443 8080
 ADD test.xml /
-ADD test.txt /
+ADD test /
 COPY /docker-entrypoint.sh /
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["java", "-jar", "mirth-server-launcher.jar"] 
