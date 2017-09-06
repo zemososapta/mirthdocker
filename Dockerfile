@@ -31,11 +31,11 @@ WORKDIR /opt/mirth-connect
 
 EXPOSE 9661 8443 80 443 8080
 ADD test.xml /
-ADD test /
+ADD output /
 
 RUN \
    cd / && \
-   chmod 777 test
+   chmod 777 output
 
 COPY /docker-entrypoint.sh /
 ENTRYPOINT ["/docker-entrypoint.sh"]

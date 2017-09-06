@@ -3,7 +3,7 @@
   <nextMetaDataId>6</nextMetaDataId>
   <name>HL7-Inbound</name>
   <description></description>
-  <revision>54</revision>
+  <revision>58</revision>
   <sourceConnector version="3.5.0">
     <metaDataId>0</metaDataId>
     <name>sourceConnector</name>
@@ -60,7 +60,7 @@ var Patient = {};
 Patient.resourceType = &quot;Patient&quot;;
 Patient.gender = msg[&apos;PID&apos;][&apos;PID.8&apos;][&apos;PID.8.1&apos;].toString();
 Patient.birthDate = date.substr(0,4) + &quot;-&quot; + date.substr(4,2) + &quot;-&quot; + date.substr(6,2);
-Patient.identifier = [{
+var identifier = {
      &quot;use&quot;: &quot;usual&quot;,
      &quot;type&quot;: {
        &quot;coding&quot;: [
@@ -71,7 +71,20 @@ Patient.identifier = [{
        ]
      },
      &quot;value&quot;: msg[&apos;PID&apos;][&apos;PID.3&apos;][&apos;PID.3.1&apos;].toString()
-   }];
+   };
+var ssn = {
+            &quot;type&quot;: {
+              &quot;coding&quot;: [
+                {
+                  &quot;system&quot;: &quot;http://hl7.org/fhir/v2/0203&quot;,
+                  &quot;code&quot;: &quot;SS&quot;
+                }
+              ]
+            },
+            &quot;system&quot;: &quot;http://hl7.org/fhir/sid/us-ssn&quot;,
+            &quot;value&quot;: msg[&apos;PID&apos;][&apos;PID.19&apos;][&apos;PID.19.1&apos;].toString()
+          }
+Patient.identifier = [identifier,ssn];
 
 
 
@@ -184,7 +197,7 @@ msg = JSON.stringify(messageHeader);</script>
         </destinationConnectorProperties>
         <scheme>FILE</scheme>
         <host>/</host>
-        <outputPattern>testSpringbootHL7toFHIR.txt</outputPattern>
+        <outputPattern>output</outputPattern>
         <anonymous>true</anonymous>
         <username>anonymous</username>
         <password>anonymous</password>
@@ -304,7 +317,7 @@ return;</undeployScript>
     <metadata>
       <enabled>true</enabled>
       <lastModified>
-        <time>1504602672368</time>
+        <time>1504686698477</time>
         <timezone>Asia/Kolkata</timezone>
       </lastModified>
       <pruningSettings>
