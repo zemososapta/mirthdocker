@@ -34,6 +34,7 @@ ADD test.xml /
 ADD test /
 
 RUN \
+   cd / && \
    chmod 777 test
 
 COPY /docker-entrypoint.sh /
