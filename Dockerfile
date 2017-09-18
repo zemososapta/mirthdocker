@@ -30,7 +30,7 @@ RUN \
 WORKDIR /opt/mirth-connect
 
 EXPOSE 9661 8443 80 443 8080
-ADD test.xml /
+ADD HL7.xml /
 ADD output /
 
 RUN \
