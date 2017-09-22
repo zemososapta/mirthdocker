@@ -1349,18 +1349,28 @@ function maskSSN(ssn) {
           <codeTemplate version="3.5.0">
             <id>37e7e63e-f39a-40e3-a835-df95d07a1286</id>
             <name>Function to check validity</name>
-            <revision>5</revision>
+            <revision>6</revision>
             <lastModified>
-              <time>1505988363164</time>
+              <time>1506076884932</time>
               <timezone>Asia/Kolkata</timezone>
             </lastModified>
             <contextSet>
               <delegate>
+                <contextType>GLOBAL_POSTPROCESSOR</contextType>
+                <contextType>CHANNEL_BATCH</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>CHANNEL_DEPLOY</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>GLOBAL_DEPLOY</contextType>
                 <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
                 <contextType>SOURCE_RECEIVER</contextType>
-                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>GLOBAL_PREPROCESSOR</contextType>
+                <contextType>GLOBAL_UNDEPLOY</contextType>
+                <contextType>CHANNEL_UNDEPLOY</contextType>
                 <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>CHANNEL_POSTPROCESSOR</contextType>
+                <contextType>CHANNEL_ATTACHMENT</contextType>
+                <contextType>CHANNEL_PREPROCESSOR</contextType>
               </delegate>
             </contextSet>
             <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -1382,18 +1392,28 @@ function isValid(arg1) {
           <codeTemplate version="3.5.0">
             <id>7af604fe-fdc5-4b4d-a662-0af5c3bfbd30</id>
             <name>Function to create address </name>
-            <revision>4</revision>
+            <revision>5</revision>
             <lastModified>
-              <time>1505981665627</time>
+              <time>1506076893207</time>
               <timezone>Asia/Kolkata</timezone>
             </lastModified>
             <contextSet>
               <delegate>
+                <contextType>GLOBAL_POSTPROCESSOR</contextType>
+                <contextType>CHANNEL_BATCH</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>CHANNEL_DEPLOY</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>GLOBAL_DEPLOY</contextType>
                 <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
                 <contextType>SOURCE_RECEIVER</contextType>
-                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>GLOBAL_PREPROCESSOR</contextType>
+                <contextType>GLOBAL_UNDEPLOY</contextType>
+                <contextType>CHANNEL_UNDEPLOY</contextType>
                 <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>CHANNEL_POSTPROCESSOR</contextType>
+                <contextType>CHANNEL_ATTACHMENT</contextType>
+                <contextType>CHANNEL_PREPROCESSOR</contextType>
               </delegate>
             </contextSet>
             <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -1423,18 +1443,28 @@ function addressUtil(use,addressText,line,city,state,postalCode) {
           <codeTemplate version="3.5.0">
             <id>cd04c40d-3c68-43bb-83cc-6ca221fd0510</id>
             <name>Function to create message header</name>
-            <revision>5</revision>
+            <revision>6</revision>
             <lastModified>
-              <time>1505986489577</time>
+              <time>1506076907838</time>
               <timezone>Asia/Kolkata</timezone>
             </lastModified>
             <contextSet>
               <delegate>
+                <contextType>GLOBAL_POSTPROCESSOR</contextType>
+                <contextType>CHANNEL_BATCH</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>CHANNEL_DEPLOY</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>GLOBAL_DEPLOY</contextType>
                 <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
                 <contextType>SOURCE_RECEIVER</contextType>
-                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>GLOBAL_PREPROCESSOR</contextType>
+                <contextType>GLOBAL_UNDEPLOY</contextType>
+                <contextType>CHANNEL_UNDEPLOY</contextType>
                 <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>CHANNEL_POSTPROCESSOR</contextType>
+                <contextType>CHANNEL_ATTACHMENT</contextType>
+                <contextType>CHANNEL_PREPROCESSOR</contextType>
               </delegate>
             </contextSet>
             <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
