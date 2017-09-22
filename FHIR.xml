@@ -1,9 +1,9 @@
 <channel version="3.5.0">
   <id>a2e7b476-50b9-42f1-a8f4-718b41b5c7fe</id>
   <nextMetaDataId>6</nextMetaDataId>
-  <name>FHIR Dedupe</name>
+  <name>FHIR-Dedupe</name>
   <description></description>
-  <revision>64</revision>
+  <revision>65</revision>
   <sourceConnector version="3.5.0">
     <metaDataId>0</metaDataId>
     <name>sourceConnector</name>
@@ -1235,7 +1235,7 @@ return;</undeployScript>
     <metadata>
       <enabled>true</enabled>
       <lastModified>
-        <time>1506063518913</time>
+        <time>1506071400052</time>
         <timezone>Asia/Kolkata</timezone>
       </lastModified>
       <pruningSettings>

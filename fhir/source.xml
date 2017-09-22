@@ -1,0 +1,29 @@
+<connectorMetaData path="fhir">
+	<name>FHIR Listener</name>
+	<author>Mirth Corporation</author>
+	<pluginVersion>3.5.1.b207</pluginVersion>
+	<mirthVersion>3.5.1</mirthVersion>
+	<url>http://www.mirthcorp.com</url>
+	<description>This connector allows Mirth to host a FHIR server and listen for incoming data.</description>
+	<clientClassName>com.mirth.connect.connectors.fhir.client.FhirListener</clientClassName>
+	<serverClassName>com.mirth.connect.connectors.fhir.server.FhirReceiver</serverClassName>
+	<sharedClassName>com.mirth.connect.connectors.fhir.shared.FhirReceiverProperties</sharedClassName>
+	<templateClassName>com.mirth.connect.connectors.fhir.client.FhirListenerCodeTemplatePlugin</templateClassName>
+	<userutilPackages>
+		<string>com.mirth.connect.connectors.fhir.server.userutil</string>
+		<string>com.mirth.connect.connectors.fhir.shared.userutil</string>
+	</userutilPackages>
+	<library type="CLIENT" path="fhir-client.jar" />
+	<library type="CLIENT" path="src/fhir-userutil-sources.jar" />
+	<library type="SHARED" path="fhir-shared.jar" />
+	<library type="SERVER" path="fhir-server.jar" />
+	<library type="SERVER" path="lib/hapi-fhir-base-1.2.jar" />
+	<library type="SERVER" path="lib/hapi-fhir-structures-dstu2-1.2.jar" />
+	<library type="SERVER" path="lib/hapi-fhir-validation-resources-dstu2-1.2.jar" />
+	<library type="SERVER" path="lib/ognl-3.0.8.jar" />
+	<library type="SERVER" path="lib/thymeleaf-2.1.4.RELEASE.jar" />
+	<library type="SERVER" path="lib/unbescape-1.1.0.RELEASE.jar" />
+	<transformers></transformers>
+	<protocol>fhir</protocol>
+	<type>SOURCE</type>
+</connectorMetaData>

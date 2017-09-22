@@ -3,7 +3,7 @@
   <nextMetaDataId>9</nextMetaDataId>
   <name>HL7-Inbound</name>
   <description></description>
-  <revision>128</revision>
+  <revision>130</revision>
   <sourceConnector version="3.5.0">
     <metaDataId>0</metaDataId>
     <name>sourceConnector</name>
@@ -722,7 +722,7 @@ TExFTnwxOTk1MDUwMTEyMDEKCgo=</inboundTemplate>
           <com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
             <name>DOB</name>
             <sequenceNumber>0</sequenceNumber>
-            <script>return isvalid(msg[&apos;PID&apos;][&apos;PID.7&apos;][&apos;PID.7.1&apos;].toString());isValid</script>
+            <script>return isValid(msg[&apos;PID&apos;][&apos;PID.7&apos;][&apos;PID.7.1&apos;].toString());isValid</script>
           </com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
           <com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
             <name>LNAME</name>
@@ -796,7 +796,7 @@ return;</undeployScript>
     <metadata>
       <enabled>true</enabled>
       <lastModified>
-        <time>1506063408657</time>
+        <time>1506071235611</time>
         <timezone>Asia/Kolkata</timezone>
       </lastModified>
       <pruningSettings>
