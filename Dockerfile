@@ -33,10 +33,6 @@ EXPOSE 9661 8443 80 443 8080
 ADD HL7.xml /
 ADD FHIR.xml /
 
-RUN \
-   cd / && \
-   chmod 777 output
-
 COPY /docker-entrypoint.sh /
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["java", "-jar", "mirth-server-launcher.jar"] 
