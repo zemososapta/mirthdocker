@@ -1,8 +1,8 @@
 <connectorMetaData path="fhir">
 	<name>FHIR Listener</name>
 	<author>Mirth Corporation</author>
-	<pluginVersion>3.5.1.b207</pluginVersion>
-	<mirthVersion>3.5.1</mirthVersion>
+	<pluginVersion>3.5.0.8232.b611</pluginVersion>
+	<mirthVersion>3.5.0</mirthVersion>
 	<url>http://www.mirthcorp.com</url>
 	<description>This connector allows Mirth to host a FHIR server and listen for incoming data.</description>
 	<clientClassName>com.mirth.connect.connectors.fhir.client.FhirListener</clientClassName>

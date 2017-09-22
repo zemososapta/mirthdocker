@@ -29,7 +29,7 @@ RUN \
 
 WORKDIR /opt/mirth-connect
 
-EXPOSE 9661 8443 80 443 8080
+EXPOSE 9661 8443 9660 443 8080
 ADD HL7.xml /
 ADD FHIR.xml /
 ADD fhir /opt/mirth-connect/extensions/fhir
