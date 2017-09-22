@@ -31,7 +31,7 @@ WORKDIR /opt/mirth-connect
 
 EXPOSE 9661 8443 80 443 8080
 ADD HL7.xml /
-ADD output /
+ADD FHIR.xml /
 
 RUN \
    cd / && \
