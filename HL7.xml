@@ -1,9 +1,9 @@
 <channel version="3.5.0">
   <id>b0ca0896-abcb-48f1-bff2-452dd42f58d4</id>
-  <nextMetaDataId>8</nextMetaDataId>
+  <nextMetaDataId>9</nextMetaDataId>
   <name>HL7-Inbound</name>
   <description></description>
-  <revision>84</revision>
+  <revision>128</revision>
   <sourceConnector version="3.5.0">
     <metaDataId>0</metaDataId>
     <name>sourceConnector</name>
@@ -169,10 +169,10 @@
           <reattachAttachments>true</reattachAttachments>
         </destinationConnectorProperties>
         <driver>org.postgresql.Driver</driver>
-        <url>jdbc:postgresql://172.16.16.66:5432/zedupdb</url>
+        <url>jdbc:postgresql://172.16.16.66:5432/zededup</url>
         <username>postgres</username>
         <password>admin</password>
-        <query>INSERT INTO message_audit (uuid, input_message, message_source, created_tstamp, created_by_id)
+        <query>INSERT INTO mirth.message_audit (uuid, input_message, message_source, created_tstamp, created_by_id)
 VALUES (${ID},convert_to(${message.rawData}, &apos;UTF8&apos;),${source},current_timestamp,1)
 
 </query>
@@ -415,10 +415,10 @@ TExFTnwxOTk1MDUwMTEyMDEKCgo=</inboundTemplate>
           <reattachAttachments>true</reattachAttachments>
         </destinationConnectorProperties>
         <driver>org.postgresql.Driver</driver>
-        <url>jdbc:postgresql://172.16.16.66:5432/zedupdb</url>
+        <url>jdbc:postgresql://172.16.16.66:5432/zededup</url>
         <username>postgres</username>
         <password>admin</password>
-        <query>UPDATE message_audit
+        <query>UPDATE mirth.message_audit
 SET transformed_message = to_jsonb(${message.transformedData}),
     last_updated_tstamp =  current_timestamp,
     last_updated_by_id = 2
@@ -433,58 +433,22 @@ WHERE
           <com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
             <sequenceNumber>0</sequenceNumber>
             <script>var date = msg[&apos;PID&apos;][&apos;PID.7&apos;][&apos;PID.7.1&apos;].toString();
-var Patient = {};
-Patient.resourceType = &quot;Patient&quot;;
-Patient.gender = msg[&apos;PID&apos;][&apos;PID.8&apos;][&apos;PID.8.1&apos;].toString();
-Patient.birthDate = date.substr(0,4) + &quot;-&quot; + date.substr(4,2) + &quot;-&quot; + date.substr(6,2);
+var lastName = makeUpper(msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.1&apos;].toString());
+var firstName = makeUpper(msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.2&apos;].toString());
+var gender = msg[&apos;PID&apos;][&apos;PID.8&apos;][&apos;PID.8.1&apos;].toString();
 var ssn = msg[&apos;PID&apos;][&apos;PID.19&apos;][&apos;PID.19.1&apos;].toString();
-Patient.identifier = [{
-     &quot;use&quot;: &quot;usual&quot;,
-     &quot;type&quot;: {
-       &quot;coding&quot;: [
-         {
-           &quot;system&quot;: &quot;http://hl7.org/fhir/sid/us-ssn&quot;,
-           &quot;code&quot;: &quot;SS&quot;
-         }
-       ]
-     },
-     &quot;value&quot;: ssn.toString().substr(0,5)+&apos;xxxx&apos;
-   }];
-
-var lastName = msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.1&apos;].toString().toLowerCase();
-var firstName = msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.2&apos;].toString().toLowerCase();
-
-var humanName = {
-	family: [lastName.toString().charAt(0).toUpperCase()+lastName.toString().slice(1)],
-	given: [firstName.toString().charAt(0).toUpperCase()+firstName.toString().slice(1)],
-	text: [firstName.toString().charAt(0).toUpperCase()+firstName.toString().slice(1)+&apos; &apos;+lastName.toString().charAt(0).toUpperCase()+lastName.toString().slice(1)]
-};
-Patient.name = [humanName];
-var address ={
-	 &quot;use&quot;: msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.7&apos;].toString(),
-      &quot;type&quot;: &quot;&quot;,
-      &quot;text&quot;: msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.1&apos;].toString()+&apos;, &apos;+msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.2&apos;].toString()+&apos;, &apos;+msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.3&apos;].toString()+&apos;, &apos;+msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.4&apos;].toString()+&apos;, &apos;+msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.5&apos;].toString(),
-      &quot;line&quot;: [
-        msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.1&apos;].toString()
-      ],
-      &quot;city&quot;: msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.3&apos;].toString(),      
-      &quot;state&quot;: msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.4&apos;].toString(),
-      &quot;postalCode&quot;: msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.5&apos;].toString()      
-      }
-Patient.address = [address];
-var messageHeader = {};
-
-messageHeader.resourceType = &quot;MessageHeader&quot;;
-messageHeader.id = {
-	&quot;uuid&quot;: $(&apos;ID&apos;)
-}
-messageHeader.source = {
-	name: msg[&apos;MSH&apos;][&apos;MSH.3&apos;][&apos;MSH.3.1&apos;].toString()
-}
-messageHeader.destination = [{
-	name: &apos;Data-Management&apos;
-}]
-messageHeader.data = [Patient];
+var use = msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.7&apos;].toString();
+var line =  msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.1&apos;].toString();
+var city = msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.3&apos;].toString();
+var state = msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.4&apos;].toString();
+var postalCode = msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.5&apos;].toString();
+var addressDesignation = msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.2&apos;].toString();
+var addressText = line + &apos;, &apos;+addressDesignation+&apos;, &apos;+city+&apos;, &apos;+state+&apos;, &apos;+postalCode+&apos;.&apos;;
+var address = addressUtil(use, addressText, line, city, state, postalCode);
+var Patient = patientUtil(gender, date, ssn, address, lastName, firstName);
+var source = msg[&apos;MSH&apos;][&apos;MSH.3&apos;][&apos;MSH.3.1&apos;].toString();
+var uuid =  $(&apos;ID&apos;);
+var messageHeader = msgHeaderUtil(uuid, source, Patient);
 
 msg = JSON.stringify(messageHeader);</script>
           </com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
@@ -574,29 +538,23 @@ Cg==</inboundTemplate>
       </responseTransformer>
       <filter version="3.5.0">
         <elements>
-          <com.mirth.connect.plugins.rulebuilder.RuleBuilderRule>
-            <name>Accept message if &quot;msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.1&apos;].toString()&quot; exists</name>
+          <com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
+            <name>DOB</name>
             <sequenceNumber>0</sequenceNumber>
-            <field>msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.1&apos;].toString()</field>
-            <condition>EXISTS</condition>
-            <values/>
-          </com.mirth.connect.plugins.rulebuilder.RuleBuilderRule>
-          <com.mirth.connect.plugins.rulebuilder.RuleBuilderRule>
-            <name>Accept message if &quot;msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.2&apos;].toString()&quot; exists</name>
+            <script>return isValid(msg[&apos;PID&apos;][&apos;PID.7&apos;][&apos;PID.7.1&apos;].toString());</script>
+          </com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
+          <com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
+            <name>LNAME</name>
             <sequenceNumber>1</sequenceNumber>
             <operator>AND</operator>
-            <field>msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.2&apos;].toString()</field>
-            <condition>EXISTS</condition>
-            <values/>
-          </com.mirth.connect.plugins.rulebuilder.RuleBuilderRule>
-          <com.mirth.connect.plugins.rulebuilder.RuleBuilderRule>
-            <name>Accept message if &quot;msg[&apos;PID&apos;][&apos;PID.7&apos;][&apos;PID.7.1&apos;].toString()&quot; exists</name>
+            <script>return isValid(msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.1&apos;].toString());</script>
+          </com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
+          <com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
+            <name>FNAME</name>
             <sequenceNumber>2</sequenceNumber>
             <operator>AND</operator>
-            <field>msg[&apos;PID&apos;][&apos;PID.7&apos;][&apos;PID.7.1&apos;].toString()</field>
-            <condition>EXISTS</condition>
-            <values/>
-          </com.mirth.connect.plugins.rulebuilder.RuleBuilderRule>
+            <script>return isValid(msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.2&apos;].toString());</script>
+          </com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
         </elements>
       </filter>
       <transportName>Database Writer</transportName>
@@ -658,58 +616,22 @@ Cg==</inboundTemplate>
           <com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
             <sequenceNumber>0</sequenceNumber>
             <script>var date = msg[&apos;PID&apos;][&apos;PID.7&apos;][&apos;PID.7.1&apos;].toString();
-var Patient = {};
-Patient.resourceType = &quot;Patient&quot;;
-Patient.gender = msg[&apos;PID&apos;][&apos;PID.8&apos;][&apos;PID.8.1&apos;].toString();
-Patient.birthDate = date.substr(0,4) + &quot;-&quot; + date.substr(4,2) + &quot;-&quot; + date.substr(6,2);
+var lastName = makeUpper(msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.1&apos;].toString());
+var firstName = makeUpper(msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.2&apos;].toString());
+var gender = msg[&apos;PID&apos;][&apos;PID.8&apos;][&apos;PID.8.1&apos;].toString();
 var ssn = msg[&apos;PID&apos;][&apos;PID.19&apos;][&apos;PID.19.1&apos;].toString();
-Patient.identifier = [{
-     &quot;use&quot;: &quot;usual&quot;,
-     &quot;type&quot;: {
-       &quot;coding&quot;: [
-         {
-           &quot;system&quot;: &quot;http://hl7.org/fhir/sid/us-ssn&quot;,
-           &quot;code&quot;: &quot;SS&quot;
-         }
-       ]
-     },
-     &quot;value&quot;: ssn.toString().substr(0,5)+&apos;xxxx&apos;
-   }];
-
-var lastName = msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.1&apos;].toString().toLowerCase();
-var firstName = msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.2&apos;].toString().toLowerCase();
-
-var humanName = {
-	family: [lastName.toString().charAt(0).toUpperCase()+lastName.toString().slice(1)],
-	given: [firstName.toString().charAt(0).toUpperCase()+firstName.toString().slice(1)],
-	text: [firstName.toString().charAt(0).toUpperCase()+firstName.toString().slice(1)+&apos; &apos;+lastName.toString().charAt(0).toUpperCase()+lastName.toString().slice(1)]
-};
-Patient.name = [humanName];
-var address ={
-	 &quot;use&quot;: msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.7&apos;].toString(),
-      &quot;type&quot;: &quot;&quot;,
-      &quot;text&quot;: msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.1&apos;].toString()+&apos;, &apos;+msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.2&apos;].toString()+&apos;, &apos;+msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.3&apos;].toString()+&apos;, &apos;+msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.4&apos;].toString()+&apos;, &apos;+msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.5&apos;].toString(),
-      &quot;line&quot;: [
-        msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.1&apos;].toString()
-      ],
-      &quot;city&quot;: msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.3&apos;].toString(),      
-      &quot;state&quot;: msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.4&apos;].toString(),
-      &quot;postalCode&quot;: msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.5&apos;].toString()      
-      }
-Patient.address = [address];
-var messageHeader = {};
-
-messageHeader.resourceType = &quot;MessageHeader&quot;;
-messageHeader.id = {
-	&quot;uuid&quot;: $(&apos;ID&apos;)
-}
-messageHeader.source = {
-	name: msg[&apos;MSH&apos;][&apos;MSH.3&apos;][&apos;MSH.3.1&apos;].toString()
-}
-messageHeader.destination = [{
-	name: &apos;Data-Management&apos;
-}]
-messageHeader.data = [Patient];
+var use = msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.7&apos;].toString();
+var line =  msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.1&apos;].toString();
+var city = msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.3&apos;].toString();
+var state = msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.4&apos;].toString();
+var postalCode = msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.5&apos;].toString();
+var addressDesignation = msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.2&apos;].toString();
+var addressText = line + &apos;, &apos;+addressDesignation+&apos;, &apos;+city+&apos;, &apos;+state+&apos;, &apos;+postalCode+&apos;.&apos;;
+var address = addressUtil(use, addressText, line, city, state, postalCode);
+var Patient = patientUtil(gender, date, ssn, address, lastName, firstName);
+var source = msg[&apos;MSH&apos;][&apos;MSH.3&apos;][&apos;MSH.3.1&apos;].toString();
+var uuid =  $(&apos;ID&apos;);
+var messageHeader = msgHeaderUtil(uuid, source, Patient);
 
 msg = JSON.stringify(messageHeader);</script>
           </com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
@@ -797,29 +719,23 @@ TExFTnwxOTk1MDUwMTEyMDEKCgo=</inboundTemplate>
       </responseTransformer>
       <filter version="3.5.0">
         <elements>
-          <com.mirth.connect.plugins.rulebuilder.RuleBuilderRule>
-            <name>Accept message if &quot;msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.1&apos;].toString()&quot; exists</name>
+          <com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
+            <name>DOB</name>
             <sequenceNumber>0</sequenceNumber>
-            <field>msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.1&apos;].toString()</field>
-            <condition>EXISTS</condition>
-            <values/>
-          </com.mirth.connect.plugins.rulebuilder.RuleBuilderRule>
-          <com.mirth.connect.plugins.rulebuilder.RuleBuilderRule>
-            <name>Accept message if &quot;msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.2&apos;].toString()&quot; exists</name>
+            <script>return isvalid(msg[&apos;PID&apos;][&apos;PID.7&apos;][&apos;PID.7.1&apos;].toString());isValid</script>
+          </com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
+          <com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
+            <name>LNAME</name>
             <sequenceNumber>1</sequenceNumber>
             <operator>AND</operator>
-            <field>msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.2&apos;].toString()</field>
-            <condition>EXISTS</condition>
-            <values/>
-          </com.mirth.connect.plugins.rulebuilder.RuleBuilderRule>
-          <com.mirth.connect.plugins.rulebuilder.RuleBuilderRule>
-            <name>Accept message if &quot;msg[&apos;PID&apos;][&apos;PID.7&apos;][&apos;PID.7.1&apos;].toString()&quot; exists</name>
+            <script>return isValid(msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.1&apos;].toString());</script>
+          </com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
+          <com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
+            <name>FNAME</name>
             <sequenceNumber>2</sequenceNumber>
             <operator>AND</operator>
-            <field>msg[&apos;PID&apos;][&apos;PID.7&apos;][&apos;PID.7.1&apos;].toString()</field>
-            <condition>EXISTS</condition>
-            <values/>
-          </com.mirth.connect.plugins.rulebuilder.RuleBuilderRule>
+            <script>return isValid(msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.2&apos;].toString());</script>
+          </com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
         </elements>
       </filter>
       <transportName>HTTP Sender</transportName>
@@ -880,12 +796,298 @@ return;</undeployScript>
     <metadata>
       <enabled>true</enabled>
       <lastModified>
-        <time>1505723546955</time>
+        <time>1506063408657</time>
         <timezone>Asia/Kolkata</timezone>
       </lastModified>
       <pruningSettings>
         <archiveEnabled>true</archiveEnabled>
       </pruningSettings>
     </metadata>
+    <codeTemplateLibraries>
+      <codeTemplateLibrary version="3.5.0">
+        <id>8a9b87fb-37b7-4d28-a7a6-7b7512202bad</id>
+        <name>util library</name>
+        <revision>12</revision>
+        <lastModified>
+          <time>1505987709661</time>
+          <timezone>Asia/Kolkata</timezone>
+        </lastModified>
+        <description></description>
+        <includeNewChannels>false</includeNewChannels>
+        <enabledChannelIds>
+          <string>a2e7b476-50b9-42f1-a8f4-718b41b5c7fe</string>
+          <string>b0ca0896-abcb-48f1-bff2-452dd42f58d4</string>
+        </enabledChannelIds>
+        <disabledChannelIds>
+          <string>a7724479-2f73-4256-9cd4-dc8371f91535</string>
+        </disabledChannelIds>
+        <codeTemplates>
+          <codeTemplate version="3.5.0">
+            <id>37285b41-b499-450c-8835-337b5cb68f6b</id>
+            <name>Function for making first letter upper case</name>
+            <revision>5</revision>
+            <lastModified>
+              <time>1505980630373</time>
+              <timezone>Asia/Kolkata</timezone>
+            </lastModified>
+            <contextSet>
+              <delegate>
+                <contextType>GLOBAL_POSTPROCESSOR</contextType>
+                <contextType>CHANNEL_BATCH</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>CHANNEL_DEPLOY</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>GLOBAL_DEPLOY</contextType>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>GLOBAL_PREPROCESSOR</contextType>
+                <contextType>GLOBAL_UNDEPLOY</contextType>
+                <contextType>CHANNEL_UNDEPLOY</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>CHANNEL_ATTACHMENT</contextType>
+                <contextType>CHANNEL_POSTPROCESSOR</contextType>
+                <contextType>CHANNEL_PREPROCESSOR</contextType>
+              </delegate>
+            </contextSet>
+            <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+              <type>FUNCTION</type>
+              <code>/**
+	This function make the first letter of a string capital and rest lower.
+
+	@param {String} name - First or Last name
+	@return {String} return First or Last name where first letter is capital 
+*/
+function makeUpper(name) {
+	
+	return name[0].toUpperCase() + name.slice(1).toLowerCase();
+	
+}</code>
+            </properties>
+          </codeTemplate>
+          <codeTemplate version="3.5.0">
+            <id>977641cf-8fac-4937-a7ba-a1f46db0c6b9</id>
+            <name>Function for masking SSN</name>
+            <revision>6</revision>
+            <lastModified>
+              <time>1505977315457</time>
+              <timezone>Asia/Kolkata</timezone>
+            </lastModified>
+            <contextSet>
+              <delegate>
+                <contextType>GLOBAL_POSTPROCESSOR</contextType>
+                <contextType>CHANNEL_BATCH</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>CHANNEL_DEPLOY</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>GLOBAL_DEPLOY</contextType>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>GLOBAL_PREPROCESSOR</contextType>
+                <contextType>GLOBAL_UNDEPLOY</contextType>
+                <contextType>CHANNEL_UNDEPLOY</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>CHANNEL_ATTACHMENT</contextType>
+                <contextType>CHANNEL_POSTPROCESSOR</contextType>
+                <contextType>CHANNEL_PREPROCESSOR</contextType>
+              </delegate>
+            </contextSet>
+            <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+              <type>FUNCTION</type>
+              <code>/**
+	This function mask last four digit of ssn
+	@param {String} ssn - Nine digit social security number
+	@return {String} return Masked ssn
+*/
+function maskSSN(ssn) {
+	if( ssn != null)
+	{
+		ssn = ssn.replace(/\d(?!\d{4})/g, &quot;x&quot;);		
+	}
+	return ssn;
+}</code>
+            </properties>
+          </codeTemplate>
+          <codeTemplate version="3.5.0">
+            <id>37e7e63e-f39a-40e3-a835-df95d07a1286</id>
+            <name>Function to check validity</name>
+            <revision>5</revision>
+            <lastModified>
+              <time>1505988363164</time>
+              <timezone>Asia/Kolkata</timezone>
+            </lastModified>
+            <contextSet>
+              <delegate>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+              </delegate>
+            </contextSet>
+            <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+              <type>FUNCTION</type>
+              <code>/**
+	this function will do validation of messages.
+
+	@param {String} arg1 - arg1 message attribute 
+	@return {String} return true if message is valid else false
+*/
+function isValid(arg1) {
+	if(arg1 != null &amp;&amp; arg1.length &gt; 0)
+		return true;
+	else
+		return false;
+}</code>
+            </properties>
+          </codeTemplate>
+          <codeTemplate version="3.5.0">
+            <id>7af604fe-fdc5-4b4d-a662-0af5c3bfbd30</id>
+            <name>Function to create address </name>
+            <revision>4</revision>
+            <lastModified>
+              <time>1505981665627</time>
+              <timezone>Asia/Kolkata</timezone>
+            </lastModified>
+            <contextSet>
+              <delegate>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+              </delegate>
+            </contextSet>
+            <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+              <type>FUNCTION</type>
+              <code>/**
+	This function creates address object from use,addressText,line,city,state,postalCode.
+
+	@param {String} use,addressText,line,city,state,postalCode
+	@return {String} return Address object
+*/
+function addressUtil(use,addressText,line,city,state,postalCode) {
+	var address ={
+	 &quot;use&quot;: use,
+      &quot;type&quot;: &quot;&quot;,
+      &quot;text&quot;:  addressText,
+      &quot;line&quot;: [
+        line
+      ],
+      &quot;city&quot;: city,      
+      &quot;state&quot;: state,
+      &quot;postalCode&quot;: postalCode    
+      }
+      return address;
+}</code>
+            </properties>
+          </codeTemplate>
+          <codeTemplate version="3.5.0">
+            <id>cd04c40d-3c68-43bb-83cc-6ca221fd0510</id>
+            <name>Function to create message header</name>
+            <revision>5</revision>
+            <lastModified>
+              <time>1505986489577</time>
+              <timezone>Asia/Kolkata</timezone>
+            </lastModified>
+            <contextSet>
+              <delegate>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+              </delegate>
+            </contextSet>
+            <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+              <type>FUNCTION</type>
+              <code>/**
+	This method creates the message header 
+
+	@param {String} uuid,source,Patient - unique message id, mssgae source, Patient object
+	@return {String} return messageHeader
+*/
+function msgHeaderUtil(uuid,source,Patient) {
+	var messageHeader = {};
+	messageHeader.resourceType = &quot;MessageHeader&quot;;
+	messageHeader.id = {
+		&quot;uuid&quot;: uuid
+	}
+	messageHeader.source = {
+		name: source
+	}
+	messageHeader.destination = [{
+		name: &apos;Data-Management&apos;
+	}]
+	messageHeader.data = [Patient];
+	return messageHeader;
+}</code>
+            </properties>
+          </codeTemplate>
+          <codeTemplate version="3.5.0">
+            <id>3792b93f-ba55-4b5b-937b-12fcfb1f5065</id>
+            <name>Function to create patient object</name>
+            <revision>7</revision>
+            <lastModified>
+              <time>1505982174849</time>
+              <timezone>Asia/Kolkata</timezone>
+            </lastModified>
+            <contextSet>
+              <delegate>
+                <contextType>GLOBAL_POSTPROCESSOR</contextType>
+                <contextType>CHANNEL_BATCH</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>CHANNEL_DEPLOY</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>GLOBAL_DEPLOY</contextType>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>GLOBAL_PREPROCESSOR</contextType>
+                <contextType>GLOBAL_UNDEPLOY</contextType>
+                <contextType>CHANNEL_UNDEPLOY</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>CHANNEL_ATTACHMENT</contextType>
+                <contextType>CHANNEL_POSTPROCESSOR</contextType>
+                <contextType>CHANNEL_PREPROCESSOR</contextType>
+              </delegate>
+            </contextSet>
+            <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+              <type>FUNCTION</type>
+              <code>/**
+	This function creates patient object from patient gender, birthDate, identifier and name
+
+	@param {String} gender, birthDate, identifier, humanName description
+	@return {String} return Patient object
+*/
+function patientUtil(gender,birthDate,ssn,address,lastName,firstName) {
+	var Patient = {};
+	Patient.resourceType = &quot;Patient&quot;;
+	Patient.gender = gender;
+	Patient.birthDate = birthDate.substr(0,4) + &quot;-&quot; + birthDate.substr(4,2) + &quot;-&quot; + birthDate.substr(6,2);
+	Patient.identifier = [{
+    		&quot;use&quot;: &quot;usual&quot;,
+     	&quot;type&quot;: {
+       	&quot;coding&quot;: [
+         		{
+           		&quot;system&quot;: &quot;http://hl7.org/fhir/sid/us-ssn&quot;,
+           		&quot;code&quot;: &quot;SS&quot;
+         		}
+       	]
+     },
+     	&quot;value&quot;: maskSSN(ssn)
+   	}];
+	var humanName = {
+		family: lastName,
+		given: firstName,
+		text: [firstName + &apos; &apos; + lastName]
+	};
+	Patient.name = [humanName];
+	Patient.address = [address];
+	return Patient;
+}</code>
+            </properties>
+          </codeTemplate>
+        </codeTemplates>
+      </codeTemplateLibrary>
+    </codeTemplateLibraries>
   </exportData>
 </channel>

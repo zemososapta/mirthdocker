@@ -1,0 +1,1532 @@
+<channel version="3.5.0">
+  <id>a2e7b476-50b9-42f1-a8f4-718b41b5c7fe</id>
+  <nextMetaDataId>6</nextMetaDataId>
+  <name>FHIR Dedupe</name>
+  <description></description>
+  <revision>64</revision>
+  <sourceConnector version="3.5.0">
+    <metaDataId>0</metaDataId>
+    <name>sourceConnector</name>
+    <properties class="com.mirth.connect.connectors.fhir.shared.FhirReceiverProperties" version="3.5.0">
+      <pluginProperties>
+        <com.mirth.connect.plugins.httpauth.NoneHttpAuthProperties version="3.5.0">
+  <authType>NONE</authType>
+        </com.mirth.connect.plugins.httpauth.NoneHttpAuthProperties>
+      </pluginProperties>
+      <listenerConnectorProperties version="3.5.0">
+        <host>0.0.0.0</host>
+        <port>80</port>
+      </listenerConnectorProperties>
+      <sourceConnectorProperties version="3.5.0">
+        <responseVariable>Auto-generate (Before processing)</responseVariable>
+        <respondAfterProcessing>true</respondAfterProcessing>
+        <processBatch>false</processBatch>
+        <firstResponse>false</firstResponse>
+        <processingThreads>1</processingThreads>
+        <resourceIds class="linked-hash-map">
+          <entry>
+            <string>Default Resource</string>
+            <string>[Default Resource]</string>
+          </entry>
+        </resourceIds>
+        <queueBufferSize>1000</queueBufferSize>
+      </sourceConnectorProperties>
+      <contextPath>dstu2</contextPath>
+      <timeout>0</timeout>
+      <conformanceTemplate>&lt;Conformance xmlns=&quot;http://hl7.org/fhir&quot;&gt;
+    &lt;rest&gt;
+        &lt;mode value=&quot;server&quot;/&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;AllergyIntolerance&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;Appointment&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;AppointmentResponse&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;AuditEvent&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;Basic&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;Binary&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;BodySite&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;Bundle&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;CarePlan&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;Claim&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;ClaimResponse&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;ClinicalImpression&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;Communication&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;CommunicationRequest&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;Composition&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;ConceptMap&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;Condition&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;Conformance&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;DetectedIssue&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;Coverage&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;DataElement&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;Device&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;DeviceComponent&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;DeviceMetric&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;DeviceUseRequest&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;DeviceUseStatement&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;DiagnosticOrder&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;DiagnosticReport&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;DocumentManifest&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;DocumentReference&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;EligibilityRequest&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;EligibilityResponse&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;Encounter&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;EnrollmentRequest&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;EnrollmentResponse&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;EpisodeOfCare&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;ExplanationOfBenefit&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;FamilyMemberHistory&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;Flag&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;Goal&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;Group&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;HealthcareService&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;ImagingObjectSelection&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;ImagingStudy&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;Patient&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+            &lt;searchParam&gt;
+			 &lt;name value=&quot;identifier&quot;/&gt;
+			 &lt;definition value=&quot;http://hl7.org/fhir/SearchParameter/patient-identifier&quot;/&gt;
+			 &lt;type value=&quot;token&quot;/&gt;
+			 &lt;documentation value=&quot;A patient identifier&quot;/&gt;
+		  &lt;/searchParam&gt;
+            &lt;searchParam&gt;
+                &lt;name value=&quot;name&quot;/&gt;
+                &lt;definition value=&quot;http://hl7.org/fhir/SearchParameter/Patient-name&quot;/&gt;
+                &lt;type value=&quot;string&quot;/&gt;
+                &lt;documentation value=&quot;Case insensitive and partial-value searching&quot;/&gt;
+                &lt;modifier value=&quot;contains&quot;/&gt;
+            &lt;/searchParam&gt;
+            &lt;searchParam&gt;
+                &lt;name value=&quot;family&quot;/&gt;
+                &lt;definition value=&quot;http://hl7.org/fhir/SearchParameter/Patient-family&quot;/&gt;
+                &lt;type value=&quot;string&quot;/&gt;
+                &lt;documentation value=&quot;Case insensitive and partial-value searching&quot;/&gt;
+                &lt;modifier value=&quot;contains&quot;/&gt;
+            &lt;/searchParam&gt;
+            &lt;searchParam&gt;
+                &lt;name value=&quot;given&quot;/&gt;
+                &lt;definition value=&quot;http://hl7.org/fhir/SearchParameter/Patient-given&quot;/&gt;
+                &lt;type value=&quot;string&quot;/&gt;
+                &lt;documentation value=&quot;Case insensitive and partial-value searching&quot;/&gt;
+                &lt;modifier value=&quot;contains&quot;/&gt;
+            &lt;/searchParam&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;RelatedPerson&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;RiskAssessment&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;Schedule&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+		  &lt;searchParam&gt;
+        		 &lt;name value=&quot;identifier&quot;/&gt;
+        		 &lt;definition value=&quot;http://hl7.org/fhir/SearchParameter/schedule-identifier&quot;/&gt;
+        		 &lt;type value=&quot;token&quot;/&gt;
+        		 &lt;documentation value=&quot;A Schedule Identifier&quot;/&gt;
+      	  &lt;/searchParam&gt;
+      	  &lt;searchParam&gt;
+        		 &lt;name value=&quot;actor&quot;/&gt;
+        		 &lt;definition value=&quot;http://hl7.org/fhir/SearchParameter/schedule-actor&quot;/&gt;
+        		 &lt;type value=&quot;reference&quot;/&gt;
+        		 &lt;documentation value=&quot;The individual(HealthcareService, Practitioner, Location, ...) to find a Schedule for&quot;/&gt;
+      	  &lt;/searchParam&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;SearchParameter&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;Slot&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+		  &lt;searchParam&gt;
+        		 &lt;name value=&quot;identifier&quot;/&gt;
+        		 &lt;definition value=&quot;http://hl7.org/fhir/SearchParameter/slot-identifier&quot;/&gt;
+        		 &lt;type value=&quot;token&quot;/&gt;
+        		 &lt;documentation value=&quot;A Slot Identifier&quot;/&gt;
+      	  &lt;/searchParam&gt;
+      	  &lt;searchParam&gt;
+        		 &lt;name value=&quot;schedule&quot;/&gt;
+        		 &lt;definition value=&quot;http://hl7.org/fhir/SearchParameter/slot-schedule&quot;/&gt;
+        		 &lt;type value=&quot;reference&quot;/&gt;
+        		 &lt;documentation value=&quot;The Schedule Resource that we are seeking a slot within&quot;/&gt;
+      	  &lt;/searchParam&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;Specimen&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;StructureDefinition&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;Subscription&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;Substance&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;SupplyRequest&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;SupplyDelivery&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;TestScript&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;ValueSet&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;resource&gt;
+            &lt;type value=&quot;VisionPrescription&quot;/&gt;
+            &lt;versioning value=&quot;versioned&quot;/&gt;
+            &lt;readHistory value=&quot;true&quot;/&gt;
+            &lt;updateCreate value=&quot;true&quot;/&gt;
+        &lt;/resource&gt;
+        &lt;searchParam&gt;
+            &lt;name value=&quot;_id&quot;/&gt;
+            &lt;definition value=&quot;http://hl7.org/fhir/SearchParameter/resource-id&quot;/&gt;
+            &lt;type value=&quot;token&quot;/&gt;
+            &lt;documentation value=&quot;Logical id of this artifact&quot;/&gt;
+        &lt;/searchParam&gt;
+        &lt;searchParam&gt;
+            &lt;name value=&quot;_lastUpdated&quot;/&gt;
+            &lt;definition value=&quot;http://hl7.org/fhir/SearchParameter/resource-lastUpdated&quot;/&gt;
+            &lt;type value=&quot;date&quot;/&gt;
+            &lt;documentation value=&quot;When the resource version last changed&quot;/&gt;
+            &lt;target value=&quot;Patient&quot;/&gt;
+        &lt;/searchParam&gt;
+    &lt;/rest&gt;
+&lt;/Conformance&gt;</conformanceTemplate>
+      <conformanceURL></conformanceURL>
+      <conformanceName>Mirth Connect FHIR Server</conformanceName>
+      <supportsXML>true</supportsXML>
+      <supportsJSON>true</supportsJSON>
+      <systemInteractions>
+        <com.mirth.connect.connectors.fhir.shared.FhirRestfulInteraction>FHIR_SEARCH_SYSTEM</com.mirth.connect.connectors.fhir.shared.FhirRestfulInteraction>
+        <com.mirth.connect.connectors.fhir.shared.FhirRestfulInteraction>FHIR_TRANSACTION</com.mirth.connect.connectors.fhir.shared.FhirRestfulInteraction>
+        <com.mirth.connect.connectors.fhir.shared.FhirRestfulInteraction>FHIR_HISTORY_SYSTEM</com.mirth.connect.connectors.fhir.shared.FhirRestfulInteraction>
+      </systemInteractions>
+      <resourceProperties>
+        <disabledInteractions/>
+      </resourceProperties>
+    </properties>
+    <transformer version="3.5.0">
+      <elements/>
+      <inboundDataType>JSON</inboundDataType>
+      <outboundDataType>JSON</outboundDataType>
+      <inboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="3.5.0">
+        <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="3.5.0">
+          <splitType>JavaScript</splitType>
+          <batchScript></batchScript>
+        </batchProperties>
+      </inboundProperties>
+      <outboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="3.5.0">
+        <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="3.5.0">
+          <splitType>JavaScript</splitType>
+          <batchScript></batchScript>
+        </batchProperties>
+      </outboundProperties>
+    </transformer>
+    <filter version="3.5.0">
+      <elements/>
+    </filter>
+    <transportName>FHIR Listener</transportName>
+    <mode>SOURCE</mode>
+    <enabled>true</enabled>
+    <waitForPrevious>true</waitForPrevious>
+  </sourceConnector>
+  <destinationConnectors>
+    <connector version="3.5.0">
+      <metaDataId>1</metaDataId>
+      <name>Raw-FHIR-PostgreSQL-</name>
+      <properties class="com.mirth.connect.connectors.jdbc.DatabaseDispatcherProperties" version="3.5.0">
+        <pluginProperties/>
+        <destinationConnectorProperties version="3.5.0">
+          <queueEnabled>false</queueEnabled>
+          <sendFirst>false</sendFirst>
+          <retryIntervalMillis>10000</retryIntervalMillis>
+          <regenerateTemplate>false</regenerateTemplate>
+          <retryCount>0</retryCount>
+          <rotate>false</rotate>
+          <includeFilterTransformer>false</includeFilterTransformer>
+          <threadCount>1</threadCount>
+          <threadAssignmentVariable></threadAssignmentVariable>
+          <validateResponse>false</validateResponse>
+          <resourceIds class="linked-hash-map">
+            <entry>
+              <string>Default Resource</string>
+              <string>[Default Resource]</string>
+            </entry>
+          </resourceIds>
+          <queueBufferSize>1000</queueBufferSize>
+          <reattachAttachments>true</reattachAttachments>
+        </destinationConnectorProperties>
+        <driver>org.postgresql.Driver</driver>
+        <url>jdbc:postgresql://172.16.16.66:5432/zededup</url>
+        <username>postgres</username>
+        <password>admin</password>
+        <query>INSERT INTO mirth.message_audit (uuid, input_message, message_source, created_tstamp, created_by_id)
+VALUES (${maps.get(&apos;FHIR UNIQUE ID&apos;)},convert_to(${message.rawData}, &apos;UTF8&apos;),${source_name},current_timestamp,1)</query>
+        <useScript>false</useScript>
+      </properties>
+      <transformer version="3.5.0">
+        <elements>
+          <com.mirth.connect.plugins.mapper.MapperStep>
+            <name>FHIR UNIQUE ID</name>
+            <sequenceNumber>0</sequenceNumber>
+            <variable>FHIR UNIQUE ID</variable>
+            <mapping>UUIDGenerator.getUUID()</mapping>
+            <defaultValue></defaultValue>
+            <replacements/>
+            <scope>CHANNEL</scope>
+          </com.mirth.connect.plugins.mapper.MapperStep>
+          <com.mirth.connect.plugins.mapper.MapperStep>
+            <name>source_name</name>
+            <sequenceNumber>1</sequenceNumber>
+            <variable>source_name</variable>
+            <mapping>msg[&apos;source&apos;][&apos;name&apos;]</mapping>
+            <defaultValue></defaultValue>
+            <replacements/>
+            <scope>CHANNEL</scope>
+          </com.mirth.connect.plugins.mapper.MapperStep>
+        </elements>
+        <inboundTemplate encoding="base64">eyJyZXNvdXJjZVR5cGUiOiJNZXNzYWdlSGVhZGVyIiwic291cmNlIjp7Im5hbWUiOiJBRFQxIn0s
+ImRlc3RpbmF0aW9uIjpbeyJuYW1lIjoiTWV0ZW9yIEFwcCJ9XSwiZGF0YSI6W3sicmVzb3VyY2VU
+eXBlIjoiUGF0aWVudCIsImdlbmRlciI6Ik0tIiwiYmlydGhEYXRlIjoiMTk2MTA2MTUiLCJpZGVu
+dGlmaWVyIjpbeyJ1c2UiOiJ1c3VhbCIsInR5cGUiOnsiY29kaW5nIjpbeyJzeXN0ZW0iOiJtaXJ0
+aC96ZW1vc28iLCJjb2RlIjoiTVIifV19LCJ2YWx1ZSI6ImY4ZDk4NjgxLTczOWMtNDIzNi05Y2Nm
+LWQ0MGM2ZTRkNjYwZiJ9LHsidXNlIjoidXN1YWwiLCJ0eXBlIjp7ImNvZGluZyI6W3sic3lzdGVt
+IjoiaHR0cDovL2hsNy5vcmcvZmhpci92Mi8wMjAzIiwiY29kZSI6Ik1SIn1dfSwidmFsdWUiOiJQ
+QVRJRDEyMzQifSx7InR5cGUiOnsiY29kaW5nIjpbeyJzeXN0ZW0iOiJodHRwOi8vaGw3Lm9yZy9m
+aGlyL3YyLzAyMDMiLCJjb2RlIjoiU1MifV19LCJzeXN0ZW0iOiJodHRwOi8vaGw3Lm9yZy9maGly
+L3NpZC91cy1zc24iLCJ2YWx1ZSI6IjEyMzQ1Njc4OSJ9XSwibmFtZSI6W3siZmFtaWx5IjpbIkpP
+TkVTIl0sImdpdmVuIjpbIldJTExJQU0iXSwidGV4dCI6IldJTExJQU0gSk9ORVMifV19XX0=</inboundTemplate>
+        <outboundTemplate encoding="base64"></outboundTemplate>
+        <inboundDataType>JSON</inboundDataType>
+        <outboundDataType>JSON</outboundDataType>
+        <inboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="3.5.0">
+          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="3.5.0">
+            <splitType>JavaScript</splitType>
+            <batchScript></batchScript>
+          </batchProperties>
+        </inboundProperties>
+        <outboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="3.5.0">
+          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="3.5.0">
+            <splitType>JavaScript</splitType>
+            <batchScript></batchScript>
+          </batchProperties>
+        </outboundProperties>
+      </transformer>
+      <responseTransformer version="3.5.0">
+        <elements/>
+        <inboundDataType>JSON</inboundDataType>
+        <outboundDataType>JSON</outboundDataType>
+        <inboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="3.5.0">
+          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="3.5.0">
+            <splitType>JavaScript</splitType>
+            <batchScript></batchScript>
+          </batchProperties>
+        </inboundProperties>
+        <outboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="3.5.0">
+          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="3.5.0">
+            <splitType>JavaScript</splitType>
+            <batchScript></batchScript>
+          </batchProperties>
+        </outboundProperties>
+      </responseTransformer>
+      <filter version="3.5.0">
+        <elements/>
+      </filter>
+      <transportName>Database Writer</transportName>
+      <mode>DESTINATION</mode>
+      <enabled>true</enabled>
+      <waitForPrevious>true</waitForPrevious>
+    </connector>
+    <connector version="3.5.0">
+      <metaDataId>2</metaDataId>
+      <name>Transformed-FHIR-PostgreSQL</name>
+      <properties class="com.mirth.connect.connectors.jdbc.DatabaseDispatcherProperties" version="3.5.0">
+        <pluginProperties/>
+        <destinationConnectorProperties version="3.5.0">
+          <queueEnabled>false</queueEnabled>
+          <sendFirst>false</sendFirst>
+          <retryIntervalMillis>10000</retryIntervalMillis>
+          <regenerateTemplate>false</regenerateTemplate>
+          <retryCount>0</retryCount>
+          <rotate>false</rotate>
+          <includeFilterTransformer>false</includeFilterTransformer>
+          <threadCount>1</threadCount>
+          <threadAssignmentVariable></threadAssignmentVariable>
+          <validateResponse>false</validateResponse>
+          <resourceIds class="linked-hash-map">
+            <entry>
+              <string>Default Resource</string>
+              <string>[Default Resource]</string>
+            </entry>
+          </resourceIds>
+          <queueBufferSize>1000</queueBufferSize>
+          <reattachAttachments>true</reattachAttachments>
+        </destinationConnectorProperties>
+        <driver>org.postgresql.Driver</driver>
+        <url>jdbc:postgresql://172.16.16.66:5432/zededup</url>
+        <username>postgres</username>
+        <password>admin</password>
+        <query>UPDATE mirth.message_audit
+SET transformed_message = to_jsonb(${message.transformedData}),
+    last_updated_tstamp =  current_timestamp,
+    last_updated_by_id = 2
+WHERE
+  uuid = ${maps.get(&apos;FHIR UNIQUE ID&apos;)};</query>
+        <useScript>false</useScript>
+      </properties>
+      <transformer version="3.5.0">
+        <elements>
+          <com.mirth.connect.plugins.mapper.MapperStep>
+            <name>birthdate</name>
+            <sequenceNumber>0</sequenceNumber>
+            <variable>birthdate</variable>
+            <mapping>msg[&apos;birthDate&apos;]</mapping>
+            <defaultValue></defaultValue>
+            <replacements/>
+            <scope>CHANNEL</scope>
+          </com.mirth.connect.plugins.mapper.MapperStep>
+          <com.mirth.connect.plugins.mapper.MapperStep>
+            <name>gender</name>
+            <sequenceNumber>1</sequenceNumber>
+            <variable>gender</variable>
+            <mapping>msg[&apos;gender&apos;]</mapping>
+            <defaultValue></defaultValue>
+            <replacements/>
+            <scope>CHANNEL</scope>
+          </com.mirth.connect.plugins.mapper.MapperStep>
+          <com.mirth.connect.plugins.mapper.MapperStep>
+            <name>identifier</name>
+            <sequenceNumber>2</sequenceNumber>
+            <variable>identifier</variable>
+            <mapping>msg[&apos;identifier&apos;]</mapping>
+            <defaultValue></defaultValue>
+            <replacements/>
+            <scope>CHANNEL</scope>
+          </com.mirth.connect.plugins.mapper.MapperStep>
+          <com.mirth.connect.plugins.mapper.MapperStep>
+            <name>address_use</name>
+            <sequenceNumber>3</sequenceNumber>
+            <variable>address_use</variable>
+            <mapping>msg[&apos;address&apos;][0][&apos;use&apos;]</mapping>
+            <defaultValue></defaultValue>
+            <replacements/>
+            <scope>CHANNEL</scope>
+          </com.mirth.connect.plugins.mapper.MapperStep>
+          <com.mirth.connect.plugins.mapper.MapperStep>
+            <name>address_line</name>
+            <sequenceNumber>4</sequenceNumber>
+            <variable>address_line</variable>
+            <mapping>msg[&apos;address&apos;][0][&apos;line&apos;][0]</mapping>
+            <defaultValue></defaultValue>
+            <replacements/>
+            <scope>CHANNEL</scope>
+          </com.mirth.connect.plugins.mapper.MapperStep>
+          <com.mirth.connect.plugins.mapper.MapperStep>
+            <name>address_city</name>
+            <sequenceNumber>5</sequenceNumber>
+            <variable>address_city</variable>
+            <mapping>msg[&apos;address&apos;][0][&apos;city&apos;]</mapping>
+            <defaultValue></defaultValue>
+            <replacements/>
+            <scope>CHANNEL</scope>
+          </com.mirth.connect.plugins.mapper.MapperStep>
+          <com.mirth.connect.plugins.mapper.MapperStep>
+            <name>address_state</name>
+            <sequenceNumber>6</sequenceNumber>
+            <variable>address_state</variable>
+            <mapping>msg[&apos;address&apos;][0][&apos;state&apos;]</mapping>
+            <defaultValue></defaultValue>
+            <replacements/>
+            <scope>CHANNEL</scope>
+          </com.mirth.connect.plugins.mapper.MapperStep>
+          <com.mirth.connect.plugins.mapper.MapperStep>
+            <name>address_postalcode</name>
+            <sequenceNumber>7</sequenceNumber>
+            <variable>address_postalcode</variable>
+            <mapping>msg[&apos;address&apos;][0][&apos;postalCode&apos;]</mapping>
+            <defaultValue></defaultValue>
+            <replacements/>
+            <scope>CHANNEL</scope>
+          </com.mirth.connect.plugins.mapper.MapperStep>
+          <com.mirth.connect.plugins.mapper.MapperStep>
+            <name>address_country</name>
+            <sequenceNumber>8</sequenceNumber>
+            <variable>address_country</variable>
+            <mapping>msg[&apos;address&apos;][0][&apos;country&apos;]</mapping>
+            <defaultValue></defaultValue>
+            <replacements/>
+            <scope>CHANNEL</scope>
+          </com.mirth.connect.plugins.mapper.MapperStep>
+          <com.mirth.connect.plugins.mapper.MapperStep>
+            <name>name_family</name>
+            <sequenceNumber>9</sequenceNumber>
+            <variable>name_family</variable>
+            <mapping>msg[&apos;name&apos;][0][&apos;family&apos;][0]</mapping>
+            <defaultValue></defaultValue>
+            <replacements/>
+            <scope>CHANNEL</scope>
+          </com.mirth.connect.plugins.mapper.MapperStep>
+          <com.mirth.connect.plugins.mapper.MapperStep>
+            <name>name_given</name>
+            <sequenceNumber>10</sequenceNumber>
+            <variable>name_given</variable>
+            <mapping>msg[&apos;name&apos;][0][&apos;given&apos;][0]</mapping>
+            <defaultValue></defaultValue>
+            <replacements/>
+            <scope>CHANNEL</scope>
+          </com.mirth.connect.plugins.mapper.MapperStep>
+          <com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
+            <sequenceNumber>11</sequenceNumber>
+            <script>var gender = $(&apos;gender&apos;);
+var birthDate = $(&apos;birthdate&apos;);
+for(var i in msg[&apos;identifier&apos;])
+{
+ 	if(msg[&apos;identifier&apos;][i][&apos;type&apos;]!= null){
+ 		if(msg[&apos;identifier&apos;][i][&apos;type&apos;][&apos;coding&apos;]!= null){    
+     		if(msg[&apos;identifier&apos;][i][&apos;type&apos;][&apos;coding&apos;][0][&apos;system&apos;]!= null){
+     			if(msg[&apos;identifier&apos;][i][&apos;type&apos;][&apos;coding&apos;][0][&apos;system&apos;]
+     			.equals(&apos;http://hl7.org/fhir/sid/us-ssn&apos;) == true)
+     				var ssn = msg[&apos;identifier&apos;][i][&apos;value&apos;].toString();
+     		}
+   	  }
+ 	}
+}
+var lastName = makeUpper(msg[&apos;name&apos;][0][&apos;family&apos;][0].toString());
+var firstName = makeUpper(msg[&apos;name&apos;][0][&apos;given&apos;][0].toString());
+var addressText = $(&apos;address_line&apos;)+&apos; ,&apos;+$(&apos;address_city&apos;)+&apos;, &apos;+$(&apos;address_state&apos;)+&apos;, &apos;+$(&apos;address_postalcode&apos;);
+var address = addressUtil($(&apos;address_use&apos;), addressText, $(&apos;address_line&apos;), $(&apos;address_city&apos;), $(&apos;address_state&apos;), $(&apos;address_postalcode&apos;));
+var Patient = patientUtil(gender, birthDate, ssn, address, lastName, firstName);
+var messageHeader = msgHeaderUtil($(&apos;FHIR UNIQUE ID&apos;), $(&apos;source_name&apos;), Patient);
+
+msg = JSON.stringify(messageHeader);</script>
+          </com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
+        </elements>
+        <inboundTemplate encoding="base64">ewogICJyZXNvdXJjZVR5cGUiOiAiUGF0aWVudCIsCiAgImJpcnRoRGF0ZSI6ICIxOTg1LTA4LTAx
+IiwKICAiYWN0aXZlIjogdHJ1ZSwKICAiZ2VuZGVyIjogIm1hbGUiLAogICJkZWNlYXNlZEJvb2xl
+YW4iOiBmYWxzZSwKICAiaWQiOiAiVGJ0M0t1Q1kwQjVQU3JKdkN1MmotUGxLLmFpSHN1MnhValVN
+OGJXcGV0WG9CIiwKICAiY2FyZVByb3ZpZGVyIjogWwogICAgewogICAgICAiZGlzcGxheSI6ICJQ
+aHlzaWNpYW4gRmFtaWx5IE1lZGljaW5lIiwKICAgICAgInJlZmVyZW5jZSI6ICJodHRwczovL29w
+ZW4taWMuZXBpYy5jb20vRkhJUi9hcGkvRkhJUi9EU1RVMi9QcmFjdGl0aW9uZXIvVDNNejNLTEJE
+VlhYZ2FSb2VlM0VLQUFCIgogICAgfQogIF0sCiAgIm5hbWUiOiBbCiAgICB7CiAgICAgICJ1c2Ui
+OiAidXN1YWwiLAogICAgICAiZmFtaWx5IjogWwogICAgICAgICJBcmdvbmF1dCIKICAgICAgXSwK
+ICAgICAgImdpdmVuIjogWwogICAgICAgICJKYXNvbiIKICAgICAgXQogICAgfQogIF0sCiAgImlk
+ZW50aWZpZXIiOiBbCiAgICB7CiAgICAgICJ1c2UiOiAidXN1YWwiLAogICAgICAic3lzdGVtIjog
+InVybjpvaWQ6MS4yLjg0MC4xMTQzNTAuMS4xMy4zMjcuMS43LjUuNzM3Mzg0LjAiLAogICAgICAi
+dmFsdWUiOiAiRTM4MjYiCiAgICB9LAogICAgewogICAgICAidXNlIjogInVzdWFsIiwKICAgICAg
+InN5c3RlbSI6ICJ1cm46b2lkOjEuMi4zLjQiLAogICAgICAidmFsdWUiOiAiMjAzNTc5IgogICAg
+fSwKICAgIHsKICAgICAidXNlIjogInVzdWFsIiwKICAgICAidHlwZSI6IHsKICAgICAgICJjb2Rp
+bmciOiBbCiAgICAgICAgIHsKICAgICAgICAgICAic3lzdGVtIjogImh0dHA6Ly9obDcub3JnL2Zo
+aXIvc2lkL3VzLXNzbiIsCiAgICAgICAgICAgImNvZGUiOiAiU1MiCiAgICAgICAgIH0KICAgICAg
+IF0KICAgICB9LAogICAgICJ2YWx1ZSI6IDEyMzQ1Njc4OQogICB9CiAgXSwKICAiYWRkcmVzcyI6
+IFsKICAgIHsKICAgICAgInVzZSI6ICJob21lIiwKICAgICAgImxpbmUiOiBbCiAgICAgICAgIjE5
+NzkgTWlsa3kgV2F5IERyLiIKICAgICAgXSwKICAgICAgImNpdHkiOiAiVmVyb25hIiwKICAgICAg
+InN0YXRlIjogIldJIiwKICAgICAgInBvc3RhbENvZGUiOiAiNTM1OTMiLAogICAgICAiY291bnRy
+eSI6ICJVUyIKICAgIH0sCiAgICB7CiAgICAgICJ1c2UiOiAidGVtcCIsCiAgICAgICJsaW5lIjog
+WwogICAgICAgICI1MzAxIFRva2F5IEJsdmQiCiAgICAgIF0sCiAgICAgICJjaXR5IjogIk1BRElT
+T04iLAogICAgICAic3RhdGUiOiAiV0kiLAogICAgICAicG9zdGFsQ29kZSI6ICI1MzcxMSIsCiAg
+ICAgICJjb3VudHJ5IjogIlVTIiwKICAgICAgInBlcmlvZCI6IHsKICAgICAgICAic3RhcnQiOiAi
+MjAxMS0wOC0wNFQwMDowMDowMFoiLAogICAgICAgICJlbmQiOiAiMjAxNC0wOC0wNFQwMDowMDow
+MFoiCiAgICAgIH0KICAgIH0KICBdLAogICJ0ZWxlY29tIjogWwogICAgewogICAgICAic3lzdGVt
+IjogInBob25lIiwKICAgICAgInZhbHVlIjogIjYwOC0yNzEtOTAwMCIsCiAgICAgICJ1c2UiOiAi
+aG9tZSIKICAgIH0sCiAgICB7CiAgICAgICJzeXN0ZW0iOiAicGhvbmUiLAogICAgICAidmFsdWUi
+OiAiNjA4LTc3MS05MDAwIiwKICAgICAgInVzZSI6ICJ3b3JrIgogICAgfSwKICAgIHsKICAgICAg
+InN5c3RlbSI6ICJwaG9uZSIsCiAgICAgICJ2YWx1ZSI6ICI2MDgtNzcxLTkwMDAiLAogICAgICAi
+dXNlIjogIm1vYmlsZSIKICAgIH0sCiAgICB7CiAgICAgICJzeXN0ZW0iOiAiZmF4IiwKICAgICAg
+InZhbHVlIjogIjYwOC03NzEtOTAwMCIsCiAgICAgICJ1c2UiOiAiaG9tZSIKICAgIH0sCiAgICB7
+CiAgICAgICJzeXN0ZW0iOiAicGhvbmUiLAogICAgICAidmFsdWUiOiAiNjA4LTc3MS05MDAwIiwK
+ICAgICAgInVzZSI6ICJ0ZW1wIiwKICAgICAgInBlcmlvZCI6IHsKICAgICAgICAic3RhcnQiOiAi
+MjAxMS0wOC0wNFQwMDowMDowMFoiLAogICAgICAgICJlbmQiOiAiMjAxNC0wOC0wNFQwMDowMDow
+MFoiCiAgICAgIH0KICAgIH0sCiAgICB7CiAgICAgICJzeXN0ZW0iOiAiZW1haWwiLAogICAgICAi
+dmFsdWUiOiAib3BlbkBlcGljLmNvbSIKICAgIH0KICBdLAogICJtYXJpdGFsU3RhdHVzIjogewog
+ICAgInRleHQiOiAiU2luZ2xlIiwKICAgICJjb2RpbmciOiBbCiAgICAgIHsKICAgICAgICAic3lz
+dGVtIjogImh0dHA6Ly9obDcub3JnL2ZoaXIvVmFsdWVTZXQvbWFyaXRhbC1zdGF0dXMiLAogICAg
+ICAgICJjb2RlIjogIlMiLAogICAgICAgICJkaXNwbGF5IjogIk5ldmVyIE1hcnJpZWQiCiAgICAg
+IH0KICAgIF0KICB9LAogICJjb21tdW5pY2F0aW9uIjogWwogICAgewogICAgICAicHJlZmVycmVk
+IjogdHJ1ZSwKICAgICAgImxhbmd1YWdlIjogewogICAgICAgICJ0ZXh0IjogIkVuZ2xpc2giLAog
+ICAgICAgICJjb2RpbmciOiBbCiAgICAgICAgICB7CiAgICAgICAgICAgICJzeXN0ZW0iOiAidXJu
+Om9pZDoyLjE2Ljg0MC4xLjExMzg4My42Ljk5IiwKICAgICAgICAgICAgImNvZGUiOiAiZW4iLAog
+ICAgICAgICAgICAiZGlzcGxheSI6ICJFbmdsaXNoIgogICAgICAgICAgfQogICAgICAgIF0KICAg
+ICAgfQogICAgfQogIF0sCiAgImV4dGVuc2lvbiI6IFsKICAgIHsKICAgICAgInVybCI6ICJodHRw
+Oi8vaGw3Lm9yZy9maGlyL1N0cnVjdHVyZURlZmluaXRpb24vdXMtY29yZS1yYWNlIiwKICAgICAg
+InZhbHVlQ29kZWFibGVDb25jZXB0IjogewogICAgICAgICJ0ZXh0IjogIkFzaWFuIiwKICAgICAg
+ICAiY29kaW5nIjogWwogICAgICAgICAgewogICAgICAgICAgICAic3lzdGVtIjogIjIuMTYuODQw
+LjEuMTEzODgzLjUuMTA0IiwKICAgICAgICAgICAgImNvZGUiOiAiMjAyOC05IiwKICAgICAgICAg
+ICAgImRpc3BsYXkiOiAiQXNpYW4iCiAgICAgICAgICB9CiAgICAgICAgXQogICAgICB9CiAgICB9
+LAogICAgewogICAgICAidXJsIjogImh0dHA6Ly9obDcub3JnL2ZoaXIvU3RydWN0dXJlRGVmaW5p
+dGlvbi91cy1jb3JlLWV0aG5pY2l0eSIsCiAgICAgICJ2YWx1ZUNvZGVhYmxlQ29uY2VwdCI6IHsK
+ICAgICAgICAidGV4dCI6ICJOb3QgSGlzcGFuaWMgb3IgTGF0aW5vIiwKICAgICAgICAiY29kaW5n
+IjogWwogICAgICAgICAgewogICAgICAgICAgICAic3lzdGVtIjogIjIuMTYuODQwLjEuMTEzODgz
+LjUuNTAiLAogICAgICAgICAgICAiY29kZSI6ICIyMTg2LTUiLAogICAgICAgICAgICAiZGlzcGxh
+eSI6ICJOb3QgSGlzcGFuaWMgb3IgTGF0aW5vIgogICAgICAgICAgfQogICAgICAgIF0KICAgICAg
+fQogICAgfSwKICAgIHsKICAgICAgInVybCI6ICJodHRwOi8vaGw3Lm9yZy9maGlyL1N0cnVjdHVy
+ZURlZmluaXRpb24vdXMtY29yZS1iaXJ0aC1zZXgiLAogICAgICAidmFsdWVDb2RlYWJsZUNvbmNl
+cHQiOiB7CiAgICAgICAgInRleHQiOiAiTWFsZSIsCiAgICAgICAgImNvZGluZyI6IFsKICAgICAg
+ICAgIHsKICAgICAgICAgICAgInN5c3RlbSI6ICJodHRwOi8vaGw3Lm9yZy9maGlyL3YzL0FkbWlu
+aXN0cmF0aXZlR2VuZGVyIiwKICAgICAgICAgICAgImNvZGUiOiAiTSIsCiAgICAgICAgICAgICJk
+aXNwbGF5IjogIk1hbGUiCiAgICAgICAgICB9CiAgICAgICAgXQogICAgICB9CiAgICB9CiAgXQp9
+CgoK</inboundTemplate>
+        <outboundTemplate encoding="base64"></outboundTemplate>
+        <inboundDataType>JSON</inboundDataType>
+        <outboundDataType>JSON</outboundDataType>
+        <inboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="3.5.0">
+          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="3.5.0">
+            <splitType>JavaScript</splitType>
+            <batchScript></batchScript>
+          </batchProperties>
+        </inboundProperties>
+        <outboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="3.5.0">
+          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="3.5.0">
+            <splitType>JavaScript</splitType>
+            <batchScript></batchScript>
+          </batchProperties>
+        </outboundProperties>
+      </transformer>
+      <responseTransformer version="3.5.0">
+        <elements/>
+        <inboundDataType>JSON</inboundDataType>
+        <outboundDataType>JSON</outboundDataType>
+        <inboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="3.5.0">
+          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="3.5.0">
+            <splitType>JavaScript</splitType>
+            <batchScript></batchScript>
+          </batchProperties>
+        </inboundProperties>
+        <outboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="3.5.0">
+          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="3.5.0">
+            <splitType>JavaScript</splitType>
+            <batchScript></batchScript>
+          </batchProperties>
+        </outboundProperties>
+      </responseTransformer>
+      <filter version="3.5.0">
+        <elements>
+          <com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
+            <name>Check Birthday</name>
+            <sequenceNumber>0</sequenceNumber>
+            <script>return isValid(msg[&apos;birthDate&apos;]);</script>
+          </com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
+          <com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
+            <name>Check Last name</name>
+            <sequenceNumber>1</sequenceNumber>
+            <operator>AND</operator>
+            <script>return isValid(msg[&apos;name&apos;][0][&apos;family&apos;][0]);</script>
+          </com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
+          <com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
+            <name>Check first name</name>
+            <sequenceNumber>2</sequenceNumber>
+            <operator>AND</operator>
+            <script>return isValid(msg[&apos;name&apos;][0][&apos;given&apos;][0]);</script>
+          </com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
+        </elements>
+      </filter>
+      <transportName>Database Writer</transportName>
+      <mode>DESTINATION</mode>
+      <enabled>true</enabled>
+      <waitForPrevious>true</waitForPrevious>
+    </connector>
+    <connector version="3.5.0">
+      <metaDataId>5</metaDataId>
+      <name>Transformed-FHIR-KAFKA</name>
+      <properties class="com.mirth.connect.connectors.http.HttpDispatcherProperties" version="3.5.0">
+        <pluginProperties/>
+        <destinationConnectorProperties version="3.5.0">
+          <queueEnabled>false</queueEnabled>
+          <sendFirst>false</sendFirst>
+          <retryIntervalMillis>10000</retryIntervalMillis>
+          <regenerateTemplate>false</regenerateTemplate>
+          <retryCount>0</retryCount>
+          <rotate>false</rotate>
+          <includeFilterTransformer>false</includeFilterTransformer>
+          <threadCount>1</threadCount>
+          <threadAssignmentVariable></threadAssignmentVariable>
+          <validateResponse>false</validateResponse>
+          <resourceIds class="linked-hash-map">
+            <entry>
+              <string>Default Resource</string>
+              <string>[Default Resource]</string>
+            </entry>
+          </resourceIds>
+          <queueBufferSize>1000</queueBufferSize>
+          <reattachAttachments>true</reattachAttachments>
+        </destinationConnectorProperties>
+        <host>http://172.16.16.66:8444/post</host>
+        <useProxyServer>false</useProxyServer>
+        <proxyAddress></proxyAddress>
+        <proxyPort></proxyPort>
+        <method>post</method>
+        <headers class="linked-hash-map"/>
+        <parameters class="linked-hash-map"/>
+        <responseXmlBody>false</responseXmlBody>
+        <responseParseMultipart>true</responseParseMultipart>
+        <responseIncludeMetadata>false</responseIncludeMetadata>
+        <responseBinaryMimeTypes>application/.*(?&lt;!json|xml)$|image/.*|video/.*|audio/.*</responseBinaryMimeTypes>
+        <responseBinaryMimeTypesRegex>true</responseBinaryMimeTypesRegex>
+        <multipart>false</multipart>
+        <useAuthentication>false</useAuthentication>
+        <authenticationType>Basic</authenticationType>
+        <usePreemptiveAuthentication>false</usePreemptiveAuthentication>
+        <username></username>
+        <password></password>
+        <content>${message.transformedData}</content>
+        <contentType>application/json</contentType>
+        <dataTypeBinary>false</dataTypeBinary>
+        <charset>UTF-8</charset>
+        <socketTimeout>30000</socketTimeout>
+      </properties>
+      <transformer version="3.5.0">
+        <elements>
+          <com.mirth.connect.plugins.mapper.MapperStep>
+            <name>birthdate</name>
+            <sequenceNumber>0</sequenceNumber>
+            <variable>birthdate</variable>
+            <mapping>msg[&apos;birthDate&apos;]</mapping>
+            <defaultValue></defaultValue>
+            <replacements/>
+            <scope>CHANNEL</scope>
+          </com.mirth.connect.plugins.mapper.MapperStep>
+          <com.mirth.connect.plugins.mapper.MapperStep>
+            <name>gender</name>
+            <sequenceNumber>1</sequenceNumber>
+            <variable>gender</variable>
+            <mapping>msg[&apos;gender&apos;]</mapping>
+            <defaultValue></defaultValue>
+            <replacements/>
+            <scope>CHANNEL</scope>
+          </com.mirth.connect.plugins.mapper.MapperStep>
+          <com.mirth.connect.plugins.mapper.MapperStep>
+            <name>identifier</name>
+            <sequenceNumber>2</sequenceNumber>
+            <variable>identifier</variable>
+            <mapping>msg[&apos;identifier&apos;]</mapping>
+            <defaultValue></defaultValue>
+            <replacements/>
+            <scope>CHANNEL</scope>
+          </com.mirth.connect.plugins.mapper.MapperStep>
+          <com.mirth.connect.plugins.mapper.MapperStep>
+            <name>address_use</name>
+            <sequenceNumber>3</sequenceNumber>
+            <variable>address_use</variable>
+            <mapping>msg[&apos;address&apos;][0][&apos;use&apos;]</mapping>
+            <defaultValue></defaultValue>
+            <replacements/>
+            <scope>CHANNEL</scope>
+          </com.mirth.connect.plugins.mapper.MapperStep>
+          <com.mirth.connect.plugins.mapper.MapperStep>
+            <name>address_line</name>
+            <sequenceNumber>4</sequenceNumber>
+            <variable>address_line</variable>
+            <mapping>msg[&apos;address&apos;][0][&apos;line&apos;][0]</mapping>
+            <defaultValue></defaultValue>
+            <replacements/>
+            <scope>CHANNEL</scope>
+          </com.mirth.connect.plugins.mapper.MapperStep>
+          <com.mirth.connect.plugins.mapper.MapperStep>
+            <name>address_city</name>
+            <sequenceNumber>5</sequenceNumber>
+            <variable>address_city</variable>
+            <mapping>msg[&apos;address&apos;][0][&apos;city&apos;]</mapping>
+            <defaultValue></defaultValue>
+            <replacements/>
+            <scope>CHANNEL</scope>
+          </com.mirth.connect.plugins.mapper.MapperStep>
+          <com.mirth.connect.plugins.mapper.MapperStep>
+            <name>address_state</name>
+            <sequenceNumber>6</sequenceNumber>
+            <variable>address_state</variable>
+            <mapping>msg[&apos;address&apos;][0][&apos;state&apos;]</mapping>
+            <defaultValue></defaultValue>
+            <replacements/>
+            <scope>CHANNEL</scope>
+          </com.mirth.connect.plugins.mapper.MapperStep>
+          <com.mirth.connect.plugins.mapper.MapperStep>
+            <name>address_postalcode</name>
+            <sequenceNumber>7</sequenceNumber>
+            <variable>address_postalcode</variable>
+            <mapping>msg[&apos;address&apos;][0][&apos;postalCode&apos;]</mapping>
+            <defaultValue></defaultValue>
+            <replacements/>
+            <scope>CHANNEL</scope>
+          </com.mirth.connect.plugins.mapper.MapperStep>
+          <com.mirth.connect.plugins.mapper.MapperStep>
+            <name>address_country</name>
+            <sequenceNumber>8</sequenceNumber>
+            <variable>address_country</variable>
+            <mapping>msg[&apos;address&apos;][0][&apos;country&apos;]</mapping>
+            <defaultValue></defaultValue>
+            <replacements/>
+            <scope>CHANNEL</scope>
+          </com.mirth.connect.plugins.mapper.MapperStep>
+          <com.mirth.connect.plugins.mapper.MapperStep>
+            <name>name_family</name>
+            <sequenceNumber>9</sequenceNumber>
+            <variable>name_family</variable>
+            <mapping>msg[&apos;name&apos;][0][&apos;family&apos;][0]</mapping>
+            <defaultValue></defaultValue>
+            <replacements/>
+            <scope>CHANNEL</scope>
+          </com.mirth.connect.plugins.mapper.MapperStep>
+          <com.mirth.connect.plugins.mapper.MapperStep>
+            <name>name_given</name>
+            <sequenceNumber>10</sequenceNumber>
+            <variable>name_given</variable>
+            <mapping>msg[&apos;name&apos;][0][&apos;given&apos;][0]</mapping>
+            <defaultValue></defaultValue>
+            <replacements/>
+            <scope>CHANNEL</scope>
+          </com.mirth.connect.plugins.mapper.MapperStep>
+          <com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
+            <sequenceNumber>11</sequenceNumber>
+            <script>var gender = $(&apos;gender&apos;);
+var birthDate = $(&apos;birthdate&apos;);
+for(var i in msg[&apos;identifier&apos;])
+{
+ 	if(msg[&apos;identifier&apos;][i][&apos;type&apos;]!= null){
+ 		if(msg[&apos;identifier&apos;][i][&apos;type&apos;][&apos;coding&apos;]!= null){    
+     		if(msg[&apos;identifier&apos;][i][&apos;type&apos;][&apos;coding&apos;][0][&apos;system&apos;]!= null){
+     			if(msg[&apos;identifier&apos;][i][&apos;type&apos;][&apos;coding&apos;][0][&apos;system&apos;]
+     			.equals(&apos;http://hl7.org/fhir/sid/us-ssn&apos;) == true)
+     				var ssn = msg[&apos;identifier&apos;][i][&apos;value&apos;].toString();
+     		}
+   	  }
+ 	}
+}
+var lastName = makeUpper(msg[&apos;name&apos;][0][&apos;family&apos;][0].toString());
+var firstName = makeUpper(msg[&apos;name&apos;][0][&apos;given&apos;][0].toString());
+var addressText = $(&apos;address_line&apos;)+&apos; ,&apos;+$(&apos;address_city&apos;)+&apos;, &apos;+$(&apos;address_state&apos;)+&apos;, &apos;+$(&apos;address_postalcode&apos;);
+var address = addressUtil($(&apos;address_use&apos;), addressText, $(&apos;address_line&apos;), $(&apos;address_city&apos;), $(&apos;address_state&apos;), $(&apos;address_postalcode&apos;));
+var Patient = patientUtil(gender, birthDate, ssn, address, lastName, firstName);
+var messageHeader = msgHeaderUtil($(&apos;FHIR UNIQUE ID&apos;), $(&apos;source_name&apos;), Patient);
+
+msg = JSON.stringify(messageHeader);</script>
+          </com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
+        </elements>
+        <inboundTemplate encoding="base64">ewogICJyZXNvdXJjZVR5cGUiOiAiUGF0aWVudCIsCiAgImJpcnRoRGF0ZSI6ICIxOTg1LTA4LTAx
+IiwKICAiYWN0aXZlIjogdHJ1ZSwKICAiZ2VuZGVyIjogIm1hbGUiLAogICJkZWNlYXNlZEJvb2xl
+YW4iOiBmYWxzZSwKICAiaWQiOiAiVGJ0M0t1Q1kwQjVQU3JKdkN1MmotUGxLLmFpSHN1MnhValVN
+OGJXcGV0WG9CIiwKICAiY2FyZVByb3ZpZGVyIjogWwogICAgewogICAgICAiZGlzcGxheSI6ICJQ
+aHlzaWNpYW4gRmFtaWx5IE1lZGljaW5lIiwKICAgICAgInJlZmVyZW5jZSI6ICJodHRwczovL29w
+ZW4taWMuZXBpYy5jb20vRkhJUi9hcGkvRkhJUi9EU1RVMi9QcmFjdGl0aW9uZXIvVDNNejNLTEJE
+VlhYZ2FSb2VlM0VLQUFCIgogICAgfQogIF0sCiAgIm5hbWUiOiBbCiAgICB7CiAgICAgICJ1c2Ui
+OiAidXN1YWwiLAogICAgICAiZmFtaWx5IjogWwogICAgICAgICJBcmdvbmF1dCIKICAgICAgXSwK
+ICAgICAgImdpdmVuIjogWwogICAgICAgICJKYXNvbiIKICAgICAgXQogICAgfQogIF0sCiAgImlk
+ZW50aWZpZXIiOiBbCiAgICB7CiAgICAgICJ1c2UiOiAidXN1YWwiLAogICAgICAic3lzdGVtIjog
+InVybjpvaWQ6MS4yLjg0MC4xMTQzNTAuMS4xMy4zMjcuMS43LjUuNzM3Mzg0LjAiLAogICAgICAi
+dmFsdWUiOiAiRTM4MjYiCiAgICB9LAogICAgewogICAgICAidXNlIjogInVzdWFsIiwKICAgICAg
+InN5c3RlbSI6ICJ1cm46b2lkOjEuMi4zLjQiLAogICAgICAidmFsdWUiOiAiMjAzNTc5IgogICAg
+fSwKICAgIHsKICAgICAidXNlIjogInVzdWFsIiwKICAgICAidHlwZSI6IHsKICAgICAgICJjb2Rp
+bmciOiBbCiAgICAgICAgIHsKICAgICAgICAgICAic3lzdGVtIjogImh0dHA6Ly9obDcub3JnL2Zo
+aXIvc2lkL3VzLXNzbiIsCiAgICAgICAgICAgImNvZGUiOiAiU1MiCiAgICAgICAgIH0KICAgICAg
+IF0KICAgICB9LAogICAgICJ2YWx1ZSI6IDEyMzQ1Njc4OQogICB9CiAgXSwKICAiYWRkcmVzcyI6
+IFsKICAgIHsKICAgICAgInVzZSI6ICJob21lIiwKICAgICAgImxpbmUiOiBbCiAgICAgICAgIjE5
+NzkgTWlsa3kgV2F5IERyLiIKICAgICAgXSwKICAgICAgImNpdHkiOiAiVmVyb25hIiwKICAgICAg
+InN0YXRlIjogIldJIiwKICAgICAgInBvc3RhbENvZGUiOiAiNTM1OTMiLAogICAgICAiY291bnRy
+eSI6ICJVUyIKICAgIH0sCiAgICB7CiAgICAgICJ1c2UiOiAidGVtcCIsCiAgICAgICJsaW5lIjog
+WwogICAgICAgICI1MzAxIFRva2F5IEJsdmQiCiAgICAgIF0sCiAgICAgICJjaXR5IjogIk1BRElT
+T04iLAogICAgICAic3RhdGUiOiAiV0kiLAogICAgICAicG9zdGFsQ29kZSI6ICI1MzcxMSIsCiAg
+ICAgICJjb3VudHJ5IjogIlVTIiwKICAgICAgInBlcmlvZCI6IHsKICAgICAgICAic3RhcnQiOiAi
+MjAxMS0wOC0wNFQwMDowMDowMFoiLAogICAgICAgICJlbmQiOiAiMjAxNC0wOC0wNFQwMDowMDow
+MFoiCiAgICAgIH0KICAgIH0KICBdLAogICJ0ZWxlY29tIjogWwogICAgewogICAgICAic3lzdGVt
+IjogInBob25lIiwKICAgICAgInZhbHVlIjogIjYwOC0yNzEtOTAwMCIsCiAgICAgICJ1c2UiOiAi
+aG9tZSIKICAgIH0sCiAgICB7CiAgICAgICJzeXN0ZW0iOiAicGhvbmUiLAogICAgICAidmFsdWUi
+OiAiNjA4LTc3MS05MDAwIiwKICAgICAgInVzZSI6ICJ3b3JrIgogICAgfSwKICAgIHsKICAgICAg
+InN5c3RlbSI6ICJwaG9uZSIsCiAgICAgICJ2YWx1ZSI6ICI2MDgtNzcxLTkwMDAiLAogICAgICAi
+dXNlIjogIm1vYmlsZSIKICAgIH0sCiAgICB7CiAgICAgICJzeXN0ZW0iOiAiZmF4IiwKICAgICAg
+InZhbHVlIjogIjYwOC03NzEtOTAwMCIsCiAgICAgICJ1c2UiOiAiaG9tZSIKICAgIH0sCiAgICB7
+CiAgICAgICJzeXN0ZW0iOiAicGhvbmUiLAogICAgICAidmFsdWUiOiAiNjA4LTc3MS05MDAwIiwK
+ICAgICAgInVzZSI6ICJ0ZW1wIiwKICAgICAgInBlcmlvZCI6IHsKICAgICAgICAic3RhcnQiOiAi
+MjAxMS0wOC0wNFQwMDowMDowMFoiLAogICAgICAgICJlbmQiOiAiMjAxNC0wOC0wNFQwMDowMDow
+MFoiCiAgICAgIH0KICAgIH0sCiAgICB7CiAgICAgICJzeXN0ZW0iOiAiZW1haWwiLAogICAgICAi
+dmFsdWUiOiAib3BlbkBlcGljLmNvbSIKICAgIH0KICBdLAogICJtYXJpdGFsU3RhdHVzIjogewog
+ICAgInRleHQiOiAiU2luZ2xlIiwKICAgICJjb2RpbmciOiBbCiAgICAgIHsKICAgICAgICAic3lz
+dGVtIjogImh0dHA6Ly9obDcub3JnL2ZoaXIvVmFsdWVTZXQvbWFyaXRhbC1zdGF0dXMiLAogICAg
+ICAgICJjb2RlIjogIlMiLAogICAgICAgICJkaXNwbGF5IjogIk5ldmVyIE1hcnJpZWQiCiAgICAg
+IH0KICAgIF0KICB9LAogICJjb21tdW5pY2F0aW9uIjogWwogICAgewogICAgICAicHJlZmVycmVk
+IjogdHJ1ZSwKICAgICAgImxhbmd1YWdlIjogewogICAgICAgICJ0ZXh0IjogIkVuZ2xpc2giLAog
+ICAgICAgICJjb2RpbmciOiBbCiAgICAgICAgICB7CiAgICAgICAgICAgICJzeXN0ZW0iOiAidXJu
+Om9pZDoyLjE2Ljg0MC4xLjExMzg4My42Ljk5IiwKICAgICAgICAgICAgImNvZGUiOiAiZW4iLAog
+ICAgICAgICAgICAiZGlzcGxheSI6ICJFbmdsaXNoIgogICAgICAgICAgfQogICAgICAgIF0KICAg
+ICAgfQogICAgfQogIF0sCiAgImV4dGVuc2lvbiI6IFsKICAgIHsKICAgICAgInVybCI6ICJodHRw
+Oi8vaGw3Lm9yZy9maGlyL1N0cnVjdHVyZURlZmluaXRpb24vdXMtY29yZS1yYWNlIiwKICAgICAg
+InZhbHVlQ29kZWFibGVDb25jZXB0IjogewogICAgICAgICJ0ZXh0IjogIkFzaWFuIiwKICAgICAg
+ICAiY29kaW5nIjogWwogICAgICAgICAgewogICAgICAgICAgICAic3lzdGVtIjogIjIuMTYuODQw
+LjEuMTEzODgzLjUuMTA0IiwKICAgICAgICAgICAgImNvZGUiOiAiMjAyOC05IiwKICAgICAgICAg
+ICAgImRpc3BsYXkiOiAiQXNpYW4iCiAgICAgICAgICB9CiAgICAgICAgXQogICAgICB9CiAgICB9
+LAogICAgewogICAgICAidXJsIjogImh0dHA6Ly9obDcub3JnL2ZoaXIvU3RydWN0dXJlRGVmaW5p
+dGlvbi91cy1jb3JlLWV0aG5pY2l0eSIsCiAgICAgICJ2YWx1ZUNvZGVhYmxlQ29uY2VwdCI6IHsK
+ICAgICAgICAidGV4dCI6ICJOb3QgSGlzcGFuaWMgb3IgTGF0aW5vIiwKICAgICAgICAiY29kaW5n
+IjogWwogICAgICAgICAgewogICAgICAgICAgICAic3lzdGVtIjogIjIuMTYuODQwLjEuMTEzODgz
+LjUuNTAiLAogICAgICAgICAgICAiY29kZSI6ICIyMTg2LTUiLAogICAgICAgICAgICAiZGlzcGxh
+eSI6ICJOb3QgSGlzcGFuaWMgb3IgTGF0aW5vIgogICAgICAgICAgfQogICAgICAgIF0KICAgICAg
+fQogICAgfSwKICAgIHsKICAgICAgInVybCI6ICJodHRwOi8vaGw3Lm9yZy9maGlyL1N0cnVjdHVy
+ZURlZmluaXRpb24vdXMtY29yZS1iaXJ0aC1zZXgiLAogICAgICAidmFsdWVDb2RlYWJsZUNvbmNl
+cHQiOiB7CiAgICAgICAgInRleHQiOiAiTWFsZSIsCiAgICAgICAgImNvZGluZyI6IFsKICAgICAg
+ICAgIHsKICAgICAgICAgICAgInN5c3RlbSI6ICJodHRwOi8vaGw3Lm9yZy9maGlyL3YzL0FkbWlu
+aXN0cmF0aXZlR2VuZGVyIiwKICAgICAgICAgICAgImNvZGUiOiAiTSIsCiAgICAgICAgICAgICJk
+aXNwbGF5IjogIk1hbGUiCiAgICAgICAgICB9CiAgICAgICAgXQogICAgICB9CiAgICB9CiAgXQp9
+CgoK</inboundTemplate>
+        <outboundTemplate encoding="base64"></outboundTemplate>
+        <inboundDataType>JSON</inboundDataType>
+        <outboundDataType>JSON</outboundDataType>
+        <inboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="3.5.0">
+          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="3.5.0">
+            <splitType>JavaScript</splitType>
+            <batchScript></batchScript>
+          </batchProperties>
+        </inboundProperties>
+        <outboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="3.5.0">
+          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="3.5.0">
+            <splitType>JavaScript</splitType>
+            <batchScript></batchScript>
+          </batchProperties>
+        </outboundProperties>
+      </transformer>
+      <responseTransformer version="3.5.0">
+        <elements/>
+        <inboundDataType>JSON</inboundDataType>
+        <outboundDataType>JSON</outboundDataType>
+        <inboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="3.5.0">
+          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="3.5.0">
+            <splitType>JavaScript</splitType>
+            <batchScript></batchScript>
+          </batchProperties>
+        </inboundProperties>
+        <outboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="3.5.0">
+          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="3.5.0">
+            <splitType>JavaScript</splitType>
+            <batchScript></batchScript>
+          </batchProperties>
+        </outboundProperties>
+      </responseTransformer>
+      <filter version="3.5.0">
+        <elements>
+          <com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
+            <name>Check Birthday</name>
+            <sequenceNumber>0</sequenceNumber>
+            <script>return isValid(msg[&apos;birthDate&apos;]);</script>
+          </com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
+          <com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
+            <name>Check Last name</name>
+            <sequenceNumber>1</sequenceNumber>
+            <operator>AND</operator>
+            <script>return isValid(msg[&apos;name&apos;][0][&apos;family&apos;][0]);</script>
+          </com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
+          <com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
+            <name>Check first name</name>
+            <sequenceNumber>2</sequenceNumber>
+            <operator>AND</operator>
+            <script>return isValid(msg[&apos;name&apos;][0][&apos;given&apos;][0]);</script>
+          </com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
+        </elements>
+      </filter>
+      <transportName>HTTP Sender</transportName>
+      <mode>DESTINATION</mode>
+      <enabled>true</enabled>
+      <waitForPrevious>true</waitForPrevious>
+    </connector>
+  </destinationConnectors>
+  <preprocessingScript>// Modify the message variable below to pre process data
+return message;</preprocessingScript>
+  <postprocessingScript>// This script executes once after a message has been processed
+// Responses returned from here will be stored as &quot;Postprocessor&quot; in the response map
+return;</postprocessingScript>
+  <deployScript>// This script executes once when the channel is deployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+return;</deployScript>
+  <undeployScript>// This script executes once when the channel is undeployed
+// You only have access to the globalMap and globalChannelMap here to persist data
+return;</undeployScript>
+  <properties version="3.5.0">
+    <clearGlobalChannelMap>true</clearGlobalChannelMap>
+    <messageStorageMode>DEVELOPMENT</messageStorageMode>
+    <encryptData>false</encryptData>
+    <removeContentOnCompletion>false</removeContentOnCompletion>
+    <removeOnlyFilteredOnCompletion>false</removeOnlyFilteredOnCompletion>
+    <removeAttachmentsOnCompletion>false</removeAttachmentsOnCompletion>
+    <initialState>STARTED</initialState>
+    <storeAttachments>false</storeAttachments>
+    <metaDataColumns>
+      <metaDataColumn>
+        <name>SOURCE</name>
+        <type>STRING</type>
+        <mappingName>mirth_source</mappingName>
+      </metaDataColumn>
+      <metaDataColumn>
+        <name>TYPE</name>
+        <type>STRING</type>
+        <mappingName>mirth_type</mappingName>
+      </metaDataColumn>
+    </metaDataColumns>
+    <attachmentProperties version="3.5.0">
+      <type>None</type>
+      <properties/>
+    </attachmentProperties>
+    <resourceIds class="linked-hash-map">
+      <entry>
+        <string>Default Resource</string>
+        <string>[Default Resource]</string>
+      </entry>
+    </resourceIds>
+  </properties>
+  <exportData>
+    <metadata>
+      <enabled>true</enabled>
+      <lastModified>
+        <time>1506063518913</time>
+        <timezone>Asia/Kolkata</timezone>
+      </lastModified>
+      <pruningSettings>
+        <archiveEnabled>true</archiveEnabled>
+      </pruningSettings>
+    </metadata>
+    <codeTemplateLibraries>
+      <codeTemplateLibrary version="3.5.0">
+        <id>8a9b87fb-37b7-4d28-a7a6-7b7512202bad</id>
+        <name>util library</name>
+        <revision>12</revision>
+        <lastModified>
+          <time>1505987709661</time>
+          <timezone>Asia/Kolkata</timezone>
+        </lastModified>
+        <description></description>
+        <includeNewChannels>false</includeNewChannels>
+        <enabledChannelIds>
+          <string>a2e7b476-50b9-42f1-a8f4-718b41b5c7fe</string>
+          <string>b0ca0896-abcb-48f1-bff2-452dd42f58d4</string>
+        </enabledChannelIds>
+        <disabledChannelIds>
+          <string>a7724479-2f73-4256-9cd4-dc8371f91535</string>
+        </disabledChannelIds>
+        <codeTemplates>
+          <codeTemplate version="3.5.0">
+            <id>37285b41-b499-450c-8835-337b5cb68f6b</id>
+            <name>Function for making first letter upper case</name>
+            <revision>5</revision>
+            <lastModified>
+              <time>1505980630373</time>
+              <timezone>Asia/Kolkata</timezone>
+            </lastModified>
+            <contextSet>
+              <delegate>
+                <contextType>GLOBAL_POSTPROCESSOR</contextType>
+                <contextType>CHANNEL_BATCH</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>CHANNEL_DEPLOY</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>GLOBAL_DEPLOY</contextType>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>GLOBAL_PREPROCESSOR</contextType>
+                <contextType>GLOBAL_UNDEPLOY</contextType>
+                <contextType>CHANNEL_UNDEPLOY</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>CHANNEL_ATTACHMENT</contextType>
+                <contextType>CHANNEL_POSTPROCESSOR</contextType>
+                <contextType>CHANNEL_PREPROCESSOR</contextType>
+              </delegate>
+            </contextSet>
+            <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+              <type>FUNCTION</type>
+              <code>/**
+	This function make the first letter of a string capital and rest lower.
+
+	@param {String} name - First or Last name
+	@return {String} return First or Last name where first letter is capital 
+*/
+function makeUpper(name) {
+	
+	return name[0].toUpperCase() + name.slice(1).toLowerCase();
+	
+}</code>
+            </properties>
+          </codeTemplate>
+          <codeTemplate version="3.5.0">
+            <id>977641cf-8fac-4937-a7ba-a1f46db0c6b9</id>
+            <name>Function for masking SSN</name>
+            <revision>6</revision>
+            <lastModified>
+              <time>1505977315457</time>
+              <timezone>Asia/Kolkata</timezone>
+            </lastModified>
+            <contextSet>
+              <delegate>
+                <contextType>GLOBAL_POSTPROCESSOR</contextType>
+                <contextType>CHANNEL_BATCH</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>CHANNEL_DEPLOY</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>GLOBAL_DEPLOY</contextType>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>GLOBAL_PREPROCESSOR</contextType>
+                <contextType>GLOBAL_UNDEPLOY</contextType>
+                <contextType>CHANNEL_UNDEPLOY</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>CHANNEL_ATTACHMENT</contextType>
+                <contextType>CHANNEL_POSTPROCESSOR</contextType>
+                <contextType>CHANNEL_PREPROCESSOR</contextType>
+              </delegate>
+            </contextSet>
+            <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+              <type>FUNCTION</type>
+              <code>/**
+	This function mask last four digit of ssn
+	@param {String} ssn - Nine digit social security number
+	@return {String} return Masked ssn
+*/
+function maskSSN(ssn) {
+	if( ssn != null)
+	{
+		ssn = ssn.replace(/\d(?!\d{4})/g, &quot;x&quot;);		
+	}
+	return ssn;
+}</code>
+            </properties>
+          </codeTemplate>
+          <codeTemplate version="3.5.0">
+            <id>37e7e63e-f39a-40e3-a835-df95d07a1286</id>
+            <name>Function to check validity</name>
+            <revision>5</revision>
+            <lastModified>
+              <time>1505988363164</time>
+              <timezone>Asia/Kolkata</timezone>
+            </lastModified>
+            <contextSet>
+              <delegate>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+              </delegate>
+            </contextSet>
+            <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+              <type>FUNCTION</type>
+              <code>/**
+	this function will do validation of messages.
+
+	@param {String} arg1 - arg1 message attribute 
+	@return {String} return true if message is valid else false
+*/
+function isValid(arg1) {
+	if(arg1 != null &amp;&amp; arg1.length &gt; 0)
+		return true;
+	else
+		return false;
+}</code>
+            </properties>
+          </codeTemplate>
+          <codeTemplate version="3.5.0">
+            <id>7af604fe-fdc5-4b4d-a662-0af5c3bfbd30</id>
+            <name>Function to create address </name>
+            <revision>4</revision>
+            <lastModified>
+              <time>1505981665627</time>
+              <timezone>Asia/Kolkata</timezone>
+            </lastModified>
+            <contextSet>
+              <delegate>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+              </delegate>
+            </contextSet>
+            <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+              <type>FUNCTION</type>
+              <code>/**
+	This function creates address object from use,addressText,line,city,state,postalCode.
+
+	@param {String} use,addressText,line,city,state,postalCode
+	@return {String} return Address object
+*/
+function addressUtil(use,addressText,line,city,state,postalCode) {
+	var address ={
+	 &quot;use&quot;: use,
+      &quot;type&quot;: &quot;&quot;,
+      &quot;text&quot;:  addressText,
+      &quot;line&quot;: [
+        line
+      ],
+      &quot;city&quot;: city,      
+      &quot;state&quot;: state,
+      &quot;postalCode&quot;: postalCode    
+      }
+      return address;
+}</code>
+            </properties>
+          </codeTemplate>
+          <codeTemplate version="3.5.0">
+            <id>cd04c40d-3c68-43bb-83cc-6ca221fd0510</id>
+            <name>Function to create message header</name>
+            <revision>5</revision>
+            <lastModified>
+              <time>1505986489577</time>
+              <timezone>Asia/Kolkata</timezone>
+            </lastModified>
+            <contextSet>
+              <delegate>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+              </delegate>
+            </contextSet>
+            <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+              <type>FUNCTION</type>
+              <code>/**
+	This method creates the message header 
+
+	@param {String} uuid,source,Patient - unique message id, mssgae source, Patient object
+	@return {String} return messageHeader
+*/
+function msgHeaderUtil(uuid,source,Patient) {
+	var messageHeader = {};
+	messageHeader.resourceType = &quot;MessageHeader&quot;;
+	messageHeader.id = {
+		&quot;uuid&quot;: uuid
+	}
+	messageHeader.source = {
+		name: source
+	}
+	messageHeader.destination = [{
+		name: &apos;Data-Management&apos;
+	}]
+	messageHeader.data = [Patient];
+	return messageHeader;
+}</code>
+            </properties>
+          </codeTemplate>
+          <codeTemplate version="3.5.0">
+            <id>3792b93f-ba55-4b5b-937b-12fcfb1f5065</id>
+            <name>Function to create patient object</name>
+            <revision>7</revision>
+            <lastModified>
+              <time>1505982174849</time>
+              <timezone>Asia/Kolkata</timezone>
+            </lastModified>
+            <contextSet>
+              <delegate>
+                <contextType>GLOBAL_POSTPROCESSOR</contextType>
+                <contextType>CHANNEL_BATCH</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>CHANNEL_DEPLOY</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>GLOBAL_DEPLOY</contextType>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>GLOBAL_PREPROCESSOR</contextType>
+                <contextType>GLOBAL_UNDEPLOY</contextType>
+                <contextType>CHANNEL_UNDEPLOY</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>CHANNEL_ATTACHMENT</contextType>
+                <contextType>CHANNEL_POSTPROCESSOR</contextType>
+                <contextType>CHANNEL_PREPROCESSOR</contextType>
+              </delegate>
+            </contextSet>
+            <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+              <type>FUNCTION</type>
+              <code>/**
+	This function creates patient object from patient gender, birthDate, identifier and name
+
+	@param {String} gender, birthDate, identifier, humanName description
+	@return {String} return Patient object
+*/
+function patientUtil(gender,birthDate,ssn,address,lastName,firstName) {
+	var Patient = {};
+	Patient.resourceType = &quot;Patient&quot;;
+	Patient.gender = gender;
+	Patient.birthDate = birthDate.substr(0,4) + &quot;-&quot; + birthDate.substr(4,2) + &quot;-&quot; + birthDate.substr(6,2);
+	Patient.identifier = [{
+    		&quot;use&quot;: &quot;usual&quot;,
+     	&quot;type&quot;: {
+       	&quot;coding&quot;: [
+         		{
+           		&quot;system&quot;: &quot;http://hl7.org/fhir/sid/us-ssn&quot;,
+           		&quot;code&quot;: &quot;SS&quot;
+         		}
+       	]
+     },
+     	&quot;value&quot;: maskSSN(ssn)
+   	}];
+	var humanName = {
+		family: lastName,
+		given: firstName,
+		text: [firstName + &apos; &apos; + lastName]
+	};
+	Patient.name = [humanName];
+	Patient.address = [address];
+	return Patient;
+}</code>
+            </properties>
+          </codeTemplate>
+        </codeTemplates>
+      </codeTemplateLibrary>
+    </codeTemplateLibraries>
+  </exportData>
+</channel>
