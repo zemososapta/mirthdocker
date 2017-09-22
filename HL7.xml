@@ -3,7 +3,7 @@
   <nextMetaDataId>9</nextMetaDataId>
   <name>HL7-Inbound</name>
   <description></description>
-  <revision>130</revision>
+  <revision>139</revision>
   <sourceConnector version="3.5.0">
     <metaDataId>0</metaDataId>
     <name>sourceConnector</name>
@@ -433,22 +433,60 @@ WHERE
           <com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
             <sequenceNumber>0</sequenceNumber>
             <script>var date = msg[&apos;PID&apos;][&apos;PID.7&apos;][&apos;PID.7.1&apos;].toString();
-var lastName = makeUpper(msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.1&apos;].toString());
-var firstName = makeUpper(msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.2&apos;].toString());
-var gender = msg[&apos;PID&apos;][&apos;PID.8&apos;][&apos;PID.8.1&apos;].toString();
+var Patient = {};
+Patient.resourceType = &quot;Patient&quot;;
+Patient.gender = msg[&apos;PID&apos;][&apos;PID.8&apos;][&apos;PID.8.1&apos;].toString();
+Patient.birthDate = date.substr(0,4) + &quot;-&quot; + date.substr(4,2) + &quot;-&quot; + date.substr(6,2);
 var ssn = msg[&apos;PID&apos;][&apos;PID.19&apos;][&apos;PID.19.1&apos;].toString();
-var use = msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.7&apos;].toString();
-var line =  msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.1&apos;].toString();
-var city = msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.3&apos;].toString();
-var state = msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.4&apos;].toString();
-var postalCode = msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.5&apos;].toString();
-var addressDesignation = msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.2&apos;].toString();
-var addressText = line + &apos;, &apos;+addressDesignation+&apos;, &apos;+city+&apos;, &apos;+state+&apos;, &apos;+postalCode+&apos;.&apos;;
-var address = addressUtil(use, addressText, line, city, state, postalCode);
-var Patient = patientUtil(gender, date, ssn, address, lastName, firstName);
-var source = msg[&apos;MSH&apos;][&apos;MSH.3&apos;][&apos;MSH.3.1&apos;].toString();
-var uuid =  $(&apos;ID&apos;);
-var messageHeader = msgHeaderUtil(uuid, source, Patient);
+if (ssn.length &gt; 0)
+	ssn = ssn.replace(/\d(?!\d{4})/g, &quot;x&quot;)	;
+Patient.identifier = [{
+     &quot;use&quot;: &quot;usual&quot;,
+     &quot;type&quot;: {
+       &quot;coding&quot;: [
+         {
+           &quot;system&quot;: &quot;http://hl7.org/fhir/sid/us-ssn&quot;,
+           &quot;code&quot;: &quot;SS&quot;
+         }
+       ]
+     },
+     &quot;value&quot;: ssn
+   }];
+
+var lastName = msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.1&apos;].toString().toLowerCase();
+var firstName = msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.2&apos;].toString().toLowerCase();
+
+var humanName = {
+	family: [lastName.toString().charAt(0).toUpperCase()+lastName.toString().slice(1)],
+	given: [firstName.toString().charAt(0).toUpperCase()+firstName.toString().slice(1)],
+	text: [firstName.toString().charAt(0).toUpperCase()+firstName.toString().slice(1)+&apos; &apos;+lastName.toString().charAt(0).toUpperCase()+lastName.toString().slice(1)]
+};
+Patient.name = [humanName];
+var address ={
+	 &quot;use&quot;: msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.7&apos;].toString(),
+      &quot;type&quot;: &quot;&quot;,
+      &quot;text&quot;: msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.1&apos;].toString()+&apos;, &apos;+msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.2&apos;].toString()+&apos;, &apos;+msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.3&apos;].toString()+&apos;, &apos;+msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.4&apos;].toString()+&apos;, &apos;+msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.5&apos;].toString(),
+      &quot;line&quot;: [
+        msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.1&apos;].toString()
+      ],
+      &quot;city&quot;: msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.3&apos;].toString(),      
+      &quot;state&quot;: msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.4&apos;].toString(),
+      &quot;postalCode&quot;: msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.5&apos;].toString()      
+      }
+Patient.address = [address];
+var messageHeader = {};
+
+messageHeader.resourceType = &quot;MessageHeader&quot;;
+messageHeader.id = {
+	&quot;uuid&quot;: $(&apos;ID&apos;)
+}
+messageHeader.source = {
+	name: msg[&apos;MSH&apos;][&apos;MSH.3&apos;][&apos;MSH.3.1&apos;].toString()
+}
+messageHeader.destination = [{
+	name: &apos;Data-Management&apos;
+}]
+messageHeader.data = [Patient];
 
 msg = JSON.stringify(messageHeader);</script>
           </com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
@@ -538,23 +576,29 @@ Cg==</inboundTemplate>
       </responseTransformer>
       <filter version="3.5.0">
         <elements>
-          <com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
-            <name>DOB</name>
+          <com.mirth.connect.plugins.rulebuilder.RuleBuilderRule>
+            <name>Accept message if &quot;msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.1&apos;].toString()&quot; exists</name>
             <sequenceNumber>0</sequenceNumber>
-            <script>return isValid(msg[&apos;PID&apos;][&apos;PID.7&apos;][&apos;PID.7.1&apos;].toString());</script>
-          </com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
-          <com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
-            <name>LNAME</name>
+            <field>msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.1&apos;].toString()</field>
+            <condition>EXISTS</condition>
+            <values/>
+          </com.mirth.connect.plugins.rulebuilder.RuleBuilderRule>
+          <com.mirth.connect.plugins.rulebuilder.RuleBuilderRule>
+            <name>Accept message if &quot;msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.2&apos;].toString()&quot; exists</name>
             <sequenceNumber>1</sequenceNumber>
             <operator>AND</operator>
-            <script>return isValid(msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.1&apos;].toString());</script>
-          </com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
-          <com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
-            <name>FNAME</name>
+            <field>msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.2&apos;].toString()</field>
+            <condition>EXISTS</condition>
+            <values/>
+          </com.mirth.connect.plugins.rulebuilder.RuleBuilderRule>
+          <com.mirth.connect.plugins.rulebuilder.RuleBuilderRule>
+            <name>Accept message if &quot;msg[&apos;PID&apos;][&apos;PID.7&apos;][&apos;PID.7.1&apos;].toString()&quot; exists</name>
             <sequenceNumber>2</sequenceNumber>
             <operator>AND</operator>
-            <script>return isValid(msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.2&apos;].toString());</script>
-          </com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
+            <field>msg[&apos;PID&apos;][&apos;PID.7&apos;][&apos;PID.7.1&apos;].toString()</field>
+            <condition>EXISTS</condition>
+            <values/>
+          </com.mirth.connect.plugins.rulebuilder.RuleBuilderRule>
         </elements>
       </filter>
       <transportName>Database Writer</transportName>
@@ -616,22 +660,60 @@ Cg==</inboundTemplate>
           <com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
             <sequenceNumber>0</sequenceNumber>
             <script>var date = msg[&apos;PID&apos;][&apos;PID.7&apos;][&apos;PID.7.1&apos;].toString();
-var lastName = makeUpper(msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.1&apos;].toString());
-var firstName = makeUpper(msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.2&apos;].toString());
-var gender = msg[&apos;PID&apos;][&apos;PID.8&apos;][&apos;PID.8.1&apos;].toString();
+var Patient = {};
+Patient.resourceType = &quot;Patient&quot;;
+Patient.gender = msg[&apos;PID&apos;][&apos;PID.8&apos;][&apos;PID.8.1&apos;].toString();
+Patient.birthDate = date.substr(0,4) + &quot;-&quot; + date.substr(4,2) + &quot;-&quot; + date.substr(6,2);
 var ssn = msg[&apos;PID&apos;][&apos;PID.19&apos;][&apos;PID.19.1&apos;].toString();
-var use = msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.7&apos;].toString();
-var line =  msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.1&apos;].toString();
-var city = msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.3&apos;].toString();
-var state = msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.4&apos;].toString();
-var postalCode = msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.5&apos;].toString();
-var addressDesignation = msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.2&apos;].toString();
-var addressText = line + &apos;, &apos;+addressDesignation+&apos;, &apos;+city+&apos;, &apos;+state+&apos;, &apos;+postalCode+&apos;.&apos;;
-var address = addressUtil(use, addressText, line, city, state, postalCode);
-var Patient = patientUtil(gender, date, ssn, address, lastName, firstName);
-var source = msg[&apos;MSH&apos;][&apos;MSH.3&apos;][&apos;MSH.3.1&apos;].toString();
-var uuid =  $(&apos;ID&apos;);
-var messageHeader = msgHeaderUtil(uuid, source, Patient);
+if (ssn.length &gt; 0)
+ssn = ssn.replace(/\d(?!\d{4})/g, &quot;x&quot;);
+Patient.identifier = [{
+     &quot;use&quot;: &quot;usual&quot;,
+     &quot;type&quot;: {
+       &quot;coding&quot;: [
+         {
+           &quot;system&quot;: &quot;http://hl7.org/fhir/sid/us-ssn&quot;,
+           &quot;code&quot;: &quot;SS&quot;
+         }
+       ]
+     },
+     &quot;value&quot;: ssn
+   }];
+
+var lastName = msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.1&apos;].toString().toLowerCase();
+var firstName = msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.2&apos;].toString().toLowerCase();
+
+var humanName = {
+	family: [lastName.toString().charAt(0).toUpperCase()+lastName.toString().slice(1)],
+	given: [firstName.toString().charAt(0).toUpperCase()+firstName.toString().slice(1)],
+	text: [firstName.toString().charAt(0).toUpperCase()+firstName.toString().slice(1)+&apos; &apos;+lastName.toString().charAt(0).toUpperCase()+lastName.toString().slice(1)]
+};
+Patient.name = [humanName];
+var address ={
+	 &quot;use&quot;: msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.7&apos;].toString(),
+      &quot;type&quot;: &quot;&quot;,
+      &quot;text&quot;: msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.1&apos;].toString()+&apos;, &apos;+msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.2&apos;].toString()+&apos;, &apos;+msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.3&apos;].toString()+&apos;, &apos;+msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.4&apos;].toString()+&apos;, &apos;+msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.5&apos;].toString(),
+      &quot;line&quot;: [
+        msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.1&apos;].toString()
+      ],
+      &quot;city&quot;: msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.3&apos;].toString(),      
+      &quot;state&quot;: msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.4&apos;].toString(),
+      &quot;postalCode&quot;: msg[&apos;PID&apos;][&apos;PID.11&apos;][&apos;PID.11.5&apos;].toString()      
+      }
+Patient.address = [address];
+var messageHeader = {};
+
+messageHeader.resourceType = &quot;MessageHeader&quot;;
+messageHeader.id = {
+	&quot;uuid&quot;: $(&apos;ID&apos;)
+}
+messageHeader.source = {
+	name: msg[&apos;MSH&apos;][&apos;MSH.3&apos;][&apos;MSH.3.1&apos;].toString()
+}
+messageHeader.destination = [{
+	name: &apos;Data-Management&apos;
+}]
+messageHeader.data = [Patient];
 
 msg = JSON.stringify(messageHeader);</script>
           </com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
@@ -719,23 +801,29 @@ TExFTnwxOTk1MDUwMTEyMDEKCgo=</inboundTemplate>
       </responseTransformer>
       <filter version="3.5.0">
         <elements>
-          <com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
-            <name>DOB</name>
+          <com.mirth.connect.plugins.rulebuilder.RuleBuilderRule>
+            <name>Accept message if &quot;msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.1&apos;].toString()&quot; exists</name>
             <sequenceNumber>0</sequenceNumber>
-            <script>return isValid(msg[&apos;PID&apos;][&apos;PID.7&apos;][&apos;PID.7.1&apos;].toString());isValid</script>
-          </com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
-          <com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
-            <name>LNAME</name>
+            <field>msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.1&apos;].toString()</field>
+            <condition>EXISTS</condition>
+            <values/>
+          </com.mirth.connect.plugins.rulebuilder.RuleBuilderRule>
+          <com.mirth.connect.plugins.rulebuilder.RuleBuilderRule>
+            <name>Accept message if &quot;msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.2&apos;].toString()&quot; exists</name>
             <sequenceNumber>1</sequenceNumber>
             <operator>AND</operator>
-            <script>return isValid(msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.1&apos;].toString());</script>
-          </com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
-          <com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
-            <name>FNAME</name>
+            <field>msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.2&apos;].toString()</field>
+            <condition>EXISTS</condition>
+            <values/>
+          </com.mirth.connect.plugins.rulebuilder.RuleBuilderRule>
+          <com.mirth.connect.plugins.rulebuilder.RuleBuilderRule>
+            <name>Accept message if &quot;msg[&apos;PID&apos;][&apos;PID.7&apos;][&apos;PID.7.1&apos;].toString()&quot; exists</name>
             <sequenceNumber>2</sequenceNumber>
             <operator>AND</operator>
-            <script>return isValid(msg[&apos;PID&apos;][&apos;PID.5&apos;][&apos;PID.5.2&apos;].toString());</script>
-          </com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
+            <field>msg[&apos;PID&apos;][&apos;PID.7&apos;][&apos;PID.7.1&apos;].toString()</field>
+            <condition>EXISTS</condition>
+            <values/>
+          </com.mirth.connect.plugins.rulebuilder.RuleBuilderRule>
         </elements>
       </filter>
       <transportName>HTTP Sender</transportName>
@@ -796,7 +884,7 @@ return;</undeployScript>
     <metadata>
       <enabled>true</enabled>
       <lastModified>
-        <time>1506071235611</time>
+        <time>1506079366457</time>
         <timezone>Asia/Kolkata</timezone>
       </lastModified>
       <pruningSettings>

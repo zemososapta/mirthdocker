@@ -1,9 +1,9 @@
 <channel version="3.5.0">
   <id>a2e7b476-50b9-42f1-a8f4-718b41b5c7fe</id>
-  <nextMetaDataId>6</nextMetaDataId>
+  <nextMetaDataId>8</nextMetaDataId>
   <name>FHIR-Dedupe</name>
   <description></description>
-  <revision>66</revision>
+  <revision>78</revision>
   <sourceConnector version="3.5.0">
     <metaDataId>0</metaDataId>
     <name>sourceConnector</name>
@@ -741,8 +741,11 @@ WHERE
           </com.mirth.connect.plugins.mapper.MapperStep>
           <com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
             <sequenceNumber>11</sequenceNumber>
-            <script>var gender = $(&apos;gender&apos;);
-var birthDate = $(&apos;birthdate&apos;);
+            <script>var Patient = {};
+Patient.resourceType = &quot;Patient&quot;;
+Patient.gender = $(&apos;gender&apos;);
+Patient.birthDate = $(&apos;birthdate&apos;);
+var ssn =&apos;&apos;; 
 for(var i in msg[&apos;identifier&apos;])
 {
  	if(msg[&apos;identifier&apos;][i][&apos;type&apos;]!= null){
@@ -755,12 +758,57 @@ for(var i in msg[&apos;identifier&apos;])
    	  }
  	}
 }
-var lastName = makeUpper(msg[&apos;name&apos;][0][&apos;family&apos;][0].toString());
-var firstName = makeUpper(msg[&apos;name&apos;][0][&apos;given&apos;][0].toString());
-var addressText = $(&apos;address_line&apos;)+&apos; ,&apos;+$(&apos;address_city&apos;)+&apos;, &apos;+$(&apos;address_state&apos;)+&apos;, &apos;+$(&apos;address_postalcode&apos;);
-var address = addressUtil($(&apos;address_use&apos;), addressText, $(&apos;address_line&apos;), $(&apos;address_city&apos;), $(&apos;address_state&apos;), $(&apos;address_postalcode&apos;));
-var Patient = patientUtil(gender, birthDate, ssn, address, lastName, firstName);
-var messageHeader = msgHeaderUtil($(&apos;FHIR UNIQUE ID&apos;), $(&apos;source_name&apos;), Patient);
+if(ssn != null)
+	ssn = ssn.replace(/\d(?!\d{4})/g, &quot;x&quot;);
+Patient.identifier = [{
+     &quot;use&quot;: &quot;usual&quot;,
+     &quot;type&quot;: {
+       &quot;coding&quot;: [
+         {
+           &quot;system&quot;: &quot;http://hl7.org/fhir/sid/us-ssn&quot;,
+           &quot;code&quot;: &quot;SS&quot;
+         }
+       ]
+     },
+     &quot;value&quot;: ssn
+   }];
+
+var lastName = msg[&apos;name&apos;][0][&apos;family&apos;][0].toUpperCase() + msg[&apos;name&apos;][0][&apos;family&apos;][0].slice(1).toLowerCase();
+var firstName = msg[&apos;name&apos;][0][&apos;given&apos;][0].toUpperCase() + msg[&apos;name&apos;][0][&apos;given&apos;][0].slice(1).toLowerCase();
+
+var humanName = {
+	family : lastName,
+	given : firstName,
+	text : firstName+&apos; &apos;+lastName
+	};
+Patient.name = [humanName];
+var address ={
+	&quot;use&quot;: $(&apos;address_use&apos;),
+      &quot;type&quot;: &quot;&quot;,
+      &quot;text&quot;:  $(&apos;address_line&apos;)+&apos;, &apos;+$(&apos;address_city&apos;)+&apos;, &apos;+$(&apos;address_state&apos;)+&apos; ,&apos;+$(&apos;address_postalcode&apos;),
+      &quot;line&quot;: [
+        $(&apos;address_line&apos;)
+      ],
+      &quot;city&quot;: $(&apos;address_city&apos;),      
+      &quot;state&quot;: $(&apos;address_state&apos;),
+      &quot;postalCode&quot;: $(&apos;address_postalcode&apos;)      
+      }
+Patient.address = [address];
+var messageHeader = {};
+
+messageHeader.resourceType = &quot;MessageHeader&quot;;
+messageHeader.id = {
+	&quot;uuid&quot;: $(&apos;FHIR UNIQUE ID&apos;)
+}
+
+messageHeader.source = {
+	
+	name: $(&apos;source_name&apos;)
+}
+messageHeader.destination = [{
+	name: &apos;Data-Management&apos;
+}]
+messageHeader.data = [Patient];
 
 msg = JSON.stringify(messageHeader);</script>
           </com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
@@ -865,21 +913,30 @@ CgoK</inboundTemplate>
       <filter version="3.5.0">
         <elements>
           <com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
-            <name>Check Birthday</name>
+            <name>family name</name>
             <sequenceNumber>0</sequenceNumber>
-            <script>return isValid(msg[&apos;birthDate&apos;]);</script>
+            <script>if(msg[&apos;name&apos;][0][&apos;family&apos;][0] != null)
+	return true ;
+else 
+	return false;</script>
           </com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
           <com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
-            <name>Check Last name</name>
+            <name>first name</name>
             <sequenceNumber>1</sequenceNumber>
             <operator>AND</operator>
-            <script>return isValid(msg[&apos;name&apos;][0][&apos;family&apos;][0]);</script>
+            <script>if(msg[&apos;name&apos;][0][&apos;given&apos;][0] != null)
+	return true ;
+else 
+	return false;</script>
           </com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
           <com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
-            <name>Check first name</name>
+            <name>last name</name>
             <sequenceNumber>2</sequenceNumber>
             <operator>AND</operator>
-            <script>return isValid(msg[&apos;name&apos;][0][&apos;given&apos;][0]);</script>
+            <script>if(msg[&apos;birthDate&apos;] != null)
+	return true ;
+else 
+	return false;</script>
           </com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
         </elements>
       </filter>
@@ -889,8 +946,8 @@ CgoK</inboundTemplate>
       <waitForPrevious>true</waitForPrevious>
     </connector>
     <connector version="3.5.0">
-      <metaDataId>5</metaDataId>
-      <name>Transformed-FHIR-KAFKA</name>
+      <metaDataId>7</metaDataId>
+      <name>Transformed Kafka</name>
       <properties class="com.mirth.connect.connectors.http.HttpDispatcherProperties" version="3.5.0">
         <pluginProperties/>
         <destinationConnectorProperties version="3.5.0">
@@ -1040,8 +1097,11 @@ CgoK</inboundTemplate>
           </com.mirth.connect.plugins.mapper.MapperStep>
           <com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
             <sequenceNumber>11</sequenceNumber>
-            <script>var gender = $(&apos;gender&apos;);
-var birthDate = $(&apos;birthdate&apos;);
+            <script>var Patient = {};
+Patient.resourceType = &quot;Patient&quot;;
+Patient.gender = $(&apos;gender&apos;);
+Patient.birthDate = $(&apos;birthdate&apos;);
+var ssn =&apos;&apos;; 
 for(var i in msg[&apos;identifier&apos;])
 {
  	if(msg[&apos;identifier&apos;][i][&apos;type&apos;]!= null){
@@ -1054,12 +1114,57 @@ for(var i in msg[&apos;identifier&apos;])
    	  }
  	}
 }
-var lastName = makeUpper(msg[&apos;name&apos;][0][&apos;family&apos;][0].toString());
-var firstName = makeUpper(msg[&apos;name&apos;][0][&apos;given&apos;][0].toString());
-var addressText = $(&apos;address_line&apos;)+&apos; ,&apos;+$(&apos;address_city&apos;)+&apos;, &apos;+$(&apos;address_state&apos;)+&apos;, &apos;+$(&apos;address_postalcode&apos;);
-var address = addressUtil($(&apos;address_use&apos;), addressText, $(&apos;address_line&apos;), $(&apos;address_city&apos;), $(&apos;address_state&apos;), $(&apos;address_postalcode&apos;));
-var Patient = patientUtil(gender, birthDate, ssn, address, lastName, firstName);
-var messageHeader = msgHeaderUtil($(&apos;FHIR UNIQUE ID&apos;), $(&apos;source_name&apos;), Patient);
+if(ssn != null)
+	ssn = ssn.replace(/\d(?!\d{4})/g, &quot;x&quot;);
+Patient.identifier = [{
+     &quot;use&quot;: &quot;usual&quot;,
+     &quot;type&quot;: {
+       &quot;coding&quot;: [
+         {
+           &quot;system&quot;: &quot;http://hl7.org/fhir/sid/us-ssn&quot;,
+           &quot;code&quot;: &quot;SS&quot;
+         }
+       ]
+     },
+     &quot;value&quot;: ssn
+   }];
+
+var lastName = msg[&apos;name&apos;][0][&apos;family&apos;][0].toUpperCase() + msg[&apos;name&apos;][0][&apos;family&apos;][0].slice(1).toLowerCase();
+var firstName = msg[&apos;name&apos;][0][&apos;given&apos;][0].toUpperCase() + msg[&apos;name&apos;][0][&apos;given&apos;][0].slice(1).toLowerCase();
+
+var humanName = {
+	family : lastName,
+	given : firstName,
+	text : firstName+&apos; &apos;+lastName
+	};
+Patient.name = [humanName];
+var address ={
+	&quot;use&quot;: $(&apos;address_use&apos;),
+      &quot;type&quot;: &quot;&quot;,
+      &quot;text&quot;:  $(&apos;address_line&apos;)+&apos;, &apos;+$(&apos;address_city&apos;)+&apos;, &apos;+$(&apos;address_state&apos;)+&apos; ,&apos;+$(&apos;address_postalcode&apos;),
+      &quot;line&quot;: [
+        $(&apos;address_line&apos;)
+      ],
+      &quot;city&quot;: $(&apos;address_city&apos;),      
+      &quot;state&quot;: $(&apos;address_state&apos;),
+      &quot;postalCode&quot;: $(&apos;address_postalcode&apos;)      
+      }
+Patient.address = [address];
+var messageHeader = {};
+
+messageHeader.resourceType = &quot;MessageHeader&quot;;
+messageHeader.id = {
+	&quot;uuid&quot;: $(&apos;FHIR UNIQUE ID&apos;)
+}
+
+messageHeader.source = {
+	
+	name: $(&apos;source_name&apos;)
+}
+messageHeader.destination = [{
+	name: &apos;Data-Management&apos;
+}]
+messageHeader.data = [Patient];
 
 msg = JSON.stringify(messageHeader);</script>
           </com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
@@ -1164,21 +1269,30 @@ CgoK</inboundTemplate>
       <filter version="3.5.0">
         <elements>
           <com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
-            <name>Check Birthday</name>
+            <name>family name</name>
             <sequenceNumber>0</sequenceNumber>
-            <script>return isValid(msg[&apos;birthDate&apos;]);</script>
+            <script>if(msg[&apos;name&apos;][0][&apos;family&apos;][0] != null)
+	return true ;
+else 
+	return false;</script>
           </com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
           <com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
-            <name>Check Last name</name>
+            <name>first name</name>
             <sequenceNumber>1</sequenceNumber>
             <operator>AND</operator>
-            <script>return isValid(msg[&apos;name&apos;][0][&apos;family&apos;][0]);</script>
+            <script>if(msg[&apos;name&apos;][0][&apos;given&apos;][0] != null)
+	return true ;
+else 
+	return false;</script>
           </com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
           <com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
-            <name>Check first name</name>
+            <name>last name</name>
             <sequenceNumber>2</sequenceNumber>
             <operator>AND</operator>
-            <script>return isValid(msg[&apos;name&apos;][0][&apos;given&apos;][0]);</script>
+            <script>if(msg[&apos;birthDate&apos;] != null)
+	return true ;
+else 
+	return false;</script>
           </com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
         </elements>
       </filter>
@@ -1235,7 +1349,7 @@ return;</undeployScript>
     <metadata>
       <enabled>true</enabled>
       <lastModified>
-        <time>1506074882016</time>
+        <time>1506079811356</time>
         <timezone>Asia/Kolkata</timezone>
       </lastModified>
       <pruningSettings>
