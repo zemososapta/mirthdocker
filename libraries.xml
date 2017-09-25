@@ -1,0 +1,689 @@
+<list>
+  <codeTemplateLibrary version="3.5.0">
+    <id>a084db27-49e0-4c67-893b-ffcc9f1d6e94</id>
+    <name>FHIR Helper Functions</name>
+    <revision>2</revision>
+    <lastModified>
+      <time>1506331720631</time>
+      <timezone>Etc/UTC</timezone>
+    </lastModified>
+    <description></description>
+    <includeNewChannels>false</includeNewChannels>
+    <enabledChannelIds/>
+    <disabledChannelIds>
+      <string>a2e7b476-50b9-42f1-a8f4-718b41b5c7fe</string>
+      <string>a7724479-2f73-4256-9cd4-dc8371f91535</string>
+      <string>b0ca0896-abcb-48f1-bff2-452dd42f58d4</string>
+    </disabledChannelIds>
+    <codeTemplates>
+      <codeTemplate version="3.5.0">
+        <id>0e158aa1-77ee-465c-bb7a-13f4c8ecda13</id>
+        <name>Create FHIR OperationOutcome</name>
+        <revision>1</revision>
+        <lastModified>
+          <time>1506329686102</time>
+          <timezone>Etc/UTC</timezone>
+        </lastModified>
+        <contextSet>
+          <delegate>
+            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+            <contextType>CHANNEL_ATTACHMENT</contextType>
+            <contextType>DESTINATION_DISPATCHER</contextType>
+            <contextType>SOURCE_RECEIVER</contextType>
+            <contextType>CHANNEL_POSTPROCESSOR</contextType>
+            <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+            <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+          </delegate>
+        </contextSet>
+        <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+          <type>FUNCTION</type>
+          <code>/**
+	Creates a FHIR OperationOutcome resource and adds it to the response map with the key &quot;response&quot;.
+
+	@param {String} severity - Indicates whether the issue indicates a variation from successful
+		processing. Values: fatal | error | warning | information
+	@param {String} code - Describes the type of the issue. The system that creates an
+		OperationOutcome SHALL choose the most applicable code from the IssueType value set, and may
+		additional provide its own code for the error in the details element. Values: invalid | security |
+		processing | transient | informational
+	@param {String} details - Additional details about the error. This may be a text description of
+		the error, or a system code that identifies the error.
+	@param {int} httpStatusCode - The HTTP status code to send back with the response. Defaults to 400
+		if not specified.
+	@param {Error} e - If included, this will be used to build up the response status message and
+		error.
+	@param {Boolean} isFormatXML - If true, the resource will be formatted in XML. Otherwise, it will
+		be formatted in JSON. If not specified, it will attempt to find the _format parameter in the source
+		map, or return XML.
+	@return {Response} The created Response object.
+*/
+function createOperationOutcome(severity, code, details, httpStatusCode, e, isFormatXML) {
+	if (!httpStatusCode) {
+		httpStatusCode = 400;
+	}
+
+	if (!isFormatXML) {
+		if ($s(&apos;parameters&apos;) &amp;&amp; $s(&apos;parameters&apos;).contains(&apos;_format&apos;)) {
+			isFormatXML = !FhirUtil.isJSON($s(&apos;parameters&apos;).getParameter(&apos;_format&apos;));
+		} else {
+			isFormatXML = true;
+		}
+	}
+
+	var outcome = FhirUtil.createOperationOutcome(severity, code, details);
+	var message = isFormatXML ? FhirUtil.toXML(outcome) : FhirUtil.toJSON(outcome);
+	responseMap.put(&apos;response&apos;, FhirResponseFactory.getResponse(message, httpStatusCode, isFormatXML ? FhirUtil.getMIMETypeXML() : FhirUtil.getMIMETypeJSON()));
+	var response = new Response(message);
+	response.setStatusMessage(severity.toUpperCase() + &apos; OperationOutcome created with status &apos; + httpStatusCode + &apos;.&apos;);
+
+	if (httpStatusCode &gt;= 400) {
+		response.setStatus(Status.ERROR);
+
+		if (e) {
+			var customMessage = &apos;Channel &apos; + channelName + &apos;: &apos;;
+			if (e.rhinoException) {
+				customMessage += &apos;Error on line &apos; + e.rhinoException.lineNumber() + &apos;: &apos;;
+			}
+			customMessage += e.toString();
+	
+			var errorContent = com.mirth.connect.util.ErrorMessageBuilder.buildErrorMessage(&apos;FHIR Listener&apos;, customMessage, e.javaException || null);
+			if (e.javaException) {
+				logger.error(errorContent, e.javaException);	
+			} else {
+				logger.error(errorContent);
+			}
+			response.setError(errorContent);
+		}
+	}
+
+	return response;
+}</code>
+        </properties>
+      </codeTemplate>
+      <codeTemplate version="3.5.0">
+        <id>13e82aac-df07-463e-b8ca-8f4b98243618</id>
+        <name>FHIR DB - Execute Cached Query</name>
+        <revision>1</revision>
+        <lastModified>
+          <time>1506329685907</time>
+          <timezone>Etc/UTC</timezone>
+        </lastModified>
+        <contextSet>
+          <delegate>
+            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+            <contextType>CHANNEL_ATTACHMENT</contextType>
+            <contextType>DESTINATION_DISPATCHER</contextType>
+            <contextType>SOURCE_RECEIVER</contextType>
+            <contextType>CHANNEL_POSTPROCESSOR</contextType>
+            <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+            <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+          </delegate>
+        </contextSet>
+        <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+          <type>FUNCTION</type>
+          <code>/**
+	Executes a prepared query on the FHIR database and returns a CachedRowSet.
+
+	@param {String} expression - The prepared statement to be executed.
+	@param {List} parameters - The parameters for the prepared statement.
+	@return {CachedRowSet} The result of the query, as a CachedRowSet.
+*/
+function executeCachedQuery(expression, parameters) {
+	return executeOperation(&apos;executeCachedQuery&apos;, expression, parameters);
+}</code>
+        </properties>
+      </codeTemplate>
+      <codeTemplate version="3.5.0">
+        <id>9ec9d96c-4ea4-4f1c-8520-b73782f36aed</id>
+        <name>FHIR DB - Execute Cached Query and Get Keys</name>
+        <revision>1</revision>
+        <lastModified>
+          <time>1506329686073</time>
+          <timezone>Etc/UTC</timezone>
+        </lastModified>
+        <contextSet>
+          <delegate>
+            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+            <contextType>CHANNEL_ATTACHMENT</contextType>
+            <contextType>DESTINATION_DISPATCHER</contextType>
+            <contextType>SOURCE_RECEIVER</contextType>
+            <contextType>CHANNEL_POSTPROCESSOR</contextType>
+            <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+            <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+          </delegate>
+        </contextSet>
+        <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+          <type>FUNCTION</type>
+          <code>/**
+	Executes an INSERT/UPDATE statement on the database and returns a CachedRowSet containing any
+	generated keys.
+
+	@param {String} expression - The prepared statement to be executed.
+	@param {List} parameters - The parameters for the prepared statement.
+	@return {CachedRowSet} A CachedRowSet containing any generated keys.
+*/
+function executeUpdateAndGetGeneratedKeys(expression, parameters) {
+	return executeOperation(&apos;executeUpdateAndGetGeneratedKeys&apos;, expression, parameters);
+}</code>
+        </properties>
+      </codeTemplate>
+      <codeTemplate version="3.5.0">
+        <id>8960e710-4870-49ea-b952-63d2b74b7bbc</id>
+        <name>FHIR DB - Execute Update</name>
+        <revision>1</revision>
+        <lastModified>
+          <time>1506329685747</time>
+          <timezone>Etc/UTC</timezone>
+        </lastModified>
+        <contextSet>
+          <delegate>
+            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+            <contextType>CHANNEL_ATTACHMENT</contextType>
+            <contextType>DESTINATION_DISPATCHER</contextType>
+            <contextType>SOURCE_RECEIVER</contextType>
+            <contextType>CHANNEL_POSTPROCESSOR</contextType>
+            <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+            <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+          </delegate>
+        </contextSet>
+        <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+          <type>FUNCTION</type>
+          <code>/**
+	Executes a prepared INSERT/UPDATE statement on the database and returns the row count.
+
+	@param {String} expression - The prepared statement to be executed.
+	@param {List} parameters - The parameters for the prepared statement.
+	@return {int} A count of the number of updated rows.
+*/
+function executeUpdate(expression, parameters) {
+	return executeOperation(&apos;executeUpdate&apos;, expression, parameters);
+}</code>
+        </properties>
+      </codeTemplate>
+      <codeTemplate version="3.5.0">
+        <id>23d0fa52-0d56-4e9a-82a5-56a6a3d55e43</id>
+        <name>FHIR DB - Get Connection</name>
+        <revision>1</revision>
+        <lastModified>
+          <time>1506329685808</time>
+          <timezone>Etc/UTC</timezone>
+        </lastModified>
+        <contextSet>
+          <delegate>
+            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+            <contextType>CHANNEL_ATTACHMENT</contextType>
+            <contextType>DESTINATION_DISPATCHER</contextType>
+            <contextType>SOURCE_RECEIVER</contextType>
+            <contextType>CHANNEL_POSTPROCESSOR</contextType>
+            <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+            <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+          </delegate>
+        </contextSet>
+        <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+          <type>FUNCTION</type>
+          <code>/**
+	Retrieves the FHIR database connection from the global channel map, creating a new one if necessary.
+
+	@param {Boolean} recreate - If true, the connection will always be closed and created anew.
+	@return {DatabaseConnection} The database connection object.
+*/
+function getFHIRDBConnection(recreate) {
+	var dbConn = $gc(&apos;dbConn&apos;);
+
+	if (!dbConn || recreate) {
+		if (dbConn) {
+			try {
+				dbConn.close();
+			} catch (e) {}
+		}
+		dbConn = DatabaseConnectionFactory.createDatabaseConnection($(&apos;fhirDBDriver&apos;), $(&apos;fhirDBUrl&apos;), $(&apos;fhirDBUsername&apos;), $(&apos;fhirDBPassword&apos;));
+		$gc(&apos;dbConn&apos;, dbConn);
+	}
+
+	return dbConn;
+}
+
+function executeOperation(operation, expression, parameters) {
+	var dbConn = getFHIRDBConnection();
+	var attempts = 0;
+	var maxAttempts = NumberUtils.toInt($(&apos;fhirDBMaxRetries&apos;) + &apos;&apos;, 0) + 1;
+
+	while (attempts &lt; maxAttempts) {
+		attempts++;
+
+		try {
+			if (parameters) {
+				for (var i in parameters) {
+					var param = parameters[i];
+					if (param instanceof Number) {
+						parameters[i] = new java.lang.Integer(param);
+					}
+				}
+				
+				return dbConn[operation](expression, java.util.Arrays.asList(parameters));
+			} else {
+				return dbConn[operation](expression);
+			}
+		} catch (e) {
+			logger.info(&apos;Error executing statement, checking if valid...&apos;);
+
+			try {
+				dbConn.executeCachedQuery(&apos;SELECT 1&apos;);
+			} catch (e2) {
+				logger.info(&apos;Connection invalid, recreating...&apos;);
+
+				try {
+					dbConn = getFHIRDBConnection(true);
+				} catch (e3) {}
+			}
+
+			if (attempts &gt;= maxAttempts) {
+				var errorMessage = &apos;Unable to execute statement.\n&apos;;
+				errorMessage += &apos;Expression: &apos; + expression + &apos;\n&apos;;
+				if (parameters) {
+					errorMessage += &apos;Parameters: &apos; + java.util.Arrays.asList(parameters).toString();
+				}
+				logger.error(errorMessage, e.javaException);
+				throw e;
+			}
+
+			java.lang.Thread.sleep(1000);
+		}
+	}
+}</code>
+        </properties>
+      </codeTemplate>
+      <codeTemplate version="3.5.0">
+        <id>a9691b6e-b455-4789-b4d7-89bcc095a163</id>
+        <name>Get Prefer Header Value</name>
+        <revision>1</revision>
+        <lastModified>
+          <time>1506329686041</time>
+          <timezone>Etc/UTC</timezone>
+        </lastModified>
+        <contextSet>
+          <delegate>
+            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+            <contextType>CHANNEL_ATTACHMENT</contextType>
+            <contextType>DESTINATION_DISPATCHER</contextType>
+            <contextType>SOURCE_RECEIVER</contextType>
+            <contextType>CHANNEL_POSTPROCESSOR</contextType>
+            <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+            <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+          </delegate>
+        </contextSet>
+        <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+          <type>FUNCTION</type>
+          <code>/**
+	Returns the &quot;return&quot; element of the Prefer HTTP header if specified.
+
+	@return {String} The &quot;return&quot; element of the Prefer header, or undefined if not present
+*/
+function getPreferValue() {
+	var preferReturn;
+	var preferHeader = $(&apos;headers&apos;).getHeader(&apos;Prefer&apos;);
+	
+	if (preferHeader) {
+		for each (element in new org.apache.http.message.BasicHeader(&apos;Prefer&apos;, preferHeader).getElements()) {
+			if (element.getName() == &apos;return&apos;) {
+				preferReturn = element.getValue();
+				break;
+			}
+		}
+	}
+	
+	return preferReturn;
+}</code>
+        </properties>
+      </codeTemplate>
+      <codeTemplate version="3.5.0">
+        <id>18c799ae-3553-40b0-b8cc-8898fbad5f7d</id>
+        <name>Import Common Packages</name>
+        <revision>1</revision>
+        <lastModified>
+          <time>1506329685874</time>
+          <timezone>Etc/UTC</timezone>
+        </lastModified>
+        <contextSet>
+          <delegate>
+            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+            <contextType>CHANNEL_ATTACHMENT</contextType>
+            <contextType>DESTINATION_DISPATCHER</contextType>
+            <contextType>SOURCE_RECEIVER</contextType>
+            <contextType>CHANNEL_POSTPROCESSOR</contextType>
+            <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+            <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+          </delegate>
+        </contextSet>
+        <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+          <type>COMPILED_CODE</type>
+          <code>/**
+	Imports HAPI FHIR packages commonly used in the FHIR Listener channel.
+*/
+importPackage(Packages.ca.uhn.fhir.model.api);
+importPackage(Packages.ca.uhn.fhir.model.base.resource);
+importPackage(Packages.ca.uhn.fhir.model.primitive);
+importPackage(Packages.ca.uhn.fhir.model.dstu2.composite);
+importPackage(Packages.ca.uhn.fhir.model.dstu2.resource);
+importPackage(Packages.ca.uhn.fhir.model.dstu2.valueset);
+importPackage(org.apache.commons.lang3);
+importPackage(org.apache.commons.lang3.math);</code>
+        </properties>
+      </codeTemplate>
+    </codeTemplates>
+  </codeTemplateLibrary>
+  <codeTemplateLibrary version="3.5.0">
+    <id>8a9b87fb-37b7-4d28-a7a6-7b7512202bad</id>
+    <name>util library</name>
+    <revision>2</revision>
+    <lastModified>
+      <time>1506331720656</time>
+      <timezone>Etc/UTC</timezone>
+    </lastModified>
+    <description></description>
+    <includeNewChannels>false</includeNewChannels>
+    <enabledChannelIds>
+      <string>a2e7b476-50b9-42f1-a8f4-718b41b5c7fe</string>
+      <string>b0ca0896-abcb-48f1-bff2-452dd42f58d4</string>
+    </enabledChannelIds>
+    <disabledChannelIds>
+      <string>a7724479-2f73-4256-9cd4-dc8371f91535</string>
+    </disabledChannelIds>
+    <codeTemplates>
+      <codeTemplate version="3.5.0">
+        <id>37285b41-b499-450c-8835-337b5cb68f6b</id>
+        <name>Function for making first letter upper case</name>
+        <revision>1</revision>
+        <lastModified>
+          <time>1506329685842</time>
+          <timezone>Etc/UTC</timezone>
+        </lastModified>
+        <contextSet>
+          <delegate>
+            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+            <contextType>GLOBAL_UNDEPLOY</contextType>
+            <contextType>GLOBAL_DEPLOY</contextType>
+            <contextType>CHANNEL_BATCH</contextType>
+            <contextType>GLOBAL_PREPROCESSOR</contextType>
+            <contextType>CHANNEL_UNDEPLOY</contextType>
+            <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+            <contextType>CHANNEL_ATTACHMENT</contextType>
+            <contextType>DESTINATION_DISPATCHER</contextType>
+            <contextType>CHANNEL_DEPLOY</contextType>
+            <contextType>CHANNEL_PREPROCESSOR</contextType>
+            <contextType>SOURCE_RECEIVER</contextType>
+            <contextType>CHANNEL_POSTPROCESSOR</contextType>
+            <contextType>GLOBAL_POSTPROCESSOR</contextType>
+            <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+          </delegate>
+        </contextSet>
+        <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+          <type>FUNCTION</type>
+          <code>/**
+	This function make the first letter of a string capital and rest lower.
+
+	@param {String} name - First or Last name
+	@return {String} return First or Last name where first letter is capital 
+*/
+function makeUpper(name) {
+	
+	return name[0].toUpperCase() + name.slice(1).toLowerCase();
+	
+}</code>
+        </properties>
+      </codeTemplate>
+      <codeTemplate version="3.5.0">
+        <id>977641cf-8fac-4937-a7ba-a1f46db0c6b9</id>
+        <name>Function for masking SSN</name>
+        <revision>1</revision>
+        <lastModified>
+          <time>1506329685938</time>
+          <timezone>Etc/UTC</timezone>
+        </lastModified>
+        <contextSet>
+          <delegate>
+            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+            <contextType>GLOBAL_UNDEPLOY</contextType>
+            <contextType>GLOBAL_DEPLOY</contextType>
+            <contextType>CHANNEL_BATCH</contextType>
+            <contextType>GLOBAL_PREPROCESSOR</contextType>
+            <contextType>CHANNEL_UNDEPLOY</contextType>
+            <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+            <contextType>CHANNEL_ATTACHMENT</contextType>
+            <contextType>DESTINATION_DISPATCHER</contextType>
+            <contextType>CHANNEL_DEPLOY</contextType>
+            <contextType>CHANNEL_PREPROCESSOR</contextType>
+            <contextType>SOURCE_RECEIVER</contextType>
+            <contextType>CHANNEL_POSTPROCESSOR</contextType>
+            <contextType>GLOBAL_POSTPROCESSOR</contextType>
+            <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+          </delegate>
+        </contextSet>
+        <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+          <type>FUNCTION</type>
+          <code>/**
+	This function mask last four digit of ssn
+	@param {String} ssn - Nine digit social security number
+	@return {String} return Masked ssn
+*/
+function maskSSN(ssn) {
+	if( ssn != null)
+	{
+		ssn = ssn.replace(/\d(?!\d{4})/g, &quot;x&quot;);		
+	}
+	return ssn;
+}</code>
+        </properties>
+      </codeTemplate>
+      <codeTemplate version="3.5.0">
+        <id>37e7e63e-f39a-40e3-a835-df95d07a1286</id>
+        <name>Function to check validity</name>
+        <revision>1</revision>
+        <lastModified>
+          <time>1506329685612</time>
+          <timezone>Etc/UTC</timezone>
+        </lastModified>
+        <contextSet>
+          <delegate>
+            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+            <contextType>GLOBAL_UNDEPLOY</contextType>
+            <contextType>GLOBAL_DEPLOY</contextType>
+            <contextType>CHANNEL_BATCH</contextType>
+            <contextType>GLOBAL_PREPROCESSOR</contextType>
+            <contextType>CHANNEL_UNDEPLOY</contextType>
+            <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+            <contextType>CHANNEL_ATTACHMENT</contextType>
+            <contextType>DESTINATION_DISPATCHER</contextType>
+            <contextType>CHANNEL_DEPLOY</contextType>
+            <contextType>CHANNEL_PREPROCESSOR</contextType>
+            <contextType>SOURCE_RECEIVER</contextType>
+            <contextType>CHANNEL_POSTPROCESSOR</contextType>
+            <contextType>GLOBAL_POSTPROCESSOR</contextType>
+            <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+          </delegate>
+        </contextSet>
+        <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+          <type>FUNCTION</type>
+          <code>/**
+	this function will do validation of messages.
+
+	@param {String} arg1 - arg1 message attribute 
+	@return {String} return true if message is valid else false
+*/
+function isValid(arg1) {
+	if(arg1 != null &amp;&amp; arg1.length &gt; 0)
+		return true;
+	else
+		return false;
+}</code>
+        </properties>
+      </codeTemplate>
+      <codeTemplate version="3.5.0">
+        <id>7af604fe-fdc5-4b4d-a662-0af5c3bfbd30</id>
+        <name>Function to create address </name>
+        <revision>1</revision>
+        <lastModified>
+          <time>1506329685974</time>
+          <timezone>Etc/UTC</timezone>
+        </lastModified>
+        <contextSet>
+          <delegate>
+            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+            <contextType>GLOBAL_UNDEPLOY</contextType>
+            <contextType>GLOBAL_DEPLOY</contextType>
+            <contextType>CHANNEL_BATCH</contextType>
+            <contextType>GLOBAL_PREPROCESSOR</contextType>
+            <contextType>CHANNEL_UNDEPLOY</contextType>
+            <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+            <contextType>CHANNEL_ATTACHMENT</contextType>
+            <contextType>DESTINATION_DISPATCHER</contextType>
+            <contextType>CHANNEL_DEPLOY</contextType>
+            <contextType>CHANNEL_PREPROCESSOR</contextType>
+            <contextType>SOURCE_RECEIVER</contextType>
+            <contextType>CHANNEL_POSTPROCESSOR</contextType>
+            <contextType>GLOBAL_POSTPROCESSOR</contextType>
+            <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+          </delegate>
+        </contextSet>
+        <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+          <type>FUNCTION</type>
+          <code>/**
+	This function creates address object from use,addressText,line,city,state,postalCode.
+
+	@param {String} use,addressText,line,city,state,postalCode
+	@return {String} return Address object
+*/
+function addressUtil(use,addressText,line,city,state,postalCode) {
+	var address ={
+	 &quot;use&quot;: use,
+      &quot;type&quot;: &quot;&quot;,
+      &quot;text&quot;:  addressText,
+      &quot;line&quot;: [
+        line
+      ],
+      &quot;city&quot;: city,      
+      &quot;state&quot;: state,
+      &quot;postalCode&quot;: postalCode    
+      }
+      return address;
+}</code>
+        </properties>
+      </codeTemplate>
+      <codeTemplate version="3.5.0">
+        <id>cd04c40d-3c68-43bb-83cc-6ca221fd0510</id>
+        <name>Function to create message header</name>
+        <revision>2</revision>
+        <lastModified>
+          <time>1506331720681</time>
+          <timezone>Etc/UTC</timezone>
+        </lastModified>
+        <contextSet>
+          <delegate>
+            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+            <contextType>GLOBAL_UNDEPLOY</contextType>
+            <contextType>GLOBAL_DEPLOY</contextType>
+            <contextType>CHANNEL_BATCH</contextType>
+            <contextType>GLOBAL_PREPROCESSOR</contextType>
+            <contextType>CHANNEL_UNDEPLOY</contextType>
+            <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+            <contextType>CHANNEL_ATTACHMENT</contextType>
+            <contextType>DESTINATION_DISPATCHER</contextType>
+            <contextType>CHANNEL_DEPLOY</contextType>
+            <contextType>CHANNEL_PREPROCESSOR</contextType>
+            <contextType>SOURCE_RECEIVER</contextType>
+            <contextType>CHANNEL_POSTPROCESSOR</contextType>
+            <contextType>GLOBAL_POSTPROCESSOR</contextType>
+            <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+          </delegate>
+        </contextSet>
+        <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+          <type>FUNCTION</type>
+          <code>/**
+	This method creates the message header 
+
+	@param {String} uuid,source,Patient - unique message id, mssgae source, Patient object
+	@return {String} return messageHeader
+*/
+function msgHeaderUtil(uuid,source,Patient) {
+	var messageHeader = {};
+	messageHeader.resourceType = &quot;Pateint&quot;;
+	messageHeader.id = {
+		&quot;uuid&quot;: uuid
+	}
+	messageHeader.source = {
+		name: source
+	}
+	messageHeader.destination = [{
+		name: &apos;Data-Management&apos;
+	}]
+	messageHeader.data = [Patient];
+	return messageHeader;
+}</code>
+        </properties>
+      </codeTemplate>
+      <codeTemplate version="3.5.0">
+        <id>3792b93f-ba55-4b5b-937b-12fcfb1f5065</id>
+        <name>Function to create patient object</name>
+        <revision>1</revision>
+        <lastModified>
+          <time>1506329686009</time>
+          <timezone>Etc/UTC</timezone>
+        </lastModified>
+        <contextSet>
+          <delegate>
+            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+            <contextType>GLOBAL_UNDEPLOY</contextType>
+            <contextType>GLOBAL_DEPLOY</contextType>
+            <contextType>CHANNEL_BATCH</contextType>
+            <contextType>GLOBAL_PREPROCESSOR</contextType>
+            <contextType>CHANNEL_UNDEPLOY</contextType>
+            <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+            <contextType>CHANNEL_ATTACHMENT</contextType>
+            <contextType>DESTINATION_DISPATCHER</contextType>
+            <contextType>CHANNEL_DEPLOY</contextType>
+            <contextType>CHANNEL_PREPROCESSOR</contextType>
+            <contextType>SOURCE_RECEIVER</contextType>
+            <contextType>CHANNEL_POSTPROCESSOR</contextType>
+            <contextType>GLOBAL_POSTPROCESSOR</contextType>
+            <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+          </delegate>
+        </contextSet>
+        <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+          <type>FUNCTION</type>
+          <code>/**
+	This function creates patient object from patient gender, birthDate, identifier and name
+
+	@param {String} gender, birthDate, identifier, humanName description
+	@return {String} return Patient object
+*/
+function patientUtil(gender,birthDate,ssn,address,lastName,firstName) {
+	var Patient = {};
+	Patient.resourceType = &quot;Patient&quot;;
+	Patient.gender = gender;
+	Patient.birthDate = birthDate.substr(0,4) + &quot;-&quot; + birthDate.substr(4,2) + &quot;-&quot; + birthDate.substr(6,2);
+	Patient.identifier = [{
+    		&quot;use&quot;: &quot;usual&quot;,
+     	&quot;type&quot;: {
+       	&quot;coding&quot;: [
+         		{
+           		&quot;system&quot;: &quot;http://hl7.org/fhir/sid/us-ssn&quot;,
+           		&quot;code&quot;: &quot;SS&quot;
+         		}
+       	]
+     },
+     	&quot;value&quot;: maskSSN(ssn)
+   	}];
+	var humanName = {
+		family: lastName,
+		given: firstName,
+		text: [firstName + &apos; &apos; + lastName]
+	};
+	Patient.name = [humanName];
+	Patient.address = [address];
+	return Patient;
+}</code>
+        </properties>
+      </codeTemplate>
+    </codeTemplates>
+  </codeTemplateLibrary>
+</list>
