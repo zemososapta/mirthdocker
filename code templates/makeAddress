@@ -6,15 +6,15 @@
 */
 function addressUtil(use,addressText,line,city,state,postalCode) {
 	var address ={
-	 "use": use,
-      "type": "",
-      "text":  addressText,
-      "line": [
-        line
-      ],
-      "city": city,      
-      "state": state,
-      "postalCode": postalCode    
+		"use": use,
+      		"type": "",
+      		"text":  addressText,
+      		"line": [
+      			  line
+      		],
+      		"city": city,      
+      		"state": state,
+      		"postalCode": postalCode    
       }
       return address;
 }
