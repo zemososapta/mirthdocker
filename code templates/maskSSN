@@ -1,0 +1,12 @@
+/**
+	This function mask last four digit of ssn
+	@param {String} ssn - Nine digit social security number
+	@return {String} return Masked ssn
+*/
+function maskSSN(ssn) {
+	if( ssn != null)
+	{
+		ssn = ssn.replace(/\d(?!\d{4})/g, "x");		
+	}
+	return ssn;
+}

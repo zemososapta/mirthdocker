@@ -1,0 +1,11 @@
+/**
+	This function make the first letter of a string capital and rest lower.
+
+	@param {String} name - First or Last name
+	@return {String} return First or Last name where first letter is capital 
+*/
+function makeUpper(name) {
+	
+	return name[0].toUpperCase() + name.slice(1).toLowerCase();
+	
+}

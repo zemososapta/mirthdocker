@@ -1,0 +1,22 @@
+var gender = $('gender');
+var birthDate = $('birthdate');
+for(var i in msg['identifier'])
+{
+ 	if(msg['identifier'][i]['type']!= null){
+ 		if(msg['identifier'][i]['type']['coding']!= null){    
+     		if(msg['identifier'][i]['type']['coding'][0]['system']!= null){
+     			if(msg['identifier'][i]['type']['coding'][0]['system']
+     			.equals('http://hl7.org/fhir/sid/us-ssn') == true)
+     				var ssn = msg['identifier'][i]['value'].toString();
+     		}
+   	  }
+ 	}
+}
+var lastName = makeUpper(msg['name'][0]['family'][0].toString());
+var firstName = makeUpper(msg['name'][0]['given'][0].toString());
+var addressText = $('address_line')+' ,'+$('address_city')+', '+$('address_state')+', '+$('address_postalcode');
+var address = addressUtil($('address_use'), addressText, $('address_line'), $('address_city'), $('address_state'), $('address_postalcode'));
+var Patient = patientUtil(gender, birthDate, ssn, address, lastName, firstName);
+var messageHeader = msgHeaderUtil($('FHIR UNIQUE ID'), $('source_name'), Patient);
+
+msg = JSON.stringify(messageHeader);

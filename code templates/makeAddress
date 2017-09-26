@@ -1,0 +1,20 @@
+/**
+	This function creates address object from use,addressText,line,city,state,postalCode.
+
+	@param {String} use,addressText,line,city,state,postalCode
+	@return {String} return Address object
+*/
+function addressUtil(use,addressText,line,city,state,postalCode) {
+	var address ={
+	 "use": use,
+      "type": "",
+      "text":  addressText,
+      "line": [
+        line
+      ],
+      "city": city,      
+      "state": state,
+      "postalCode": postalCode    
+      }
+      return address;
+}
