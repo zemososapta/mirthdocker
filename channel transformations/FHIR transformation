@@ -1,22 +1,22 @@
-var gender = $('gender');
-var birthDate = $('birthdate');
 for(var i in msg['identifier'])
 {
- 	if(msg['identifier'][i]['type']!= null){
- 		if(msg['identifier'][i]['type']['coding']!= null){    
-     		if(msg['identifier'][i]['type']['coding'][0]['system']!= null){
-     			if(msg['identifier'][i]['type']['coding'][0]['system']
-     			.equals('http://hl7.org/fhir/sid/us-ssn') == true)
-     				var ssn = msg['identifier'][i]['value'].toString();
-     		}
-   	  }
- 	}
+ 	if(msg['identifier'][i]['system']!= null){ 		
+ 		if(msg['identifier'][i]['system']
+ 			.equals('http://hl7.org/fhir/sid/us-ssn') == true)
+ 			var ssnJS = msg['identifier'][i]['value'].toString();
+     } 	  
 }
-var lastName = makeUpper(msg['name'][0]['family'][0].toString());
-var firstName = makeUpper(msg['name'][0]['given'][0].toString());
-var addressText = $('address_line')+' ,'+$('address_city')+', '+$('address_state')+', '+$('address_postalcode');
-var address = addressUtil($('address_use'), addressText, $('address_line'), $('address_city'), $('address_state'), $('address_postalcode'));
-var Patient = patientUtil(gender, birthDate, ssn, address, lastName, firstName);
-var messageHeader = msgHeaderUtil($('FHIR UNIQUE ID'), $('source_name'), Patient);
+if(ssnJS != null && ssnJS.length > 0)
+	var ssn = new java.lang.String(ssnJS);
+else
+	var ssn = new java.lang.String('');
+	
+var lastName = makeUpper($('lastName').toLowerCase());
+var firstName = makeUpper($('firstName').toLowerCase());
+var addressText = $('line')+' ,'+$('city')+', '+$('state')+', '+$('zip');
+var address = addressUtil($('use'), addressText, $('line'), $('city'), $('state'), $('zip'));
+var patient = patientUtil($('gender'), $('birthDate'), ssn, address, lastName, firstName);
+var messageHeader = msgHeaderUtil($('id'), $('sourceName'), patient);
 
 msg = JSON.stringify(messageHeader);
+channelMap.put('msgHeader', messageHeader);

@@ -1,9 +1,9 @@
 <channel version="3.5.0">
   <id>a2e7b476-50b9-42f1-a8f4-718b41b5c7fe</id>
-  <nextMetaDataId>8</nextMetaDataId>
+  <nextMetaDataId>15</nextMetaDataId>
   <name>FHIR-Dedupe</name>
   <description></description>
-  <revision>16</revision>
+  <revision>92</revision>
   <sourceConnector version="3.5.0">
     <metaDataId>0</metaDataId>
     <name>sourceConnector</name>
@@ -461,9 +461,9 @@
       <supportsXML>true</supportsXML>
       <supportsJSON>true</supportsJSON>
       <systemInteractions>
-        <com.mirth.connect.connectors.fhir.shared.FhirRestfulInteraction>FHIR_SEARCH_SYSTEM</com.mirth.connect.connectors.fhir.shared.FhirRestfulInteraction>
         <com.mirth.connect.connectors.fhir.shared.FhirRestfulInteraction>FHIR_HISTORY_SYSTEM</com.mirth.connect.connectors.fhir.shared.FhirRestfulInteraction>
         <com.mirth.connect.connectors.fhir.shared.FhirRestfulInteraction>FHIR_TRANSACTION</com.mirth.connect.connectors.fhir.shared.FhirRestfulInteraction>
+        <com.mirth.connect.connectors.fhir.shared.FhirRestfulInteraction>FHIR_SEARCH_SYSTEM</com.mirth.connect.connectors.fhir.shared.FhirRestfulInteraction>
       </systemInteractions>
       <resourceProperties>
         <disabledInteractions/>
@@ -521,45 +521,121 @@
           <reattachAttachments>true</reattachAttachments>
         </destinationConnectorProperties>
         <driver>org.postgresql.Driver</driver>
-        <url>jdbc:postgresql://172.16.16.66:5432/zededup</url>
-        <username>postgres</username>
-        <password>admin</password>
+        <url>jdbc:postgresql://172.16.16.51:5432/zededup</url>
+        <username>zemoso</username>
+        <password>zemoso123</password>
         <query>INSERT INTO mirth.message_audit (uuid, input_message, message_source, created_tstamp, created_by_id)
-VALUES (${maps.get(&apos;FHIR UNIQUE ID&apos;)},convert_to(${message.rawData}, &apos;UTF8&apos;),${source_name},current_timestamp,1)</query>
+VALUES (${id},convert_to(${message.rawData}, &apos;UTF8&apos;),${source_name},current_timestamp,1)</query>
         <useScript>false</useScript>
       </properties>
       <transformer version="3.5.0">
         <elements>
           <com.mirth.connect.plugins.mapper.MapperStep>
-            <name>FHIR UNIQUE ID</name>
+            <name>id</name>
             <sequenceNumber>0</sequenceNumber>
-            <variable>FHIR UNIQUE ID</variable>
+            <variable>id</variable>
             <mapping>UUIDGenerator.getUUID()</mapping>
             <defaultValue></defaultValue>
             <replacements/>
             <scope>CHANNEL</scope>
           </com.mirth.connect.plugins.mapper.MapperStep>
           <com.mirth.connect.plugins.mapper.MapperStep>
-            <name>source_name</name>
+            <name>sourceName</name>
             <sequenceNumber>1</sequenceNumber>
-            <variable>source_name</variable>
+            <variable>sourceName</variable>
             <mapping>msg[&apos;source&apos;][&apos;name&apos;]</mapping>
             <defaultValue></defaultValue>
             <replacements/>
             <scope>CHANNEL</scope>
           </com.mirth.connect.plugins.mapper.MapperStep>
+          <com.mirth.connect.plugins.mapper.MapperStep>
+            <name>birthDate</name>
+            <sequenceNumber>2</sequenceNumber>
+            <variable>birthDate</variable>
+            <mapping>msg[&apos;birthDate&apos;]</mapping>
+            <defaultValue></defaultValue>
+            <replacements/>
+            <scope>CHANNEL</scope>
+          </com.mirth.connect.plugins.mapper.MapperStep>
+          <com.mirth.connect.plugins.mapper.MapperStep>
+            <name>firstName</name>
+            <sequenceNumber>3</sequenceNumber>
+            <variable>firstName</variable>
+            <mapping>msg[&apos;name&apos;][0][&apos;given&apos;][0]</mapping>
+            <defaultValue></defaultValue>
+            <replacements/>
+            <scope>CHANNEL</scope>
+          </com.mirth.connect.plugins.mapper.MapperStep>
+          <com.mirth.connect.plugins.mapper.MapperStep>
+            <name>lastName</name>
+            <sequenceNumber>4</sequenceNumber>
+            <variable>lastName</variable>
+            <mapping>msg[&apos;name&apos;][0][&apos;family&apos;][0]</mapping>
+            <defaultValue></defaultValue>
+            <replacements/>
+            <scope>CHANNEL</scope>
+          </com.mirth.connect.plugins.mapper.MapperStep>
         </elements>
-        <inboundTemplate encoding="base64">eyJyZXNvdXJjZVR5cGUiOiJNZXNzYWdlSGVhZGVyIiwic291cmNlIjp7Im5hbWUiOiJBRFQxIn0s
-ImRlc3RpbmF0aW9uIjpbeyJuYW1lIjoiTWV0ZW9yIEFwcCJ9XSwiZGF0YSI6W3sicmVzb3VyY2VU
-eXBlIjoiUGF0aWVudCIsImdlbmRlciI6Ik0tIiwiYmlydGhEYXRlIjoiMTk2MTA2MTUiLCJpZGVu
-dGlmaWVyIjpbeyJ1c2UiOiJ1c3VhbCIsInR5cGUiOnsiY29kaW5nIjpbeyJzeXN0ZW0iOiJtaXJ0
-aC96ZW1vc28iLCJjb2RlIjoiTVIifV19LCJ2YWx1ZSI6ImY4ZDk4NjgxLTczOWMtNDIzNi05Y2Nm
-LWQ0MGM2ZTRkNjYwZiJ9LHsidXNlIjoidXN1YWwiLCJ0eXBlIjp7ImNvZGluZyI6W3sic3lzdGVt
-IjoiaHR0cDovL2hsNy5vcmcvZmhpci92Mi8wMjAzIiwiY29kZSI6Ik1SIn1dfSwidmFsdWUiOiJQ
-QVRJRDEyMzQifSx7InR5cGUiOnsiY29kaW5nIjpbeyJzeXN0ZW0iOiJodHRwOi8vaGw3Lm9yZy9m
-aGlyL3YyLzAyMDMiLCJjb2RlIjoiU1MifV19LCJzeXN0ZW0iOiJodHRwOi8vaGw3Lm9yZy9maGly
-L3NpZC91cy1zc24iLCJ2YWx1ZSI6IjEyMzQ1Njc4OSJ9XSwibmFtZSI6W3siZmFtaWx5IjpbIkpP
-TkVTIl0sImdpdmVuIjpbIldJTExJQU0iXSwidGV4dCI6IldJTExJQU0gSk9ORVMifV19XX0=</inboundTemplate>
+        <inboundTemplate encoding="base64">ewogICJyZXNvdXJjZVR5cGUiOiAiUGF0aWVudCIsCiAgImJpcnRoRGF0ZSI6ICIxOTg1LTA4LTAx
+IiwKICAiYWN0aXZlIjogdHJ1ZSwKICAiZ2VuZGVyIjogIm1hbGUiLAogICJkZWNlYXNlZEJvb2xl
+YW4iOiBmYWxzZSwKICAiaWQiOiAiVGJ0M0t1Q1kwQjVQU3JKdkN1MmotUGxLLmFpSHN1MnhValVN
+OGJXcGV0WG9CIiwKICAiY2FyZVByb3ZpZGVyIjogWwogICAgewogICAgICAiZGlzcGxheSI6ICJQ
+aHlzaWNpYW4gRmFtaWx5IE1lZGljaW5lIiwKICAgICAgInJlZmVyZW5jZSI6ICJodHRwczovL29w
+ZW4taWMuZXBpYy5jb20vRkhJUi9hcGkvRkhJUi9EU1RVMi9QcmFjdGl0aW9uZXIvVDNNejNLTEJE
+VlhYZ2FSb2VlM0VLQUFCIgogICAgfQogIF0sCiAgIm5hbWUiOiBbCiAgICB7CiAgICAgICJ1c2Ui
+OiAidXN1YWwiLAogICAgICAiZmFtaWx5IjogWwogICAgICAgICJBcmdvbmF1dCIKICAgICAgXSwK
+ICAgICAgImdpdmVuIjogWwogICAgICAgICJKYXNvbiIKICAgICAgXQogICAgfQogIF0sCiAgImlk
+ZW50aWZpZXIiOiBbCiAgICB7CiAgICAgICJ1c2UiOiAidXN1YWwiLAogICAgICAic3lzdGVtIjog
+InVybjpvaWQ6MS4yLjg0MC4xMTQzNTAuMS4xMy4zMjcuMS43LjUuNzM3Mzg0LjAiLAogICAgICAi
+dmFsdWUiOiAiRTM4MjYiCiAgICB9LAogICAgewogICAgICAidXNlIjogInVzdWFsIiwKICAgICAg
+InN5c3RlbSI6ICJ1cm46b2lkOjEuMi4zLjQiLAogICAgICAidmFsdWUiOiAiMjAzNTc5IgogICAg
+fQogIF0sCiAgImFkZHJlc3MiOiBbCiAgICB7CiAgICAgICJ1c2UiOiAiaG9tZSIsCiAgICAgICJs
+aW5lIjogWwogICAgICAgICIxOTc5IE1pbGt5IFdheSBEci4iCiAgICAgIF0sCiAgICAgICJjaXR5
+IjogIlZlcm9uYSIsCiAgICAgICJzdGF0ZSI6ICJXSSIsCiAgICAgICJwb3N0YWxDb2RlIjogIjUz
+NTkzIiwKICAgICAgImNvdW50cnkiOiAiVVMiCiAgICB9LAogICAgewogICAgICAidXNlIjogInRl
+bXAiLAogICAgICAibGluZSI6IFsKICAgICAgICAiNTMwMSBUb2theSBCbHZkIgogICAgICBdLAog
+ICAgICAiY2l0eSI6ICJNQURJU09OIiwKICAgICAgInN0YXRlIjogIldJIiwKICAgICAgInBvc3Rh
+bENvZGUiOiAiNTM3MTEiLAogICAgICAiY291bnRyeSI6ICJVUyIsCiAgICAgICJwZXJpb2QiOiB7
+CiAgICAgICAgInN0YXJ0IjogIjIwMTEtMDgtMDRUMDA6MDA6MDBaIiwKICAgICAgICAiZW5kIjog
+IjIwMTQtMDgtMDRUMDA6MDA6MDBaIgogICAgICB9CiAgICB9CiAgXSwKICAidGVsZWNvbSI6IFsK
+ICAgIHsKICAgICAgInN5c3RlbSI6ICJwaG9uZSIsCiAgICAgICJ2YWx1ZSI6ICI2MDgtMjcxLTkw
+MDAiLAogICAgICAidXNlIjogImhvbWUiCiAgICB9LAogICAgewogICAgICAic3lzdGVtIjogInBo
+b25lIiwKICAgICAgInZhbHVlIjogIjYwOC03NzEtOTAwMCIsCiAgICAgICJ1c2UiOiAid29yayIK
+ICAgIH0sCiAgICB7CiAgICAgICJzeXN0ZW0iOiAicGhvbmUiLAogICAgICAidmFsdWUiOiAiNjA4
+LTc3MS05MDAwIiwKICAgICAgInVzZSI6ICJtb2JpbGUiCiAgICB9LAogICAgewogICAgICAic3lz
+dGVtIjogImZheCIsCiAgICAgICJ2YWx1ZSI6ICI2MDgtNzcxLTkwMDAiLAogICAgICAidXNlIjog
+ImhvbWUiCiAgICB9LAogICAgewogICAgICAic3lzdGVtIjogInBob25lIiwKICAgICAgInZhbHVl
+IjogIjYwOC03NzEtOTAwMCIsCiAgICAgICJ1c2UiOiAidGVtcCIsCiAgICAgICJwZXJpb2QiOiB7
+CiAgICAgICAgInN0YXJ0IjogIjIwMTEtMDgtMDRUMDA6MDA6MDBaIiwKICAgICAgICAiZW5kIjog
+IjIwMTQtMDgtMDRUMDA6MDA6MDBaIgogICAgICB9CiAgICB9LAogICAgewogICAgICAic3lzdGVt
+IjogImVtYWlsIiwKICAgICAgInZhbHVlIjogIm9wZW5AZXBpYy5jb20iCiAgICB9CiAgXSwKICAi
+bWFyaXRhbFN0YXR1cyI6IHsKICAgICJ0ZXh0IjogIlNpbmdsZSIsCiAgICAiY29kaW5nIjogWwog
+ICAgICB7CiAgICAgICAgInN5c3RlbSI6ICJodHRwOi8vaGw3Lm9yZy9maGlyL1ZhbHVlU2V0L21h
+cml0YWwtc3RhdHVzIiwKICAgICAgICAiY29kZSI6ICJTIiwKICAgICAgICAiZGlzcGxheSI6ICJO
+ZXZlciBNYXJyaWVkIgogICAgICB9CiAgICBdCiAgfSwKICAiY29tbXVuaWNhdGlvbiI6IFsKICAg
+IHsKICAgICAgInByZWZlcnJlZCI6IHRydWUsCiAgICAgICJsYW5ndWFnZSI6IHsKICAgICAgICAi
+dGV4dCI6ICJFbmdsaXNoIiwKICAgICAgICAiY29kaW5nIjogWwogICAgICAgICAgewogICAgICAg
+ICAgICAic3lzdGVtIjogInVybjpvaWQ6Mi4xNi44NDAuMS4xMTM4ODMuNi45OSIsCiAgICAgICAg
+ICAgICJjb2RlIjogImVuIiwKICAgICAgICAgICAgImRpc3BsYXkiOiAiRW5nbGlzaCIKICAgICAg
+ICAgIH0KICAgICAgICBdCiAgICAgIH0KICAgIH0KICBdLAogICJleHRlbnNpb24iOiBbCiAgICB7
+CiAgICAgICJ1cmwiOiAiaHR0cDovL2hsNy5vcmcvZmhpci9TdHJ1Y3R1cmVEZWZpbml0aW9uL3Vz
+LWNvcmUtcmFjZSIsCiAgICAgICJ2YWx1ZUNvZGVhYmxlQ29uY2VwdCI6IHsKICAgICAgICAidGV4
+dCI6ICJBc2lhbiIsCiAgICAgICAgImNvZGluZyI6IFsKICAgICAgICAgIHsKICAgICAgICAgICAg
+InN5c3RlbSI6ICIyLjE2Ljg0MC4xLjExMzg4My41LjEwNCIsCiAgICAgICAgICAgICJjb2RlIjog
+IjIwMjgtOSIsCiAgICAgICAgICAgICJkaXNwbGF5IjogIkFzaWFuIgogICAgICAgICAgfQogICAg
+ICAgIF0KICAgICAgfQogICAgfSwKICAgIHsKICAgICAgInVybCI6ICJodHRwOi8vaGw3Lm9yZy9m
+aGlyL1N0cnVjdHVyZURlZmluaXRpb24vdXMtY29yZS1ldGhuaWNpdHkiLAogICAgICAidmFsdWVD
+b2RlYWJsZUNvbmNlcHQiOiB7CiAgICAgICAgInRleHQiOiAiTm90IEhpc3BhbmljIG9yIExhdGlu
+byIsCiAgICAgICAgImNvZGluZyI6IFsKICAgICAgICAgIHsKICAgICAgICAgICAgInN5c3RlbSI6
+ICIyLjE2Ljg0MC4xLjExMzg4My41LjUwIiwKICAgICAgICAgICAgImNvZGUiOiAiMjE4Ni01IiwK
+ICAgICAgICAgICAgImRpc3BsYXkiOiAiTm90IEhpc3BhbmljIG9yIExhdGlubyIKICAgICAgICAg
+IH0KICAgICAgICBdCiAgICAgIH0KICAgIH0sCiAgICB7CiAgICAgICJ1cmwiOiAiaHR0cDovL2hs
+Ny5vcmcvZmhpci9TdHJ1Y3R1cmVEZWZpbml0aW9uL3VzLWNvcmUtYmlydGgtc2V4IiwKICAgICAg
+InZhbHVlQ29kZWFibGVDb25jZXB0IjogewogICAgICAgICJ0ZXh0IjogIk1hbGUiLAogICAgICAg
+ICJjb2RpbmciOiBbCiAgICAgICAgICB7CiAgICAgICAgICAgICJzeXN0ZW0iOiAiaHR0cDovL2hs
+Ny5vcmcvZmhpci92My9BZG1pbmlzdHJhdGl2ZUdlbmRlciIsCiAgICAgICAgICAgICJjb2RlIjog
+Ik0iLAogICAgICAgICAgICAiZGlzcGxheSI6ICJNYWxlIgogICAgICAgICAgfQogICAgICAgIF0K
+ICAgICAgfQogICAgfQogIF0KfQo=</inboundTemplate>
         <outboundTemplate encoding="base64"></outboundTemplate>
         <inboundDataType>JSON</inboundDataType>
         <outboundDataType>JSON</outboundDataType>
@@ -627,31 +703,22 @@ TkVTIl0sImdpdmVuIjpbIldJTExJQU0iXSwidGV4dCI6IldJTExJQU0gSk9ORVMifV19XX0=</inboun
           <reattachAttachments>true</reattachAttachments>
         </destinationConnectorProperties>
         <driver>org.postgresql.Driver</driver>
-        <url>jdbc:postgresql://172.16.16.66:5432/zededup</url>
-        <username>postgres</username>
-        <password>admin</password>
+        <url>jdbc:postgresql://172.16.16.51:5432/zededup</url>
+        <username>zemoso</username>
+        <password>zemoso123</password>
         <query>UPDATE mirth.message_audit
 SET transformed_message = to_jsonb(${message.transformedData}),
     last_updated_tstamp =  current_timestamp,
     last_updated_by_id = 2
 WHERE
-  uuid = ${maps.get(&apos;FHIR UNIQUE ID&apos;)};</query>
+  uuid = ${id};</query>
         <useScript>false</useScript>
       </properties>
       <transformer version="3.5.0">
         <elements>
           <com.mirth.connect.plugins.mapper.MapperStep>
-            <name>birthdate</name>
-            <sequenceNumber>0</sequenceNumber>
-            <variable>birthdate</variable>
-            <mapping>msg[&apos;birthDate&apos;]</mapping>
-            <defaultValue></defaultValue>
-            <replacements/>
-            <scope>CHANNEL</scope>
-          </com.mirth.connect.plugins.mapper.MapperStep>
-          <com.mirth.connect.plugins.mapper.MapperStep>
             <name>gender</name>
-            <sequenceNumber>1</sequenceNumber>
+            <sequenceNumber>0</sequenceNumber>
             <variable>gender</variable>
             <mapping>msg[&apos;gender&apos;]</mapping>
             <defaultValue></defaultValue>
@@ -660,7 +727,7 @@ WHERE
           </com.mirth.connect.plugins.mapper.MapperStep>
           <com.mirth.connect.plugins.mapper.MapperStep>
             <name>identifier</name>
-            <sequenceNumber>2</sequenceNumber>
+            <sequenceNumber>1</sequenceNumber>
             <variable>identifier</variable>
             <mapping>msg[&apos;identifier&apos;]</mapping>
             <defaultValue></defaultValue>
@@ -668,167 +735,121 @@ WHERE
             <scope>CHANNEL</scope>
           </com.mirth.connect.plugins.mapper.MapperStep>
           <com.mirth.connect.plugins.mapper.MapperStep>
-            <name>address_use</name>
-            <sequenceNumber>3</sequenceNumber>
-            <variable>address_use</variable>
+            <name>use</name>
+            <sequenceNumber>2</sequenceNumber>
+            <variable>use</variable>
             <mapping>msg[&apos;address&apos;][0][&apos;use&apos;]</mapping>
             <defaultValue></defaultValue>
             <replacements/>
             <scope>CHANNEL</scope>
           </com.mirth.connect.plugins.mapper.MapperStep>
           <com.mirth.connect.plugins.mapper.MapperStep>
-            <name>address_line</name>
-            <sequenceNumber>4</sequenceNumber>
-            <variable>address_line</variable>
+            <name>line</name>
+            <sequenceNumber>3</sequenceNumber>
+            <variable>line</variable>
             <mapping>msg[&apos;address&apos;][0][&apos;line&apos;][0]</mapping>
             <defaultValue></defaultValue>
             <replacements/>
             <scope>CHANNEL</scope>
           </com.mirth.connect.plugins.mapper.MapperStep>
           <com.mirth.connect.plugins.mapper.MapperStep>
-            <name>address_city</name>
-            <sequenceNumber>5</sequenceNumber>
-            <variable>address_city</variable>
+            <name>city</name>
+            <sequenceNumber>4</sequenceNumber>
+            <variable>city</variable>
             <mapping>msg[&apos;address&apos;][0][&apos;city&apos;]</mapping>
             <defaultValue></defaultValue>
             <replacements/>
             <scope>CHANNEL</scope>
           </com.mirth.connect.plugins.mapper.MapperStep>
           <com.mirth.connect.plugins.mapper.MapperStep>
-            <name>address_state</name>
-            <sequenceNumber>6</sequenceNumber>
-            <variable>address_state</variable>
+            <name>state</name>
+            <sequenceNumber>5</sequenceNumber>
+            <variable>state</variable>
             <mapping>msg[&apos;address&apos;][0][&apos;state&apos;]</mapping>
             <defaultValue></defaultValue>
             <replacements/>
             <scope>CHANNEL</scope>
           </com.mirth.connect.plugins.mapper.MapperStep>
           <com.mirth.connect.plugins.mapper.MapperStep>
-            <name>address_postalcode</name>
-            <sequenceNumber>7</sequenceNumber>
-            <variable>address_postalcode</variable>
+            <name>zip</name>
+            <sequenceNumber>6</sequenceNumber>
+            <variable>zip</variable>
             <mapping>msg[&apos;address&apos;][0][&apos;postalCode&apos;]</mapping>
             <defaultValue></defaultValue>
             <replacements/>
             <scope>CHANNEL</scope>
           </com.mirth.connect.plugins.mapper.MapperStep>
           <com.mirth.connect.plugins.mapper.MapperStep>
-            <name>address_country</name>
-            <sequenceNumber>8</sequenceNumber>
-            <variable>address_country</variable>
+            <name>country</name>
+            <sequenceNumber>7</sequenceNumber>
+            <variable>country</variable>
             <mapping>msg[&apos;address&apos;][0][&apos;country&apos;]</mapping>
             <defaultValue></defaultValue>
             <replacements/>
             <scope>CHANNEL</scope>
           </com.mirth.connect.plugins.mapper.MapperStep>
           <com.mirth.connect.plugins.mapper.MapperStep>
-            <name>name_family</name>
-            <sequenceNumber>9</sequenceNumber>
-            <variable>name_family</variable>
+            <name>family</name>
+            <sequenceNumber>8</sequenceNumber>
+            <variable>family</variable>
             <mapping>msg[&apos;name&apos;][0][&apos;family&apos;][0]</mapping>
             <defaultValue></defaultValue>
             <replacements/>
             <scope>CHANNEL</scope>
           </com.mirth.connect.plugins.mapper.MapperStep>
           <com.mirth.connect.plugins.mapper.MapperStep>
-            <name>name_given</name>
-            <sequenceNumber>10</sequenceNumber>
-            <variable>name_given</variable>
+            <name>given</name>
+            <sequenceNumber>9</sequenceNumber>
+            <variable>given</variable>
             <mapping>msg[&apos;name&apos;][0][&apos;given&apos;][0]</mapping>
             <defaultValue></defaultValue>
             <replacements/>
             <scope>CHANNEL</scope>
           </com.mirth.connect.plugins.mapper.MapperStep>
           <com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
-            <sequenceNumber>11</sequenceNumber>
-            <script>var gender = $(&apos;gender&apos;);
-var birthDate = $(&apos;birthdate&apos;);
-for(var i in msg[&apos;identifier&apos;])
+            <sequenceNumber>10</sequenceNumber>
+            <script>for(var i in msg[&apos;identifier&apos;])
 {
- 	if(msg[&apos;identifier&apos;][i][&apos;type&apos;]!= null){
- 		if(msg[&apos;identifier&apos;][i][&apos;type&apos;][&apos;coding&apos;]!= null){    
-     		if(msg[&apos;identifier&apos;][i][&apos;type&apos;][&apos;coding&apos;][0][&apos;system&apos;]!= null){
-     			if(msg[&apos;identifier&apos;][i][&apos;type&apos;][&apos;coding&apos;][0][&apos;system&apos;]
-     			.equals(&apos;http://hl7.org/fhir/sid/us-ssn&apos;) == true)
-     				var ssn = msg[&apos;identifier&apos;][i][&apos;value&apos;].toString();
-     		}
-   	  }
- 	}
+ 	if(msg[&apos;identifier&apos;][i][&apos;system&apos;]!= null){ 		
+ 		if(msg[&apos;identifier&apos;][i][&apos;system&apos;]
+ 			.equals(&apos;http://hl7.org/fhir/sid/us-ssn&apos;) == true)
+ 			var ssnJS = msg[&apos;identifier&apos;][i][&apos;value&apos;].toString();
+     } 	  
 }
-var lastName = makeUpper(msg[&apos;name&apos;][0][&apos;family&apos;][0].toString());
-var firstName = makeUpper(msg[&apos;name&apos;][0][&apos;given&apos;][0].toString());
-var addressText = $(&apos;address_line&apos;)+&apos; ,&apos;+$(&apos;address_city&apos;)+&apos;, &apos;+$(&apos;address_state&apos;)+&apos;, &apos;+$(&apos;address_postalcode&apos;);
-var address = addressUtil($(&apos;address_use&apos;), addressText, $(&apos;address_line&apos;), $(&apos;address_city&apos;), $(&apos;address_state&apos;), $(&apos;address_postalcode&apos;));
-var Patient = patientUtil(gender, birthDate, ssn, address, lastName, firstName);
-var messageHeader = msgHeaderUtil($(&apos;FHIR UNIQUE ID&apos;), $(&apos;source_name&apos;), Patient);
+if(ssnJS != null &amp;&amp; ssnJS.length &gt; 0)
+	var ssn = new java.lang.String(ssnJS);
+else
+	var ssn = new java.lang.String(&apos;&apos;);
+	
+var lastName = makeUpper($(&apos;lastName&apos;).toLowerCase());
+var firstName = makeUpper($(&apos;firstName&apos;).toLowerCase());
+var addressText = $(&apos;line&apos;)+&apos; ,&apos;+$(&apos;city&apos;)+&apos;, &apos;+$(&apos;state&apos;)+&apos;, &apos;+$(&apos;zip&apos;);
+var address = addressUtil($(&apos;use&apos;), addressText, $(&apos;line&apos;), $(&apos;city&apos;), $(&apos;state&apos;), $(&apos;zip&apos;));
+var patient = patientUtil($(&apos;gender&apos;), $(&apos;birthDate&apos;), ssn, address, lastName, firstName);
+var messageHeader = msgHeaderUtil($(&apos;id&apos;), $(&apos;sourceName&apos;), patient);
 
-msg = JSON.stringify(messageHeader);</script>
+msg = JSON.stringify(messageHeader);
+//send message to kafka
+kafkaAPI($(&apos;id&apos;), msg);</script>
           </com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
         </elements>
-        <inboundTemplate encoding="base64">ewogICJyZXNvdXJjZVR5cGUiOiAiUGF0aWVudCIsCiAgImJpcnRoRGF0ZSI6ICIxOTg1LTA4LTAx
-IiwKICAiYWN0aXZlIjogdHJ1ZSwKICAiZ2VuZGVyIjogIm1hbGUiLAogICJkZWNlYXNlZEJvb2xl
-YW4iOiBmYWxzZSwKICAiaWQiOiAiVGJ0M0t1Q1kwQjVQU3JKdkN1MmotUGxLLmFpSHN1MnhValVN
-OGJXcGV0WG9CIiwKICAiY2FyZVByb3ZpZGVyIjogWwogICAgewogICAgICAiZGlzcGxheSI6ICJQ
-aHlzaWNpYW4gRmFtaWx5IE1lZGljaW5lIiwKICAgICAgInJlZmVyZW5jZSI6ICJodHRwczovL29w
-ZW4taWMuZXBpYy5jb20vRkhJUi9hcGkvRkhJUi9EU1RVMi9QcmFjdGl0aW9uZXIvVDNNejNLTEJE
-VlhYZ2FSb2VlM0VLQUFCIgogICAgfQogIF0sCiAgIm5hbWUiOiBbCiAgICB7CiAgICAgICJ1c2Ui
-OiAidXN1YWwiLAogICAgICAiZmFtaWx5IjogWwogICAgICAgICJBcmdvbmF1dCIKICAgICAgXSwK
-ICAgICAgImdpdmVuIjogWwogICAgICAgICJKYXNvbiIKICAgICAgXQogICAgfQogIF0sCiAgImlk
-ZW50aWZpZXIiOiBbCiAgICB7CiAgICAgICJ1c2UiOiAidXN1YWwiLAogICAgICAic3lzdGVtIjog
-InVybjpvaWQ6MS4yLjg0MC4xMTQzNTAuMS4xMy4zMjcuMS43LjUuNzM3Mzg0LjAiLAogICAgICAi
-dmFsdWUiOiAiRTM4MjYiCiAgICB9LAogICAgewogICAgICAidXNlIjogInVzdWFsIiwKICAgICAg
-InN5c3RlbSI6ICJ1cm46b2lkOjEuMi4zLjQiLAogICAgICAidmFsdWUiOiAiMjAzNTc5IgogICAg
-fSwKICAgIHsKICAgICAidXNlIjogInVzdWFsIiwKICAgICAidHlwZSI6IHsKICAgICAgICJjb2Rp
-bmciOiBbCiAgICAgICAgIHsKICAgICAgICAgICAic3lzdGVtIjogImh0dHA6Ly9obDcub3JnL2Zo
-aXIvc2lkL3VzLXNzbiIsCiAgICAgICAgICAgImNvZGUiOiAiU1MiCiAgICAgICAgIH0KICAgICAg
-IF0KICAgICB9LAogICAgICJ2YWx1ZSI6IDEyMzQ1Njc4OQogICB9CiAgXSwKICAiYWRkcmVzcyI6
-IFsKICAgIHsKICAgICAgInVzZSI6ICJob21lIiwKICAgICAgImxpbmUiOiBbCiAgICAgICAgIjE5
-NzkgTWlsa3kgV2F5IERyLiIKICAgICAgXSwKICAgICAgImNpdHkiOiAiVmVyb25hIiwKICAgICAg
-InN0YXRlIjogIldJIiwKICAgICAgInBvc3RhbENvZGUiOiAiNTM1OTMiLAogICAgICAiY291bnRy
-eSI6ICJVUyIKICAgIH0sCiAgICB7CiAgICAgICJ1c2UiOiAidGVtcCIsCiAgICAgICJsaW5lIjog
-WwogICAgICAgICI1MzAxIFRva2F5IEJsdmQiCiAgICAgIF0sCiAgICAgICJjaXR5IjogIk1BRElT
-T04iLAogICAgICAic3RhdGUiOiAiV0kiLAogICAgICAicG9zdGFsQ29kZSI6ICI1MzcxMSIsCiAg
-ICAgICJjb3VudHJ5IjogIlVTIiwKICAgICAgInBlcmlvZCI6IHsKICAgICAgICAic3RhcnQiOiAi
-MjAxMS0wOC0wNFQwMDowMDowMFoiLAogICAgICAgICJlbmQiOiAiMjAxNC0wOC0wNFQwMDowMDow
-MFoiCiAgICAgIH0KICAgIH0KICBdLAogICJ0ZWxlY29tIjogWwogICAgewogICAgICAic3lzdGVt
-IjogInBob25lIiwKICAgICAgInZhbHVlIjogIjYwOC0yNzEtOTAwMCIsCiAgICAgICJ1c2UiOiAi
-aG9tZSIKICAgIH0sCiAgICB7CiAgICAgICJzeXN0ZW0iOiAicGhvbmUiLAogICAgICAidmFsdWUi
-OiAiNjA4LTc3MS05MDAwIiwKICAgICAgInVzZSI6ICJ3b3JrIgogICAgfSwKICAgIHsKICAgICAg
-InN5c3RlbSI6ICJwaG9uZSIsCiAgICAgICJ2YWx1ZSI6ICI2MDgtNzcxLTkwMDAiLAogICAgICAi
-dXNlIjogIm1vYmlsZSIKICAgIH0sCiAgICB7CiAgICAgICJzeXN0ZW0iOiAiZmF4IiwKICAgICAg
-InZhbHVlIjogIjYwOC03NzEtOTAwMCIsCiAgICAgICJ1c2UiOiAiaG9tZSIKICAgIH0sCiAgICB7
-CiAgICAgICJzeXN0ZW0iOiAicGhvbmUiLAogICAgICAidmFsdWUiOiAiNjA4LTc3MS05MDAwIiwK
-ICAgICAgInVzZSI6ICJ0ZW1wIiwKICAgICAgInBlcmlvZCI6IHsKICAgICAgICAic3RhcnQiOiAi
-MjAxMS0wOC0wNFQwMDowMDowMFoiLAogICAgICAgICJlbmQiOiAiMjAxNC0wOC0wNFQwMDowMDow
-MFoiCiAgICAgIH0KICAgIH0sCiAgICB7CiAgICAgICJzeXN0ZW0iOiAiZW1haWwiLAogICAgICAi
-dmFsdWUiOiAib3BlbkBlcGljLmNvbSIKICAgIH0KICBdLAogICJtYXJpdGFsU3RhdHVzIjogewog
-ICAgInRleHQiOiAiU2luZ2xlIiwKICAgICJjb2RpbmciOiBbCiAgICAgIHsKICAgICAgICAic3lz
-dGVtIjogImh0dHA6Ly9obDcub3JnL2ZoaXIvVmFsdWVTZXQvbWFyaXRhbC1zdGF0dXMiLAogICAg
-ICAgICJjb2RlIjogIlMiLAogICAgICAgICJkaXNwbGF5IjogIk5ldmVyIE1hcnJpZWQiCiAgICAg
-IH0KICAgIF0KICB9LAogICJjb21tdW5pY2F0aW9uIjogWwogICAgewogICAgICAicHJlZmVycmVk
-IjogdHJ1ZSwKICAgICAgImxhbmd1YWdlIjogewogICAgICAgICJ0ZXh0IjogIkVuZ2xpc2giLAog
-ICAgICAgICJjb2RpbmciOiBbCiAgICAgICAgICB7CiAgICAgICAgICAgICJzeXN0ZW0iOiAidXJu
-Om9pZDoyLjE2Ljg0MC4xLjExMzg4My42Ljk5IiwKICAgICAgICAgICAgImNvZGUiOiAiZW4iLAog
-ICAgICAgICAgICAiZGlzcGxheSI6ICJFbmdsaXNoIgogICAgICAgICAgfQogICAgICAgIF0KICAg
-ICAgfQogICAgfQogIF0sCiAgImV4dGVuc2lvbiI6IFsKICAgIHsKICAgICAgInVybCI6ICJodHRw
-Oi8vaGw3Lm9yZy9maGlyL1N0cnVjdHVyZURlZmluaXRpb24vdXMtY29yZS1yYWNlIiwKICAgICAg
-InZhbHVlQ29kZWFibGVDb25jZXB0IjogewogICAgICAgICJ0ZXh0IjogIkFzaWFuIiwKICAgICAg
-ICAiY29kaW5nIjogWwogICAgICAgICAgewogICAgICAgICAgICAic3lzdGVtIjogIjIuMTYuODQw
-LjEuMTEzODgzLjUuMTA0IiwKICAgICAgICAgICAgImNvZGUiOiAiMjAyOC05IiwKICAgICAgICAg
-ICAgImRpc3BsYXkiOiAiQXNpYW4iCiAgICAgICAgICB9CiAgICAgICAgXQogICAgICB9CiAgICB9
-LAogICAgewogICAgICAidXJsIjogImh0dHA6Ly9obDcub3JnL2ZoaXIvU3RydWN0dXJlRGVmaW5p
-dGlvbi91cy1jb3JlLWV0aG5pY2l0eSIsCiAgICAgICJ2YWx1ZUNvZGVhYmxlQ29uY2VwdCI6IHsK
-ICAgICAgICAidGV4dCI6ICJOb3QgSGlzcGFuaWMgb3IgTGF0aW5vIiwKICAgICAgICAiY29kaW5n
-IjogWwogICAgICAgICAgewogICAgICAgICAgICAic3lzdGVtIjogIjIuMTYuODQwLjEuMTEzODgz
-LjUuNTAiLAogICAgICAgICAgICAiY29kZSI6ICIyMTg2LTUiLAogICAgICAgICAgICAiZGlzcGxh
-eSI6ICJOb3QgSGlzcGFuaWMgb3IgTGF0aW5vIgogICAgICAgICAgfQogICAgICAgIF0KICAgICAg
-fQogICAgfSwKICAgIHsKICAgICAgInVybCI6ICJodHRwOi8vaGw3Lm9yZy9maGlyL1N0cnVjdHVy
-ZURlZmluaXRpb24vdXMtY29yZS1iaXJ0aC1zZXgiLAogICAgICAidmFsdWVDb2RlYWJsZUNvbmNl
-cHQiOiB7CiAgICAgICAgInRleHQiOiAiTWFsZSIsCiAgICAgICAgImNvZGluZyI6IFsKICAgICAg
-ICAgIHsKICAgICAgICAgICAgInN5c3RlbSI6ICJodHRwOi8vaGw3Lm9yZy9maGlyL3YzL0FkbWlu
-aXN0cmF0aXZlR2VuZGVyIiwKICAgICAgICAgICAgImNvZGUiOiAiTSIsCiAgICAgICAgICAgICJk
-aXNwbGF5IjogIk1hbGUiCiAgICAgICAgICB9CiAgICAgICAgXQogICAgICB9CiAgICB9CiAgXQp9
-CgoK</inboundTemplate>
+        <inboundTemplate encoding="base64">ewogICJyZXNvdXJjZVR5cGUiIDogIlBhdGVpbnQiLAogICJpZCIgOiB7CiAgICAidXVpZCIgOiAi
+MjkyYTc3OWEtNTMwNS00ZmJmLWEzNTgtY2VjMGZkNzA3MDliIgogIH0sCiAgInNvdXJjZSIgOiB7
+CiAgICAibmFtZSIgOiAiIgogIH0sCiAgImRlc3RpbmF0aW9uIiA6IFsKICAgIHsKICAgICAgIm5h
+bWUiIDogIkRhdGEtTWFuYWdlbWVudCIKICAgIH0KICBdLAogICJpZGVudGlmaWVyIiA6IFsKICAg
+IHsKICAgICAgInVzZSIgOiAidXN1YWwiLAogICAgICAidHlwZSIgOiB7CiAgICAgICAgImNvZGlu
+ZyIgOiBbCiAgICAgICAgICB7CiAgICAgICAgICAgICJzeXN0ZW0iIDogImh0dHA6Ly9obDcub3Jn
+L2ZoaXIvc2lkL3VzLXNzbiIsCiAgICAgICAgICAgICJjb2RlIiA6ICJTUyIKICAgICAgICAgIH0K
+ICAgICAgICBdCiAgICAgIH0sCiAgICAgICJ2YWx1ZSIgOiAiIgogICAgfQogIF0sCiAgIm5hbWUi
+IDogWwogICAgewogICAgICAiZmFtaWx5IiA6ICJHcmF5c29uIiwKICAgICAgImdpdmVuIiA6ICJK
+aW0iLAogICAgICAidGV4dCIgOiBbCiAgICAgICAgIkppbSBHcmF5c29uIgogICAgICBdCiAgICB9
+CiAgXSwKICAiZ2VuZGVyIiA6ICJNIiwKICAiYmlydGhEYXRlIiA6ICIxOTQzLTAzLTA5IiwKICAi
+YWRkcmVzcyIgOiBbCiAgICB7CiAgICAgICJ1c2UiIDogIiIsCiAgICAgICJ0eXBlIiA6ICIiLAog
+ICAgICAidGV4dCIgOiAiODM0IE9jZWFuIFZpc3RhIEF2ZW51ZSwgQXB0LiAyMDIsIFNhbnRhIE1v
+bmljYSwgQ0EsIDkwNDAxIiwKICAgICAgImxpbmUiIDogWwogICAgICAgICI4MzQgT2NlYW4gVmlz
+dGEgQXZlbnVlIgogICAgICBdLAogICAgICAiY2l0eSIgOiAiU2FudGEgTW9uaWNhIiwKICAgICAg
+InN0YXRlIiA6ICJDQSIsCiAgICAgICJwb3N0YWxDb2RlIiA6ICI5MDQwMSIKICAgIH0KICBdCn0K
+</inboundTemplate>
         <outboundTemplate encoding="base64"></outboundTemplate>
         <inboundDataType>JSON</inboundDataType>
         <outboundDataType>JSON</outboundDataType>
@@ -865,324 +886,27 @@ CgoK</inboundTemplate>
       <filter version="3.5.0">
         <elements>
           <com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
-            <name>family name</name>
+            <name>lastName</name>
             <sequenceNumber>0</sequenceNumber>
-            <script>return isValid(msg[&apos;name&apos;][0][&apos;family&apos;][0]);</script>
+            <script>logger.info(&apos;lastname is :&apos;+$(&apos;lastName&apos;));
+return isNotNull($(&apos;lastName&apos;));</script>
           </com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
           <com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
-            <name>first name</name>
+            <name>firstName</name>
             <sequenceNumber>1</sequenceNumber>
             <operator>AND</operator>
-            <script>return isValid(msg[&apos;name&apos;][0][&apos;given&apos;][0]);</script>
+            <script>logger.info(&quot;first name is : &quot; +$(&apos;firstName&apos;));
+return isNotNull($(&apos;firstName&apos;));</script>
           </com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
           <com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
-            <name>last name</name>
+            <name>Birthdate</name>
             <sequenceNumber>2</sequenceNumber>
             <operator>AND</operator>
-            <script>return isValid(msg[&apos;birthDate&apos;]);</script>
+            <script>return isNotNull($(&apos;birthDate&apos;));</script>
           </com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
         </elements>
       </filter>
       <transportName>Database Writer</transportName>
-      <mode>DESTINATION</mode>
-      <enabled>true</enabled>
-      <waitForPrevious>true</waitForPrevious>
-    </connector>
-    <connector version="3.5.0">
-      <metaDataId>7</metaDataId>
-      <name>Transformed Kafka</name>
-      <properties class="com.mirth.connect.connectors.http.HttpDispatcherProperties" version="3.5.0">
-        <pluginProperties/>
-        <destinationConnectorProperties version="3.5.0">
-          <queueEnabled>false</queueEnabled>
-          <sendFirst>false</sendFirst>
-          <retryIntervalMillis>10000</retryIntervalMillis>
-          <regenerateTemplate>false</regenerateTemplate>
-          <retryCount>0</retryCount>
-          <rotate>false</rotate>
-          <includeFilterTransformer>false</includeFilterTransformer>
-          <threadCount>1</threadCount>
-          <threadAssignmentVariable></threadAssignmentVariable>
-          <validateResponse>false</validateResponse>
-          <resourceIds class="linked-hash-map">
-            <entry>
-              <string>Default Resource</string>
-              <string>[Default Resource]</string>
-            </entry>
-          </resourceIds>
-          <queueBufferSize>1000</queueBufferSize>
-          <reattachAttachments>true</reattachAttachments>
-        </destinationConnectorProperties>
-        <host>http://172.16.16.66:8444/post</host>
-        <useProxyServer>false</useProxyServer>
-        <proxyAddress></proxyAddress>
-        <proxyPort></proxyPort>
-        <method>post</method>
-        <headers class="linked-hash-map"/>
-        <parameters class="linked-hash-map"/>
-        <responseXmlBody>false</responseXmlBody>
-        <responseParseMultipart>true</responseParseMultipart>
-        <responseIncludeMetadata>false</responseIncludeMetadata>
-        <responseBinaryMimeTypes>application/.*(?&lt;!json|xml)$|image/.*|video/.*|audio/.*</responseBinaryMimeTypes>
-        <responseBinaryMimeTypesRegex>true</responseBinaryMimeTypesRegex>
-        <multipart>false</multipart>
-        <useAuthentication>false</useAuthentication>
-        <authenticationType>Basic</authenticationType>
-        <usePreemptiveAuthentication>false</usePreemptiveAuthentication>
-        <username></username>
-        <password></password>
-        <content>${message.transformedData}</content>
-        <contentType>application/json</contentType>
-        <dataTypeBinary>false</dataTypeBinary>
-        <charset>UTF-8</charset>
-        <socketTimeout>30000</socketTimeout>
-      </properties>
-      <transformer version="3.5.0">
-        <elements>
-          <com.mirth.connect.plugins.mapper.MapperStep>
-            <name>birthdate</name>
-            <sequenceNumber>0</sequenceNumber>
-            <variable>birthdate</variable>
-            <mapping>msg[&apos;birthDate&apos;]</mapping>
-            <defaultValue></defaultValue>
-            <replacements/>
-            <scope>CHANNEL</scope>
-          </com.mirth.connect.plugins.mapper.MapperStep>
-          <com.mirth.connect.plugins.mapper.MapperStep>
-            <name>gender</name>
-            <sequenceNumber>1</sequenceNumber>
-            <variable>gender</variable>
-            <mapping>msg[&apos;gender&apos;]</mapping>
-            <defaultValue></defaultValue>
-            <replacements/>
-            <scope>CHANNEL</scope>
-          </com.mirth.connect.plugins.mapper.MapperStep>
-          <com.mirth.connect.plugins.mapper.MapperStep>
-            <name>identifier</name>
-            <sequenceNumber>2</sequenceNumber>
-            <variable>identifier</variable>
-            <mapping>msg[&apos;identifier&apos;]</mapping>
-            <defaultValue></defaultValue>
-            <replacements/>
-            <scope>CHANNEL</scope>
-          </com.mirth.connect.plugins.mapper.MapperStep>
-          <com.mirth.connect.plugins.mapper.MapperStep>
-            <name>address_use</name>
-            <sequenceNumber>3</sequenceNumber>
-            <variable>address_use</variable>
-            <mapping>msg[&apos;address&apos;][0][&apos;use&apos;]</mapping>
-            <defaultValue></defaultValue>
-            <replacements/>
-            <scope>CHANNEL</scope>
-          </com.mirth.connect.plugins.mapper.MapperStep>
-          <com.mirth.connect.plugins.mapper.MapperStep>
-            <name>address_line</name>
-            <sequenceNumber>4</sequenceNumber>
-            <variable>address_line</variable>
-            <mapping>msg[&apos;address&apos;][0][&apos;line&apos;][0]</mapping>
-            <defaultValue></defaultValue>
-            <replacements/>
-            <scope>CHANNEL</scope>
-          </com.mirth.connect.plugins.mapper.MapperStep>
-          <com.mirth.connect.plugins.mapper.MapperStep>
-            <name>address_city</name>
-            <sequenceNumber>5</sequenceNumber>
-            <variable>address_city</variable>
-            <mapping>msg[&apos;address&apos;][0][&apos;city&apos;]</mapping>
-            <defaultValue></defaultValue>
-            <replacements/>
-            <scope>CHANNEL</scope>
-          </com.mirth.connect.plugins.mapper.MapperStep>
-          <com.mirth.connect.plugins.mapper.MapperStep>
-            <name>address_state</name>
-            <sequenceNumber>6</sequenceNumber>
-            <variable>address_state</variable>
-            <mapping>msg[&apos;address&apos;][0][&apos;state&apos;]</mapping>
-            <defaultValue></defaultValue>
-            <replacements/>
-            <scope>CHANNEL</scope>
-          </com.mirth.connect.plugins.mapper.MapperStep>
-          <com.mirth.connect.plugins.mapper.MapperStep>
-            <name>address_postalcode</name>
-            <sequenceNumber>7</sequenceNumber>
-            <variable>address_postalcode</variable>
-            <mapping>msg[&apos;address&apos;][0][&apos;postalCode&apos;]</mapping>
-            <defaultValue></defaultValue>
-            <replacements/>
-            <scope>CHANNEL</scope>
-          </com.mirth.connect.plugins.mapper.MapperStep>
-          <com.mirth.connect.plugins.mapper.MapperStep>
-            <name>address_country</name>
-            <sequenceNumber>8</sequenceNumber>
-            <variable>address_country</variable>
-            <mapping>msg[&apos;address&apos;][0][&apos;country&apos;]</mapping>
-            <defaultValue></defaultValue>
-            <replacements/>
-            <scope>CHANNEL</scope>
-          </com.mirth.connect.plugins.mapper.MapperStep>
-          <com.mirth.connect.plugins.mapper.MapperStep>
-            <name>name_family</name>
-            <sequenceNumber>9</sequenceNumber>
-            <variable>name_family</variable>
-            <mapping>msg[&apos;name&apos;][0][&apos;family&apos;][0]</mapping>
-            <defaultValue></defaultValue>
-            <replacements/>
-            <scope>CHANNEL</scope>
-          </com.mirth.connect.plugins.mapper.MapperStep>
-          <com.mirth.connect.plugins.mapper.MapperStep>
-            <name>name_given</name>
-            <sequenceNumber>10</sequenceNumber>
-            <variable>name_given</variable>
-            <mapping>msg[&apos;name&apos;][0][&apos;given&apos;][0]</mapping>
-            <defaultValue></defaultValue>
-            <replacements/>
-            <scope>CHANNEL</scope>
-          </com.mirth.connect.plugins.mapper.MapperStep>
-          <com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
-            <sequenceNumber>11</sequenceNumber>
-            <script>var gender = $(&apos;gender&apos;);
-var birthDate = $(&apos;birthdate&apos;);
-for(var i in msg[&apos;identifier&apos;])
-{
- 	if(msg[&apos;identifier&apos;][i][&apos;type&apos;]!= null){
- 		if(msg[&apos;identifier&apos;][i][&apos;type&apos;][&apos;coding&apos;]!= null){    
-     		if(msg[&apos;identifier&apos;][i][&apos;type&apos;][&apos;coding&apos;][0][&apos;system&apos;]!= null){
-     			if(msg[&apos;identifier&apos;][i][&apos;type&apos;][&apos;coding&apos;][0][&apos;system&apos;]
-     			.equals(&apos;http://hl7.org/fhir/sid/us-ssn&apos;) == true)
-     				var ssn = msg[&apos;identifier&apos;][i][&apos;value&apos;].toString();
-     		}
-   	  }
- 	}
-}
-var lastName = makeUpper(msg[&apos;name&apos;][0][&apos;family&apos;][0].toString());
-var firstName = makeUpper(msg[&apos;name&apos;][0][&apos;given&apos;][0].toString());
-var addressText = $(&apos;address_line&apos;)+&apos; ,&apos;+$(&apos;address_city&apos;)+&apos;, &apos;+$(&apos;address_state&apos;)+&apos;, &apos;+$(&apos;address_postalcode&apos;);
-var address = addressUtil($(&apos;address_use&apos;), addressText, $(&apos;address_line&apos;), $(&apos;address_city&apos;), $(&apos;address_state&apos;), $(&apos;address_postalcode&apos;));
-var Patient = patientUtil(gender, birthDate, ssn, address, lastName, firstName);
-var messageHeader = msgHeaderUtil($(&apos;FHIR UNIQUE ID&apos;), $(&apos;source_name&apos;), Patient);
-
-msg = JSON.stringify(messageHeader);</script>
-          </com.mirth.connect.plugins.javascriptstep.JavaScriptStep>
-        </elements>
-        <inboundTemplate encoding="base64">ewogICJyZXNvdXJjZVR5cGUiOiAiUGF0aWVudCIsCiAgImJpcnRoRGF0ZSI6ICIxOTg1LTA4LTAx
-IiwKICAiYWN0aXZlIjogdHJ1ZSwKICAiZ2VuZGVyIjogIm1hbGUiLAogICJkZWNlYXNlZEJvb2xl
-YW4iOiBmYWxzZSwKICAiaWQiOiAiVGJ0M0t1Q1kwQjVQU3JKdkN1MmotUGxLLmFpSHN1MnhValVN
-OGJXcGV0WG9CIiwKICAiY2FyZVByb3ZpZGVyIjogWwogICAgewogICAgICAiZGlzcGxheSI6ICJQ
-aHlzaWNpYW4gRmFtaWx5IE1lZGljaW5lIiwKICAgICAgInJlZmVyZW5jZSI6ICJodHRwczovL29w
-ZW4taWMuZXBpYy5jb20vRkhJUi9hcGkvRkhJUi9EU1RVMi9QcmFjdGl0aW9uZXIvVDNNejNLTEJE
-VlhYZ2FSb2VlM0VLQUFCIgogICAgfQogIF0sCiAgIm5hbWUiOiBbCiAgICB7CiAgICAgICJ1c2Ui
-OiAidXN1YWwiLAogICAgICAiZmFtaWx5IjogWwogICAgICAgICJBcmdvbmF1dCIKICAgICAgXSwK
-ICAgICAgImdpdmVuIjogWwogICAgICAgICJKYXNvbiIKICAgICAgXQogICAgfQogIF0sCiAgImlk
-ZW50aWZpZXIiOiBbCiAgICB7CiAgICAgICJ1c2UiOiAidXN1YWwiLAogICAgICAic3lzdGVtIjog
-InVybjpvaWQ6MS4yLjg0MC4xMTQzNTAuMS4xMy4zMjcuMS43LjUuNzM3Mzg0LjAiLAogICAgICAi
-dmFsdWUiOiAiRTM4MjYiCiAgICB9LAogICAgewogICAgICAidXNlIjogInVzdWFsIiwKICAgICAg
-InN5c3RlbSI6ICJ1cm46b2lkOjEuMi4zLjQiLAogICAgICAidmFsdWUiOiAiMjAzNTc5IgogICAg
-fSwKICAgIHsKICAgICAidXNlIjogInVzdWFsIiwKICAgICAidHlwZSI6IHsKICAgICAgICJjb2Rp
-bmciOiBbCiAgICAgICAgIHsKICAgICAgICAgICAic3lzdGVtIjogImh0dHA6Ly9obDcub3JnL2Zo
-aXIvc2lkL3VzLXNzbiIsCiAgICAgICAgICAgImNvZGUiOiAiU1MiCiAgICAgICAgIH0KICAgICAg
-IF0KICAgICB9LAogICAgICJ2YWx1ZSI6IDEyMzQ1Njc4OQogICB9CiAgXSwKICAiYWRkcmVzcyI6
-IFsKICAgIHsKICAgICAgInVzZSI6ICJob21lIiwKICAgICAgImxpbmUiOiBbCiAgICAgICAgIjE5
-NzkgTWlsa3kgV2F5IERyLiIKICAgICAgXSwKICAgICAgImNpdHkiOiAiVmVyb25hIiwKICAgICAg
-InN0YXRlIjogIldJIiwKICAgICAgInBvc3RhbENvZGUiOiAiNTM1OTMiLAogICAgICAiY291bnRy
-eSI6ICJVUyIKICAgIH0sCiAgICB7CiAgICAgICJ1c2UiOiAidGVtcCIsCiAgICAgICJsaW5lIjog
-WwogICAgICAgICI1MzAxIFRva2F5IEJsdmQiCiAgICAgIF0sCiAgICAgICJjaXR5IjogIk1BRElT
-T04iLAogICAgICAic3RhdGUiOiAiV0kiLAogICAgICAicG9zdGFsQ29kZSI6ICI1MzcxMSIsCiAg
-ICAgICJjb3VudHJ5IjogIlVTIiwKICAgICAgInBlcmlvZCI6IHsKICAgICAgICAic3RhcnQiOiAi
-MjAxMS0wOC0wNFQwMDowMDowMFoiLAogICAgICAgICJlbmQiOiAiMjAxNC0wOC0wNFQwMDowMDow
-MFoiCiAgICAgIH0KICAgIH0KICBdLAogICJ0ZWxlY29tIjogWwogICAgewogICAgICAic3lzdGVt
-IjogInBob25lIiwKICAgICAgInZhbHVlIjogIjYwOC0yNzEtOTAwMCIsCiAgICAgICJ1c2UiOiAi
-aG9tZSIKICAgIH0sCiAgICB7CiAgICAgICJzeXN0ZW0iOiAicGhvbmUiLAogICAgICAidmFsdWUi
-OiAiNjA4LTc3MS05MDAwIiwKICAgICAgInVzZSI6ICJ3b3JrIgogICAgfSwKICAgIHsKICAgICAg
-InN5c3RlbSI6ICJwaG9uZSIsCiAgICAgICJ2YWx1ZSI6ICI2MDgtNzcxLTkwMDAiLAogICAgICAi
-dXNlIjogIm1vYmlsZSIKICAgIH0sCiAgICB7CiAgICAgICJzeXN0ZW0iOiAiZmF4IiwKICAgICAg
-InZhbHVlIjogIjYwOC03NzEtOTAwMCIsCiAgICAgICJ1c2UiOiAiaG9tZSIKICAgIH0sCiAgICB7
-CiAgICAgICJzeXN0ZW0iOiAicGhvbmUiLAogICAgICAidmFsdWUiOiAiNjA4LTc3MS05MDAwIiwK
-ICAgICAgInVzZSI6ICJ0ZW1wIiwKICAgICAgInBlcmlvZCI6IHsKICAgICAgICAic3RhcnQiOiAi
-MjAxMS0wOC0wNFQwMDowMDowMFoiLAogICAgICAgICJlbmQiOiAiMjAxNC0wOC0wNFQwMDowMDow
-MFoiCiAgICAgIH0KICAgIH0sCiAgICB7CiAgICAgICJzeXN0ZW0iOiAiZW1haWwiLAogICAgICAi
-dmFsdWUiOiAib3BlbkBlcGljLmNvbSIKICAgIH0KICBdLAogICJtYXJpdGFsU3RhdHVzIjogewog
-ICAgInRleHQiOiAiU2luZ2xlIiwKICAgICJjb2RpbmciOiBbCiAgICAgIHsKICAgICAgICAic3lz
-dGVtIjogImh0dHA6Ly9obDcub3JnL2ZoaXIvVmFsdWVTZXQvbWFyaXRhbC1zdGF0dXMiLAogICAg
-ICAgICJjb2RlIjogIlMiLAogICAgICAgICJkaXNwbGF5IjogIk5ldmVyIE1hcnJpZWQiCiAgICAg
-IH0KICAgIF0KICB9LAogICJjb21tdW5pY2F0aW9uIjogWwogICAgewogICAgICAicHJlZmVycmVk
-IjogdHJ1ZSwKICAgICAgImxhbmd1YWdlIjogewogICAgICAgICJ0ZXh0IjogIkVuZ2xpc2giLAog
-ICAgICAgICJjb2RpbmciOiBbCiAgICAgICAgICB7CiAgICAgICAgICAgICJzeXN0ZW0iOiAidXJu
-Om9pZDoyLjE2Ljg0MC4xLjExMzg4My42Ljk5IiwKICAgICAgICAgICAgImNvZGUiOiAiZW4iLAog
-ICAgICAgICAgICAiZGlzcGxheSI6ICJFbmdsaXNoIgogICAgICAgICAgfQogICAgICAgIF0KICAg
-ICAgfQogICAgfQogIF0sCiAgImV4dGVuc2lvbiI6IFsKICAgIHsKICAgICAgInVybCI6ICJodHRw
-Oi8vaGw3Lm9yZy9maGlyL1N0cnVjdHVyZURlZmluaXRpb24vdXMtY29yZS1yYWNlIiwKICAgICAg
-InZhbHVlQ29kZWFibGVDb25jZXB0IjogewogICAgICAgICJ0ZXh0IjogIkFzaWFuIiwKICAgICAg
-ICAiY29kaW5nIjogWwogICAgICAgICAgewogICAgICAgICAgICAic3lzdGVtIjogIjIuMTYuODQw
-LjEuMTEzODgzLjUuMTA0IiwKICAgICAgICAgICAgImNvZGUiOiAiMjAyOC05IiwKICAgICAgICAg
-ICAgImRpc3BsYXkiOiAiQXNpYW4iCiAgICAgICAgICB9CiAgICAgICAgXQogICAgICB9CiAgICB9
-LAogICAgewogICAgICAidXJsIjogImh0dHA6Ly9obDcub3JnL2ZoaXIvU3RydWN0dXJlRGVmaW5p
-dGlvbi91cy1jb3JlLWV0aG5pY2l0eSIsCiAgICAgICJ2YWx1ZUNvZGVhYmxlQ29uY2VwdCI6IHsK
-ICAgICAgICAidGV4dCI6ICJOb3QgSGlzcGFuaWMgb3IgTGF0aW5vIiwKICAgICAgICAiY29kaW5n
-IjogWwogICAgICAgICAgewogICAgICAgICAgICAic3lzdGVtIjogIjIuMTYuODQwLjEuMTEzODgz
-LjUuNTAiLAogICAgICAgICAgICAiY29kZSI6ICIyMTg2LTUiLAogICAgICAgICAgICAiZGlzcGxh
-eSI6ICJOb3QgSGlzcGFuaWMgb3IgTGF0aW5vIgogICAgICAgICAgfQogICAgICAgIF0KICAgICAg
-fQogICAgfSwKICAgIHsKICAgICAgInVybCI6ICJodHRwOi8vaGw3Lm9yZy9maGlyL1N0cnVjdHVy
-ZURlZmluaXRpb24vdXMtY29yZS1iaXJ0aC1zZXgiLAogICAgICAidmFsdWVDb2RlYWJsZUNvbmNl
-cHQiOiB7CiAgICAgICAgInRleHQiOiAiTWFsZSIsCiAgICAgICAgImNvZGluZyI6IFsKICAgICAg
-ICAgIHsKICAgICAgICAgICAgInN5c3RlbSI6ICJodHRwOi8vaGw3Lm9yZy9maGlyL3YzL0FkbWlu
-aXN0cmF0aXZlR2VuZGVyIiwKICAgICAgICAgICAgImNvZGUiOiAiTSIsCiAgICAgICAgICAgICJk
-aXNwbGF5IjogIk1hbGUiCiAgICAgICAgICB9CiAgICAgICAgXQogICAgICB9CiAgICB9CiAgXQp9
-CgoK</inboundTemplate>
-        <outboundTemplate encoding="base64"></outboundTemplate>
-        <inboundDataType>JSON</inboundDataType>
-        <outboundDataType>JSON</outboundDataType>
-        <inboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="3.5.0">
-          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="3.5.0">
-            <splitType>JavaScript</splitType>
-            <batchScript></batchScript>
-          </batchProperties>
-        </inboundProperties>
-        <outboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="3.5.0">
-          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="3.5.0">
-            <splitType>JavaScript</splitType>
-            <batchScript></batchScript>
-          </batchProperties>
-        </outboundProperties>
-      </transformer>
-      <responseTransformer version="3.5.0">
-        <elements/>
-        <inboundDataType>JSON</inboundDataType>
-        <outboundDataType>JSON</outboundDataType>
-        <inboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="3.5.0">
-          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="3.5.0">
-            <splitType>JavaScript</splitType>
-            <batchScript></batchScript>
-          </batchProperties>
-        </inboundProperties>
-        <outboundProperties class="com.mirth.connect.plugins.datatypes.json.JSONDataTypeProperties" version="3.5.0">
-          <batchProperties class="com.mirth.connect.plugins.datatypes.json.JSONBatchProperties" version="3.5.0">
-            <splitType>JavaScript</splitType>
-            <batchScript></batchScript>
-          </batchProperties>
-        </outboundProperties>
-      </responseTransformer>
-      <filter version="3.5.0">
-        <elements>
-          <com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
-            <name>family name</name>
-            <sequenceNumber>0</sequenceNumber>
-            <script>return isValid(msg[&apos;name&apos;][0][&apos;family&apos;][0]);</script>
-          </com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
-          <com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
-            <name>first name</name>
-            <sequenceNumber>1</sequenceNumber>
-            <operator>AND</operator>
-            <script>return isValid(msg[&apos;name&apos;][0][&apos;given&apos;][0]);</script>
-          </com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
-          <com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
-            <name>last name</name>
-            <sequenceNumber>2</sequenceNumber>
-            <operator>AND</operator>
-            <script>return isValid(msg[&apos;birthDate&apos;]);</script>
-          </com.mirth.connect.plugins.javascriptrule.JavaScriptRule>
-        </elements>
-      </filter>
-      <transportName>HTTP Sender</transportName>
       <mode>DESTINATION</mode>
       <enabled>true</enabled>
       <waitForPrevious>true</waitForPrevious>
@@ -1235,7 +959,7 @@ return;</undeployScript>
     <metadata>
       <enabled>true</enabled>
       <lastModified>
-        <time>1506329980119</time>
+        <time>1509087786470</time>
         <timezone>Asia/Kolkata</timezone>
       </lastModified>
       <pruningSettings>
@@ -1246,10 +970,10 @@ return;</undeployScript>
       <codeTemplateLibrary version="3.5.0">
         <id>8a9b87fb-37b7-4d28-a7a6-7b7512202bad</id>
         <name>util library</name>
-        <revision>2</revision>
+        <revision>15</revision>
         <lastModified>
-          <time>1506331720656</time>
-          <timezone>Etc/UTC</timezone>
+          <time>1509087522382</time>
+          <timezone>Asia/Kolkata</timezone>
         </lastModified>
         <description></description>
         <includeNewChannels>false</includeNewChannels>
@@ -1264,28 +988,28 @@ return;</undeployScript>
           <codeTemplate version="3.5.0">
             <id>37285b41-b499-450c-8835-337b5cb68f6b</id>
             <name>Function for making first letter upper case</name>
-            <revision>1</revision>
+            <revision>6</revision>
             <lastModified>
-              <time>1506329685842</time>
-              <timezone>Etc/UTC</timezone>
+              <time>1507547241205</time>
+              <timezone>Asia/Kolkata</timezone>
             </lastModified>
             <contextSet>
               <delegate>
-                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
-                <contextType>GLOBAL_UNDEPLOY</contextType>
-                <contextType>GLOBAL_DEPLOY</contextType>
-                <contextType>CHANNEL_BATCH</contextType>
-                <contextType>GLOBAL_PREPROCESSOR</contextType>
-                <contextType>CHANNEL_UNDEPLOY</contextType>
-                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                <contextType>CHANNEL_ATTACHMENT</contextType>
-                <contextType>DESTINATION_DISPATCHER</contextType>
-                <contextType>CHANNEL_DEPLOY</contextType>
-                <contextType>CHANNEL_PREPROCESSOR</contextType>
                 <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>CHANNEL_PREPROCESSOR</contextType>
                 <contextType>CHANNEL_POSTPROCESSOR</contextType>
-                <contextType>GLOBAL_POSTPROCESSOR</contextType>
+                <contextType>CHANNEL_ATTACHMENT</contextType>
+                <contextType>CHANNEL_DEPLOY</contextType>
+                <contextType>GLOBAL_UNDEPLOY</contextType>
                 <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                <contextType>GLOBAL_PREPROCESSOR</contextType>
+                <contextType>CHANNEL_BATCH</contextType>
+                <contextType>GLOBAL_POSTPROCESSOR</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>GLOBAL_DEPLOY</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>CHANNEL_UNDEPLOY</contextType>
               </delegate>
             </contextSet>
             <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -1294,40 +1018,38 @@ return;</undeployScript>
 	This function make the first letter of a string capital and rest lower.
 
 	@param {String} name - First or Last name
-	@return {String} return First or Last name where first letter is capital 
+	@return {String} return First or Last name where first letter is capital
 */
-function makeUpper(name) {
-	
-	return name[0].toUpperCase() + name.slice(1).toLowerCase();
-	
+function makeUpper(name) {	    
+	    return name.substring(0, 1).toUpperCase() + name.substring(1);
 }</code>
             </properties>
           </codeTemplate>
           <codeTemplate version="3.5.0">
             <id>977641cf-8fac-4937-a7ba-a1f46db0c6b9</id>
             <name>Function for masking SSN</name>
-            <revision>1</revision>
+            <revision>7</revision>
             <lastModified>
-              <time>1506329685938</time>
-              <timezone>Etc/UTC</timezone>
+              <time>1507547240831</time>
+              <timezone>Asia/Kolkata</timezone>
             </lastModified>
             <contextSet>
               <delegate>
-                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
-                <contextType>GLOBAL_UNDEPLOY</contextType>
-                <contextType>GLOBAL_DEPLOY</contextType>
-                <contextType>CHANNEL_BATCH</contextType>
-                <contextType>GLOBAL_PREPROCESSOR</contextType>
-                <contextType>CHANNEL_UNDEPLOY</contextType>
-                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                <contextType>CHANNEL_ATTACHMENT</contextType>
-                <contextType>DESTINATION_DISPATCHER</contextType>
-                <contextType>CHANNEL_DEPLOY</contextType>
-                <contextType>CHANNEL_PREPROCESSOR</contextType>
                 <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>CHANNEL_PREPROCESSOR</contextType>
                 <contextType>CHANNEL_POSTPROCESSOR</contextType>
-                <contextType>GLOBAL_POSTPROCESSOR</contextType>
+                <contextType>CHANNEL_ATTACHMENT</contextType>
+                <contextType>CHANNEL_DEPLOY</contextType>
+                <contextType>GLOBAL_UNDEPLOY</contextType>
                 <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                <contextType>GLOBAL_PREPROCESSOR</contextType>
+                <contextType>CHANNEL_BATCH</contextType>
+                <contextType>GLOBAL_POSTPROCESSOR</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>GLOBAL_DEPLOY</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>CHANNEL_UNDEPLOY</contextType>
               </delegate>
             </contextSet>
             <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -1338,82 +1060,85 @@ function makeUpper(name) {
 	@return {String} return Masked ssn
 */
 function maskSSN(ssn) {
-	if( ssn != null)
-	{
-		ssn = ssn.replace(/\d(?!\d{4})/g, &quot;x&quot;);		
-	}
-	return ssn;
+	var length = ssn.length();
+
+    if (length != 9) 
+    	return &apos;&apos; ;
+    else
+    	return ssn.substring(0, length - 4) + &quot;****&quot;;
 }</code>
             </properties>
           </codeTemplate>
           <codeTemplate version="3.5.0">
             <id>37e7e63e-f39a-40e3-a835-df95d07a1286</id>
-            <name>Function to check validity</name>
-            <revision>1</revision>
+            <name>Function to check param is null</name>
+            <revision>11</revision>
             <lastModified>
-              <time>1506329685612</time>
-              <timezone>Etc/UTC</timezone>
+              <time>1508835898089</time>
+              <timezone>Asia/Kolkata</timezone>
             </lastModified>
             <contextSet>
               <delegate>
-                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
-                <contextType>GLOBAL_UNDEPLOY</contextType>
-                <contextType>GLOBAL_DEPLOY</contextType>
-                <contextType>CHANNEL_BATCH</contextType>
-                <contextType>GLOBAL_PREPROCESSOR</contextType>
-                <contextType>CHANNEL_UNDEPLOY</contextType>
-                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                <contextType>CHANNEL_ATTACHMENT</contextType>
-                <contextType>DESTINATION_DISPATCHER</contextType>
-                <contextType>CHANNEL_DEPLOY</contextType>
-                <contextType>CHANNEL_PREPROCESSOR</contextType>
                 <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>CHANNEL_PREPROCESSOR</contextType>
                 <contextType>CHANNEL_POSTPROCESSOR</contextType>
-                <contextType>GLOBAL_POSTPROCESSOR</contextType>
+                <contextType>CHANNEL_ATTACHMENT</contextType>
+                <contextType>CHANNEL_DEPLOY</contextType>
+                <contextType>GLOBAL_UNDEPLOY</contextType>
                 <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                <contextType>GLOBAL_PREPROCESSOR</contextType>
+                <contextType>CHANNEL_BATCH</contextType>
+                <contextType>GLOBAL_POSTPROCESSOR</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>GLOBAL_DEPLOY</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>CHANNEL_UNDEPLOY</contextType>
               </delegate>
             </contextSet>
             <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
               <type>FUNCTION</type>
               <code>/**
-	this function will do validation of messages.
+	this function will check nullity of parameters.
 
-	@param {String} arg1 - arg1 message attribute 
+	@param {String} arg1 - arg1 message attribute
 	@return {String} return true if message is valid else false
 */
-function isValid(arg1) {
-	if(arg1 != null &amp;&amp; arg1.length &gt; 0)
-		return true;
+function isNotNull(arg1) {
+	
+	if(arg1 != null &amp;&amp; arg1.length() &gt; 0)	
+		return true;	
 	else
 		return false;
+	
 }</code>
             </properties>
           </codeTemplate>
           <codeTemplate version="3.5.0">
             <id>7af604fe-fdc5-4b4d-a662-0af5c3bfbd30</id>
             <name>Function to create address </name>
-            <revision>1</revision>
+            <revision>7</revision>
             <lastModified>
-              <time>1506329685974</time>
-              <timezone>Etc/UTC</timezone>
+              <time>1508843165085</time>
+              <timezone>Asia/Kolkata</timezone>
             </lastModified>
             <contextSet>
               <delegate>
-                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
-                <contextType>GLOBAL_UNDEPLOY</contextType>
-                <contextType>GLOBAL_DEPLOY</contextType>
-                <contextType>CHANNEL_BATCH</contextType>
-                <contextType>GLOBAL_PREPROCESSOR</contextType>
-                <contextType>CHANNEL_UNDEPLOY</contextType>
-                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                <contextType>CHANNEL_ATTACHMENT</contextType>
-                <contextType>DESTINATION_DISPATCHER</contextType>
-                <contextType>CHANNEL_DEPLOY</contextType>
-                <contextType>CHANNEL_PREPROCESSOR</contextType>
                 <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>CHANNEL_PREPROCESSOR</contextType>
                 <contextType>CHANNEL_POSTPROCESSOR</contextType>
-                <contextType>GLOBAL_POSTPROCESSOR</contextType>
+                <contextType>CHANNEL_ATTACHMENT</contextType>
+                <contextType>CHANNEL_DEPLOY</contextType>
+                <contextType>GLOBAL_UNDEPLOY</contextType>
                 <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                <contextType>GLOBAL_PREPROCESSOR</contextType>
+                <contextType>CHANNEL_BATCH</contextType>
+                <contextType>GLOBAL_POSTPROCESSOR</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>GLOBAL_DEPLOY</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>CHANNEL_UNDEPLOY</contextType>
               </delegate>
             </contextSet>
             <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -1425,13 +1150,11 @@ function isValid(arg1) {
 	@return {String} return Address object
 */
 function addressUtil(use,addressText,line,city,state,postalCode) {
-	var address ={
+	var address = {
 	 &quot;use&quot;: use,
       &quot;type&quot;: &quot;&quot;,
       &quot;text&quot;:  addressText,
-      &quot;line&quot;: [
-        line
-      ],
+      &quot;line&quot;:  line,
       &quot;city&quot;: city,      
       &quot;state&quot;: state,
       &quot;postalCode&quot;: postalCode    
@@ -1443,28 +1166,28 @@ function addressUtil(use,addressText,line,city,state,postalCode) {
           <codeTemplate version="3.5.0">
             <id>cd04c40d-3c68-43bb-83cc-6ca221fd0510</id>
             <name>Function to create message header</name>
-            <revision>2</revision>
+            <revision>7</revision>
             <lastModified>
-              <time>1506331720681</time>
-              <timezone>Etc/UTC</timezone>
+              <time>1507547241047</time>
+              <timezone>Asia/Kolkata</timezone>
             </lastModified>
             <contextSet>
               <delegate>
-                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
-                <contextType>GLOBAL_UNDEPLOY</contextType>
-                <contextType>GLOBAL_DEPLOY</contextType>
-                <contextType>CHANNEL_BATCH</contextType>
-                <contextType>GLOBAL_PREPROCESSOR</contextType>
-                <contextType>CHANNEL_UNDEPLOY</contextType>
-                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                <contextType>CHANNEL_ATTACHMENT</contextType>
-                <contextType>DESTINATION_DISPATCHER</contextType>
-                <contextType>CHANNEL_DEPLOY</contextType>
-                <contextType>CHANNEL_PREPROCESSOR</contextType>
                 <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>CHANNEL_PREPROCESSOR</contextType>
                 <contextType>CHANNEL_POSTPROCESSOR</contextType>
-                <contextType>GLOBAL_POSTPROCESSOR</contextType>
+                <contextType>CHANNEL_ATTACHMENT</contextType>
+                <contextType>CHANNEL_DEPLOY</contextType>
+                <contextType>GLOBAL_UNDEPLOY</contextType>
                 <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                <contextType>GLOBAL_PREPROCESSOR</contextType>
+                <contextType>CHANNEL_BATCH</contextType>
+                <contextType>GLOBAL_POSTPROCESSOR</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>GLOBAL_DEPLOY</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>CHANNEL_UNDEPLOY</contextType>
               </delegate>
             </contextSet>
             <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -1475,7 +1198,7 @@ function addressUtil(use,addressText,line,city,state,postalCode) {
 	@param {String} uuid,source,Patient - unique message id, mssgae source, Patient object
 	@return {String} return messageHeader
 */
-function msgHeaderUtil(uuid,source,Patient) {
+function msgHeaderUtil(uuid,source,patient) {
 	var messageHeader = {};
 	messageHeader.resourceType = &quot;Pateint&quot;;
 	messageHeader.id = {
@@ -1487,7 +1210,12 @@ function msgHeaderUtil(uuid,source,Patient) {
 	messageHeader.destination = [{
 		name: &apos;Data-Management&apos;
 	}]
-	messageHeader.data = [Patient];
+	messageHeader.identifier = patient.identifier;
+	messageHeader.name = patient.name;
+	messageHeader.gender = patient.gender;
+	messageHeader.birthDate = patient.birthDate;
+	messageHeader.address = patient.address;
+	
 	return messageHeader;
 }</code>
             </properties>
@@ -1495,28 +1223,28 @@ function msgHeaderUtil(uuid,source,Patient) {
           <codeTemplate version="3.5.0">
             <id>3792b93f-ba55-4b5b-937b-12fcfb1f5065</id>
             <name>Function to create patient object</name>
-            <revision>1</revision>
+            <revision>11</revision>
             <lastModified>
-              <time>1506329686009</time>
-              <timezone>Etc/UTC</timezone>
+              <time>1508843138784</time>
+              <timezone>Asia/Kolkata</timezone>
             </lastModified>
             <contextSet>
               <delegate>
-                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
-                <contextType>GLOBAL_UNDEPLOY</contextType>
-                <contextType>GLOBAL_DEPLOY</contextType>
-                <contextType>CHANNEL_BATCH</contextType>
-                <contextType>GLOBAL_PREPROCESSOR</contextType>
-                <contextType>CHANNEL_UNDEPLOY</contextType>
-                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                <contextType>CHANNEL_ATTACHMENT</contextType>
-                <contextType>DESTINATION_DISPATCHER</contextType>
-                <contextType>CHANNEL_DEPLOY</contextType>
-                <contextType>CHANNEL_PREPROCESSOR</contextType>
                 <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>CHANNEL_PREPROCESSOR</contextType>
                 <contextType>CHANNEL_POSTPROCESSOR</contextType>
-                <contextType>GLOBAL_POSTPROCESSOR</contextType>
+                <contextType>CHANNEL_ATTACHMENT</contextType>
+                <contextType>CHANNEL_DEPLOY</contextType>
+                <contextType>GLOBAL_UNDEPLOY</contextType>
                 <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                <contextType>GLOBAL_PREPROCESSOR</contextType>
+                <contextType>CHANNEL_BATCH</contextType>
+                <contextType>GLOBAL_POSTPROCESSOR</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>GLOBAL_DEPLOY</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>CHANNEL_UNDEPLOY</contextType>
               </delegate>
             </contextSet>
             <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -1528,31 +1256,81 @@ function msgHeaderUtil(uuid,source,Patient) {
 	@return {String} return Patient object
 */
 function patientUtil(gender,birthDate,ssn,address,lastName,firstName) {
-	var Patient = {};
-	Patient.resourceType = &quot;Patient&quot;;
-	Patient.gender = gender;
-	Patient.birthDate = birthDate.substr(0,4) + &quot;-&quot; + birthDate.substr(4,2) + &quot;-&quot; + birthDate.substr(6,2);
-	Patient.identifier = [{
+	var patient = {};
+	patient.resourceType = &quot;Patient&quot;;
+	patient.gender = gender;
+	patient.birthDate = birthDate;
+	patient.identifier = [{
     		&quot;use&quot;: &quot;usual&quot;,
      	&quot;type&quot;: {
        	&quot;coding&quot;: [
          		{
-           		&quot;system&quot;: &quot;http://hl7.org/fhir/sid/us-ssn&quot;,
+           		&quot;system&quot;: &quot;http://hl7.org/fhir/v2/0203&quot;,           		
            		&quot;code&quot;: &quot;SS&quot;
          		}
        	]
      },
+		&quot;system&quot;: &quot;http://hl7.org/fhir/sid/us-ssn&quot;,     
      	&quot;value&quot;: maskSSN(ssn)
    	}];
 	var humanName = {
 		family: lastName,
 		given: firstName,
-		text: [firstName + &apos; &apos; + lastName]
+		text: firstName + &apos; &apos; + lastName
 	};
-	Patient.name = [humanName];
-	Patient.address = [address];
-	return Patient;
+	patient.name = [humanName];
+	patient.address = [address];
+	return patient;
 }</code>
+            </properties>
+          </codeTemplate>
+          <codeTemplate version="3.5.0">
+            <id>f55693aa-4500-4426-9f4a-05a92ba35423</id>
+            <name>Function to send message to kafka</name>
+            <revision>1</revision>
+            <lastModified>
+              <time>1509087522442</time>
+              <timezone>Asia/Kolkata</timezone>
+            </lastModified>
+            <contextSet>
+              <delegate>
+                <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>CHANNEL_PREPROCESSOR</contextType>
+                <contextType>CHANNEL_POSTPROCESSOR</contextType>
+                <contextType>GLOBAL_UNDEPLOY</contextType>
+                <contextType>CHANNEL_DEPLOY</contextType>
+                <contextType>CHANNEL_ATTACHMENT</contextType>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                <contextType>GLOBAL_PREPROCESSOR</contextType>
+                <contextType>CHANNEL_BATCH</contextType>
+                <contextType>GLOBAL_POSTPROCESSOR</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>GLOBAL_DEPLOY</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>CHANNEL_UNDEPLOY</contextType>
+              </delegate>
+            </contextSet>
+            <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+              <type>FUNCTION</type>
+              <code>/**
+	This method will send message to kafka 
+
+	@param {String} uudi - unique identifier of message bes sent to kafka
+	@param {String} msg	 - fhir message to
+	@return {String} return description
+*/
+	function kafkaAPI(uuid,msg) {
+		var kafkaConnect = globalMap.get(&apos;kafkaConnect&apos;);
+		logger.info(&quot;sending message to kafka...&quot;);
+		try{
+			kafkaConnect.send($(&apos;id&apos;),msg);
+			logger.info(&quot;message sent to kafka&quot;);
+		}
+		catch(err){
+			logger.error(err);
+		}
+	}</code>
             </properties>
           </codeTemplate>
         </codeTemplates>

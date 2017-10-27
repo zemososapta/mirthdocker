@@ -1,32 +1,26 @@
 /**
-	This function creates patient object from patient gender, birthDate, identifier and name
+	This method creates the message header 
 
-	@param {String} gender, birthDate, identifier, humanName description
-	@return {String} return Patient object
+	@param {String} uuid,source,Patient - unique message id, mssgae source, Patient object
+	@return {String} return messageHeader
 */
-function patientUtil(gender,birthDate,ssn,address,lastName,firstName) {
-	var Patient = {};
-	Patient.resourceType = "Patient";
-	Patient.gender = gender;
-	Patient.birthDate = birthDate.substr(0,4) + "-" + birthDate.substr(4,2) + "-" + birthDate.substr(6,2);
-	Patient.identifier = [{
-    		"use": "usual",
-     	"type": {
-       	"coding": [
-         		{
-           		"system": "http://hl7.org/fhir/sid/us-ssn",
-           		"code": "SS"
-         		}
-       	]
-     },
-     	"value": maskSSN(ssn)
-   	}];
-	var humanName = {
-		family: lastName,
-		given: firstName,
-		text: [firstName + ' ' + lastName]
-	};
-	Patient.name = [humanName];
-	Patient.address = [address];
-	return Patient;
+function msgHeaderUtil(uuid,source,patient) {
+	var messageHeader = {};
+	messageHeader.resourceType = "Pateint";
+	messageHeader.id = {
+		"uuid": uuid
+	}
+	messageHeader.source = {
+		name: source
+	}
+	messageHeader.destination = [{
+		name: 'Data-Management'
+	}]
+	messageHeader.identifier = patient.identifier;
+	messageHeader.name = patient.name;
+	messageHeader.gender = patient.gender;
+	messageHeader.birthDate = patient.birthDate;
+	messageHeader.address = patient.address;
+	
+	return messageHeader;
 }

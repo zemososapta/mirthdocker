@@ -1,17 +1,10 @@
-var date = msg['PID']['PID.7']['PID.7.1'].toString();
-var lastName = makeUpper(msg['PID']['PID.5']['PID.5.1'].toString().toLowerCase());
-var firstName = makeUpper(msg['PID']['PID.5']['PID.5.2'].toString().toLowerCase());
-var gender = msg['PID']['PID.8']['PID.8.1'].toString();
+var date = $('birthDate');
+var lastName = makeUpper($('lastName').toLowerCase());
+var firstName = makeUpper($('firstName').toLowerCase());
 var birthDate = date.substr(0,4) + "-" + date.substr(4,2) + "-" + date.substr(6,2);
-var ssn = msg['PID']['PID.19']['PID.19.1'].toString();
-var use = msg['PID']['PID.11']['PID.11.7'].toString();
-var addressText = msg['PID']['PID.11']['PID.11.1'].toString()+', '+msg['PID']['PID.11']['PID.11.2'].toString()+', '+msg['PID']['PID.11']['PID.11.3'].toString()+', '+msg['PID']['PID.11']['PID.11.4'].toString()+', '+msg['PID']['PID.11']['PID.11.5'].toString();
-var line = msg['PID']['PID.11']['PID.11.1'].toString();
-var city = msg['PID']['PID.11']['PID.11.3'].toString(); 
-var state = msg['PID']['PID.11']['PID.11.4'].toString();
-var postalCode = msg['PID']['PID.11']['PID.11.5'].toString();  
-var address =  addressUtil(use, addressText, line, city, state, postalCode);
-var Patient = patientUtil(gender, birthDate, ssn, address, lastName, firstName)
-var messageHeader = msgHeaderUtil($('ID'), $('source'), Patient)
+var addressText = $('line')+', '+$('addressDesignation')+', '+$('city')+', '+$('state')+', '+$('zip');
+var address =  addressUtil($('use'), addressText, $('line'), $('city'), $('state'), $('zip'));
+var patient = patientUtil($('gender'), $('birthDate'), $('ssn'), address, lastName, firstName);
+var messageHeader = msgHeaderUtil($('id'), $('source'), patient);
 
 msg = JSON.stringify(messageHeader);

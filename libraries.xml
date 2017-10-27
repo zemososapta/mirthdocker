@@ -2,10 +2,10 @@
   <codeTemplateLibrary version="3.5.0">
     <id>a084db27-49e0-4c67-893b-ffcc9f1d6e94</id>
     <name>FHIR Helper Functions</name>
-    <revision>2</revision>
+    <revision>4</revision>
     <lastModified>
-      <time>1506331720631</time>
-      <timezone>Etc/UTC</timezone>
+      <time>1508829955229</time>
+      <timezone>Asia/Kolkata</timezone>
     </lastModified>
     <description></description>
     <includeNewChannels>false</includeNewChannels>
@@ -21,18 +21,18 @@
         <name>Create FHIR OperationOutcome</name>
         <revision>1</revision>
         <lastModified>
-          <time>1506329686102</time>
-          <timezone>Etc/UTC</timezone>
+          <time>1505222584622</time>
+          <timezone>Asia/Kolkata</timezone>
         </lastModified>
         <contextSet>
           <delegate>
-            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
-            <contextType>CHANNEL_ATTACHMENT</contextType>
-            <contextType>DESTINATION_DISPATCHER</contextType>
             <contextType>SOURCE_RECEIVER</contextType>
             <contextType>CHANNEL_POSTPROCESSOR</contextType>
-            <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+            <contextType>DESTINATION_DISPATCHER</contextType>
+            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+            <contextType>CHANNEL_ATTACHMENT</contextType>
             <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+            <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
           </delegate>
         </contextSet>
         <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -105,18 +105,18 @@ function createOperationOutcome(severity, code, details, httpStatusCode, e, isFo
         <name>FHIR DB - Execute Cached Query</name>
         <revision>1</revision>
         <lastModified>
-          <time>1506329685907</time>
-          <timezone>Etc/UTC</timezone>
+          <time>1505222584135</time>
+          <timezone>Asia/Kolkata</timezone>
         </lastModified>
         <contextSet>
           <delegate>
-            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
-            <contextType>CHANNEL_ATTACHMENT</contextType>
-            <contextType>DESTINATION_DISPATCHER</contextType>
             <contextType>SOURCE_RECEIVER</contextType>
             <contextType>CHANNEL_POSTPROCESSOR</contextType>
-            <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+            <contextType>DESTINATION_DISPATCHER</contextType>
+            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+            <contextType>CHANNEL_ATTACHMENT</contextType>
             <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+            <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
           </delegate>
         </contextSet>
         <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -138,18 +138,18 @@ function executeCachedQuery(expression, parameters) {
         <name>FHIR DB - Execute Cached Query and Get Keys</name>
         <revision>1</revision>
         <lastModified>
-          <time>1506329686073</time>
-          <timezone>Etc/UTC</timezone>
+          <time>1505222584531</time>
+          <timezone>Asia/Kolkata</timezone>
         </lastModified>
         <contextSet>
           <delegate>
-            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
-            <contextType>CHANNEL_ATTACHMENT</contextType>
-            <contextType>DESTINATION_DISPATCHER</contextType>
             <contextType>SOURCE_RECEIVER</contextType>
             <contextType>CHANNEL_POSTPROCESSOR</contextType>
-            <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+            <contextType>DESTINATION_DISPATCHER</contextType>
+            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+            <contextType>CHANNEL_ATTACHMENT</contextType>
             <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+            <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
           </delegate>
         </contextSet>
         <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -172,18 +172,18 @@ function executeUpdateAndGetGeneratedKeys(expression, parameters) {
         <name>FHIR DB - Execute Update</name>
         <revision>1</revision>
         <lastModified>
-          <time>1506329685747</time>
-          <timezone>Etc/UTC</timezone>
+          <time>1505222584300</time>
+          <timezone>Asia/Kolkata</timezone>
         </lastModified>
         <contextSet>
           <delegate>
-            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
-            <contextType>CHANNEL_ATTACHMENT</contextType>
-            <contextType>DESTINATION_DISPATCHER</contextType>
             <contextType>SOURCE_RECEIVER</contextType>
             <contextType>CHANNEL_POSTPROCESSOR</contextType>
-            <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+            <contextType>DESTINATION_DISPATCHER</contextType>
+            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+            <contextType>CHANNEL_ATTACHMENT</contextType>
             <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+            <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
           </delegate>
         </contextSet>
         <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -205,18 +205,18 @@ function executeUpdate(expression, parameters) {
         <name>FHIR DB - Get Connection</name>
         <revision>1</revision>
         <lastModified>
-          <time>1506329685808</time>
-          <timezone>Etc/UTC</timezone>
+          <time>1505222584474</time>
+          <timezone>Asia/Kolkata</timezone>
         </lastModified>
         <contextSet>
           <delegate>
-            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
-            <contextType>CHANNEL_ATTACHMENT</contextType>
-            <contextType>DESTINATION_DISPATCHER</contextType>
             <contextType>SOURCE_RECEIVER</contextType>
             <contextType>CHANNEL_POSTPROCESSOR</contextType>
-            <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+            <contextType>DESTINATION_DISPATCHER</contextType>
+            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+            <contextType>CHANNEL_ATTACHMENT</contextType>
             <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+            <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
           </delegate>
         </contextSet>
         <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -298,18 +298,18 @@ function executeOperation(operation, expression, parameters) {
         <name>Get Prefer Header Value</name>
         <revision>1</revision>
         <lastModified>
-          <time>1506329686041</time>
-          <timezone>Etc/UTC</timezone>
+          <time>1505222584409</time>
+          <timezone>Asia/Kolkata</timezone>
         </lastModified>
         <contextSet>
           <delegate>
-            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
-            <contextType>CHANNEL_ATTACHMENT</contextType>
-            <contextType>DESTINATION_DISPATCHER</contextType>
             <contextType>SOURCE_RECEIVER</contextType>
             <contextType>CHANNEL_POSTPROCESSOR</contextType>
-            <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+            <contextType>DESTINATION_DISPATCHER</contextType>
+            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+            <contextType>CHANNEL_ATTACHMENT</contextType>
             <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+            <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
           </delegate>
         </contextSet>
         <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -341,18 +341,18 @@ function getPreferValue() {
         <name>Import Common Packages</name>
         <revision>1</revision>
         <lastModified>
-          <time>1506329685874</time>
-          <timezone>Etc/UTC</timezone>
+          <time>1505222584725</time>
+          <timezone>Asia/Kolkata</timezone>
         </lastModified>
         <contextSet>
           <delegate>
-            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
-            <contextType>CHANNEL_ATTACHMENT</contextType>
-            <contextType>DESTINATION_DISPATCHER</contextType>
             <contextType>SOURCE_RECEIVER</contextType>
             <contextType>CHANNEL_POSTPROCESSOR</contextType>
-            <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+            <contextType>DESTINATION_DISPATCHER</contextType>
+            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+            <contextType>CHANNEL_ATTACHMENT</contextType>
             <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+            <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
           </delegate>
         </contextSet>
         <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -375,10 +375,10 @@ importPackage(org.apache.commons.lang3.math);</code>
   <codeTemplateLibrary version="3.5.0">
     <id>8a9b87fb-37b7-4d28-a7a6-7b7512202bad</id>
     <name>util library</name>
-    <revision>2</revision>
+    <revision>15</revision>
     <lastModified>
-      <time>1506331720656</time>
-      <timezone>Etc/UTC</timezone>
+      <time>1509087522382</time>
+      <timezone>Asia/Kolkata</timezone>
     </lastModified>
     <description></description>
     <includeNewChannels>false</includeNewChannels>
@@ -393,28 +393,28 @@ importPackage(org.apache.commons.lang3.math);</code>
       <codeTemplate version="3.5.0">
         <id>37285b41-b499-450c-8835-337b5cb68f6b</id>
         <name>Function for making first letter upper case</name>
-        <revision>1</revision>
+        <revision>6</revision>
         <lastModified>
-          <time>1506329685842</time>
-          <timezone>Etc/UTC</timezone>
+          <time>1507547241205</time>
+          <timezone>Asia/Kolkata</timezone>
         </lastModified>
         <contextSet>
           <delegate>
-            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
-            <contextType>GLOBAL_UNDEPLOY</contextType>
-            <contextType>GLOBAL_DEPLOY</contextType>
-            <contextType>CHANNEL_BATCH</contextType>
-            <contextType>GLOBAL_PREPROCESSOR</contextType>
-            <contextType>CHANNEL_UNDEPLOY</contextType>
-            <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-            <contextType>CHANNEL_ATTACHMENT</contextType>
-            <contextType>DESTINATION_DISPATCHER</contextType>
-            <contextType>CHANNEL_DEPLOY</contextType>
-            <contextType>CHANNEL_PREPROCESSOR</contextType>
             <contextType>SOURCE_RECEIVER</contextType>
+            <contextType>CHANNEL_PREPROCESSOR</contextType>
             <contextType>CHANNEL_POSTPROCESSOR</contextType>
-            <contextType>GLOBAL_POSTPROCESSOR</contextType>
+            <contextType>CHANNEL_ATTACHMENT</contextType>
+            <contextType>CHANNEL_DEPLOY</contextType>
+            <contextType>GLOBAL_UNDEPLOY</contextType>
             <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+            <contextType>GLOBAL_PREPROCESSOR</contextType>
+            <contextType>CHANNEL_BATCH</contextType>
+            <contextType>GLOBAL_POSTPROCESSOR</contextType>
+            <contextType>DESTINATION_DISPATCHER</contextType>
+            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+            <contextType>GLOBAL_DEPLOY</contextType>
+            <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+            <contextType>CHANNEL_UNDEPLOY</contextType>
           </delegate>
         </contextSet>
         <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -423,40 +423,38 @@ importPackage(org.apache.commons.lang3.math);</code>
 	This function make the first letter of a string capital and rest lower.
 
 	@param {String} name - First or Last name
-	@return {String} return First or Last name where first letter is capital 
+	@return {String} return First or Last name where first letter is capital
 */
-function makeUpper(name) {
-	
-	return name[0].toUpperCase() + name.slice(1).toLowerCase();
-	
+function makeUpper(name) {	    
+	    return name.substring(0, 1).toUpperCase() + name.substring(1);
 }</code>
         </properties>
       </codeTemplate>
       <codeTemplate version="3.5.0">
         <id>977641cf-8fac-4937-a7ba-a1f46db0c6b9</id>
         <name>Function for masking SSN</name>
-        <revision>1</revision>
+        <revision>7</revision>
         <lastModified>
-          <time>1506329685938</time>
-          <timezone>Etc/UTC</timezone>
+          <time>1507547240831</time>
+          <timezone>Asia/Kolkata</timezone>
         </lastModified>
         <contextSet>
           <delegate>
-            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
-            <contextType>GLOBAL_UNDEPLOY</contextType>
-            <contextType>GLOBAL_DEPLOY</contextType>
-            <contextType>CHANNEL_BATCH</contextType>
-            <contextType>GLOBAL_PREPROCESSOR</contextType>
-            <contextType>CHANNEL_UNDEPLOY</contextType>
-            <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-            <contextType>CHANNEL_ATTACHMENT</contextType>
-            <contextType>DESTINATION_DISPATCHER</contextType>
-            <contextType>CHANNEL_DEPLOY</contextType>
-            <contextType>CHANNEL_PREPROCESSOR</contextType>
             <contextType>SOURCE_RECEIVER</contextType>
+            <contextType>CHANNEL_PREPROCESSOR</contextType>
             <contextType>CHANNEL_POSTPROCESSOR</contextType>
-            <contextType>GLOBAL_POSTPROCESSOR</contextType>
+            <contextType>CHANNEL_ATTACHMENT</contextType>
+            <contextType>CHANNEL_DEPLOY</contextType>
+            <contextType>GLOBAL_UNDEPLOY</contextType>
             <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+            <contextType>GLOBAL_PREPROCESSOR</contextType>
+            <contextType>CHANNEL_BATCH</contextType>
+            <contextType>GLOBAL_POSTPROCESSOR</contextType>
+            <contextType>DESTINATION_DISPATCHER</contextType>
+            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+            <contextType>GLOBAL_DEPLOY</contextType>
+            <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+            <contextType>CHANNEL_UNDEPLOY</contextType>
           </delegate>
         </contextSet>
         <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -467,82 +465,85 @@ function makeUpper(name) {
 	@return {String} return Masked ssn
 */
 function maskSSN(ssn) {
-	if( ssn != null)
-	{
-		ssn = ssn.replace(/\d(?!\d{4})/g, &quot;x&quot;);		
-	}
-	return ssn;
+	var length = ssn.length();
+
+    if (length != 9) 
+    	return &apos;&apos; ;
+    else
+    	return ssn.substring(0, length - 4) + &quot;****&quot;;
 }</code>
         </properties>
       </codeTemplate>
       <codeTemplate version="3.5.0">
         <id>37e7e63e-f39a-40e3-a835-df95d07a1286</id>
-        <name>Function to check validity</name>
-        <revision>1</revision>
+        <name>Function to check param is null</name>
+        <revision>11</revision>
         <lastModified>
-          <time>1506329685612</time>
-          <timezone>Etc/UTC</timezone>
+          <time>1508835898089</time>
+          <timezone>Asia/Kolkata</timezone>
         </lastModified>
         <contextSet>
           <delegate>
-            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
-            <contextType>GLOBAL_UNDEPLOY</contextType>
-            <contextType>GLOBAL_DEPLOY</contextType>
-            <contextType>CHANNEL_BATCH</contextType>
-            <contextType>GLOBAL_PREPROCESSOR</contextType>
-            <contextType>CHANNEL_UNDEPLOY</contextType>
-            <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-            <contextType>CHANNEL_ATTACHMENT</contextType>
-            <contextType>DESTINATION_DISPATCHER</contextType>
-            <contextType>CHANNEL_DEPLOY</contextType>
-            <contextType>CHANNEL_PREPROCESSOR</contextType>
             <contextType>SOURCE_RECEIVER</contextType>
+            <contextType>CHANNEL_PREPROCESSOR</contextType>
             <contextType>CHANNEL_POSTPROCESSOR</contextType>
-            <contextType>GLOBAL_POSTPROCESSOR</contextType>
+            <contextType>CHANNEL_ATTACHMENT</contextType>
+            <contextType>CHANNEL_DEPLOY</contextType>
+            <contextType>GLOBAL_UNDEPLOY</contextType>
             <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+            <contextType>GLOBAL_PREPROCESSOR</contextType>
+            <contextType>CHANNEL_BATCH</contextType>
+            <contextType>GLOBAL_POSTPROCESSOR</contextType>
+            <contextType>DESTINATION_DISPATCHER</contextType>
+            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+            <contextType>GLOBAL_DEPLOY</contextType>
+            <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+            <contextType>CHANNEL_UNDEPLOY</contextType>
           </delegate>
         </contextSet>
         <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
           <type>FUNCTION</type>
           <code>/**
-	this function will do validation of messages.
+	this function will check nullity of parameters.
 
-	@param {String} arg1 - arg1 message attribute 
+	@param {String} arg1 - arg1 message attribute
 	@return {String} return true if message is valid else false
 */
-function isValid(arg1) {
-	if(arg1 != null &amp;&amp; arg1.length &gt; 0)
-		return true;
+function isNotNull(arg1) {
+	
+	if(arg1 != null &amp;&amp; arg1.length() &gt; 0)	
+		return true;	
 	else
 		return false;
+	
 }</code>
         </properties>
       </codeTemplate>
       <codeTemplate version="3.5.0">
         <id>7af604fe-fdc5-4b4d-a662-0af5c3bfbd30</id>
         <name>Function to create address </name>
-        <revision>1</revision>
+        <revision>7</revision>
         <lastModified>
-          <time>1506329685974</time>
-          <timezone>Etc/UTC</timezone>
+          <time>1508843165085</time>
+          <timezone>Asia/Kolkata</timezone>
         </lastModified>
         <contextSet>
           <delegate>
-            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
-            <contextType>GLOBAL_UNDEPLOY</contextType>
-            <contextType>GLOBAL_DEPLOY</contextType>
-            <contextType>CHANNEL_BATCH</contextType>
-            <contextType>GLOBAL_PREPROCESSOR</contextType>
-            <contextType>CHANNEL_UNDEPLOY</contextType>
-            <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-            <contextType>CHANNEL_ATTACHMENT</contextType>
-            <contextType>DESTINATION_DISPATCHER</contextType>
-            <contextType>CHANNEL_DEPLOY</contextType>
-            <contextType>CHANNEL_PREPROCESSOR</contextType>
             <contextType>SOURCE_RECEIVER</contextType>
+            <contextType>CHANNEL_PREPROCESSOR</contextType>
             <contextType>CHANNEL_POSTPROCESSOR</contextType>
-            <contextType>GLOBAL_POSTPROCESSOR</contextType>
+            <contextType>CHANNEL_ATTACHMENT</contextType>
+            <contextType>CHANNEL_DEPLOY</contextType>
+            <contextType>GLOBAL_UNDEPLOY</contextType>
             <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+            <contextType>GLOBAL_PREPROCESSOR</contextType>
+            <contextType>CHANNEL_BATCH</contextType>
+            <contextType>GLOBAL_POSTPROCESSOR</contextType>
+            <contextType>DESTINATION_DISPATCHER</contextType>
+            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+            <contextType>GLOBAL_DEPLOY</contextType>
+            <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+            <contextType>CHANNEL_UNDEPLOY</contextType>
           </delegate>
         </contextSet>
         <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -554,13 +555,11 @@ function isValid(arg1) {
 	@return {String} return Address object
 */
 function addressUtil(use,addressText,line,city,state,postalCode) {
-	var address ={
+	var address = {
 	 &quot;use&quot;: use,
       &quot;type&quot;: &quot;&quot;,
       &quot;text&quot;:  addressText,
-      &quot;line&quot;: [
-        line
-      ],
+      &quot;line&quot;:  line,
       &quot;city&quot;: city,      
       &quot;state&quot;: state,
       &quot;postalCode&quot;: postalCode    
@@ -572,28 +571,28 @@ function addressUtil(use,addressText,line,city,state,postalCode) {
       <codeTemplate version="3.5.0">
         <id>cd04c40d-3c68-43bb-83cc-6ca221fd0510</id>
         <name>Function to create message header</name>
-        <revision>2</revision>
+        <revision>7</revision>
         <lastModified>
-          <time>1506331720681</time>
-          <timezone>Etc/UTC</timezone>
+          <time>1507547241047</time>
+          <timezone>Asia/Kolkata</timezone>
         </lastModified>
         <contextSet>
           <delegate>
-            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
-            <contextType>GLOBAL_UNDEPLOY</contextType>
-            <contextType>GLOBAL_DEPLOY</contextType>
-            <contextType>CHANNEL_BATCH</contextType>
-            <contextType>GLOBAL_PREPROCESSOR</contextType>
-            <contextType>CHANNEL_UNDEPLOY</contextType>
-            <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-            <contextType>CHANNEL_ATTACHMENT</contextType>
-            <contextType>DESTINATION_DISPATCHER</contextType>
-            <contextType>CHANNEL_DEPLOY</contextType>
-            <contextType>CHANNEL_PREPROCESSOR</contextType>
             <contextType>SOURCE_RECEIVER</contextType>
+            <contextType>CHANNEL_PREPROCESSOR</contextType>
             <contextType>CHANNEL_POSTPROCESSOR</contextType>
-            <contextType>GLOBAL_POSTPROCESSOR</contextType>
+            <contextType>CHANNEL_ATTACHMENT</contextType>
+            <contextType>CHANNEL_DEPLOY</contextType>
+            <contextType>GLOBAL_UNDEPLOY</contextType>
             <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+            <contextType>GLOBAL_PREPROCESSOR</contextType>
+            <contextType>CHANNEL_BATCH</contextType>
+            <contextType>GLOBAL_POSTPROCESSOR</contextType>
+            <contextType>DESTINATION_DISPATCHER</contextType>
+            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+            <contextType>GLOBAL_DEPLOY</contextType>
+            <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+            <contextType>CHANNEL_UNDEPLOY</contextType>
           </delegate>
         </contextSet>
         <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -604,7 +603,7 @@ function addressUtil(use,addressText,line,city,state,postalCode) {
 	@param {String} uuid,source,Patient - unique message id, mssgae source, Patient object
 	@return {String} return messageHeader
 */
-function msgHeaderUtil(uuid,source,Patient) {
+function msgHeaderUtil(uuid,source,patient) {
 	var messageHeader = {};
 	messageHeader.resourceType = &quot;Pateint&quot;;
 	messageHeader.id = {
@@ -616,7 +615,12 @@ function msgHeaderUtil(uuid,source,Patient) {
 	messageHeader.destination = [{
 		name: &apos;Data-Management&apos;
 	}]
-	messageHeader.data = [Patient];
+	messageHeader.identifier = patient.identifier;
+	messageHeader.name = patient.name;
+	messageHeader.gender = patient.gender;
+	messageHeader.birthDate = patient.birthDate;
+	messageHeader.address = patient.address;
+	
 	return messageHeader;
 }</code>
         </properties>
@@ -624,28 +628,28 @@ function msgHeaderUtil(uuid,source,Patient) {
       <codeTemplate version="3.5.0">
         <id>3792b93f-ba55-4b5b-937b-12fcfb1f5065</id>
         <name>Function to create patient object</name>
-        <revision>1</revision>
+        <revision>11</revision>
         <lastModified>
-          <time>1506329686009</time>
-          <timezone>Etc/UTC</timezone>
+          <time>1508843138784</time>
+          <timezone>Asia/Kolkata</timezone>
         </lastModified>
         <contextSet>
           <delegate>
-            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
-            <contextType>GLOBAL_UNDEPLOY</contextType>
-            <contextType>GLOBAL_DEPLOY</contextType>
-            <contextType>CHANNEL_BATCH</contextType>
-            <contextType>GLOBAL_PREPROCESSOR</contextType>
-            <contextType>CHANNEL_UNDEPLOY</contextType>
-            <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-            <contextType>CHANNEL_ATTACHMENT</contextType>
-            <contextType>DESTINATION_DISPATCHER</contextType>
-            <contextType>CHANNEL_DEPLOY</contextType>
-            <contextType>CHANNEL_PREPROCESSOR</contextType>
             <contextType>SOURCE_RECEIVER</contextType>
+            <contextType>CHANNEL_PREPROCESSOR</contextType>
             <contextType>CHANNEL_POSTPROCESSOR</contextType>
-            <contextType>GLOBAL_POSTPROCESSOR</contextType>
+            <contextType>CHANNEL_ATTACHMENT</contextType>
+            <contextType>CHANNEL_DEPLOY</contextType>
+            <contextType>GLOBAL_UNDEPLOY</contextType>
             <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+            <contextType>GLOBAL_PREPROCESSOR</contextType>
+            <contextType>CHANNEL_BATCH</contextType>
+            <contextType>GLOBAL_POSTPROCESSOR</contextType>
+            <contextType>DESTINATION_DISPATCHER</contextType>
+            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+            <contextType>GLOBAL_DEPLOY</contextType>
+            <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+            <contextType>CHANNEL_UNDEPLOY</contextType>
           </delegate>
         </contextSet>
         <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -657,31 +661,81 @@ function msgHeaderUtil(uuid,source,Patient) {
 	@return {String} return Patient object
 */
 function patientUtil(gender,birthDate,ssn,address,lastName,firstName) {
-	var Patient = {};
-	Patient.resourceType = &quot;Patient&quot;;
-	Patient.gender = gender;
-	Patient.birthDate = birthDate.substr(0,4) + &quot;-&quot; + birthDate.substr(4,2) + &quot;-&quot; + birthDate.substr(6,2);
-	Patient.identifier = [{
+	var patient = {};
+	patient.resourceType = &quot;Patient&quot;;
+	patient.gender = gender;
+	patient.birthDate = birthDate;
+	patient.identifier = [{
     		&quot;use&quot;: &quot;usual&quot;,
      	&quot;type&quot;: {
        	&quot;coding&quot;: [
          		{
-           		&quot;system&quot;: &quot;http://hl7.org/fhir/sid/us-ssn&quot;,
+           		&quot;system&quot;: &quot;http://hl7.org/fhir/v2/0203&quot;,           		
            		&quot;code&quot;: &quot;SS&quot;
          		}
        	]
      },
+		&quot;system&quot;: &quot;http://hl7.org/fhir/sid/us-ssn&quot;,     
      	&quot;value&quot;: maskSSN(ssn)
    	}];
 	var humanName = {
 		family: lastName,
 		given: firstName,
-		text: [firstName + &apos; &apos; + lastName]
+		text: firstName + &apos; &apos; + lastName
 	};
-	Patient.name = [humanName];
-	Patient.address = [address];
-	return Patient;
+	patient.name = [humanName];
+	patient.address = [address];
+	return patient;
 }</code>
+        </properties>
+      </codeTemplate>
+      <codeTemplate version="3.5.0">
+        <id>f55693aa-4500-4426-9f4a-05a92ba35423</id>
+        <name>Function to send message to kafka</name>
+        <revision>1</revision>
+        <lastModified>
+          <time>1509087522442</time>
+          <timezone>Asia/Kolkata</timezone>
+        </lastModified>
+        <contextSet>
+          <delegate>
+            <contextType>SOURCE_RECEIVER</contextType>
+            <contextType>CHANNEL_PREPROCESSOR</contextType>
+            <contextType>CHANNEL_POSTPROCESSOR</contextType>
+            <contextType>GLOBAL_UNDEPLOY</contextType>
+            <contextType>CHANNEL_DEPLOY</contextType>
+            <contextType>CHANNEL_ATTACHMENT</contextType>
+            <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+            <contextType>GLOBAL_PREPROCESSOR</contextType>
+            <contextType>CHANNEL_BATCH</contextType>
+            <contextType>GLOBAL_POSTPROCESSOR</contextType>
+            <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+            <contextType>DESTINATION_DISPATCHER</contextType>
+            <contextType>GLOBAL_DEPLOY</contextType>
+            <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+            <contextType>CHANNEL_UNDEPLOY</contextType>
+          </delegate>
+        </contextSet>
+        <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+          <type>FUNCTION</type>
+          <code>/**
+	This method will send message to kafka 
+
+	@param {String} uudi - unique identifier of message bes sent to kafka
+	@param {String} msg	 - fhir message to
+	@return {String} return description
+*/
+	function kafkaAPI(uuid,msg) {
+		var kafkaConnect = globalMap.get(&apos;kafkaConnect&apos;);
+		logger.info(&quot;sending message to kafka...&quot;);
+		try{
+			kafkaConnect.send($(&apos;id&apos;),msg);
+			logger.info(&quot;message sent to kafka&quot;);
+		}
+		catch(err){
+			logger.error(err);
+		}
+	}</code>
         </properties>
       </codeTemplate>
     </codeTemplates>

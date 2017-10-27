@@ -4,9 +4,10 @@
 	@return {String} return Masked ssn
 */
 function maskSSN(ssn) {
-	if( ssn != null)
-	{
-		ssn = ssn.replace(/\d(?!\d{4})/g, "x");		
-	}
-	return ssn;
+	var length = ssn.length();
+
+    if (length != 9) 
+    	return '' ;
+    else
+    	return ssn.substring(0, length - 4) + "****";
 }
