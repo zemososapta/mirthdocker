@@ -1,0 +1,18 @@
+/**
+	This method will send message to kafka 
+
+	@param {String} uudi - unique identifier of message bes sent to kafka
+	@param {String} msg	 - fhir message to
+	@return {String} return description
+*/
+	function kafkaAPI(uuid,msg) {
+		var kafkaConnect = globalMap.get('kafkaConnect');
+		logger.info("sending message to kafka...");
+		try{
+			kafkaConnect.send($('id'),msg);
+			logger.info("message sent to kafka");
+		}
+		catch(err){
+			logger.error(err);
+		}
+	}

@@ -25,7 +25,7 @@ function patientUtil(gender,birthDate,ssn,address,lastName,firstName) {
 	var humanName = {
 		family: lastName,
 		given: firstName,
-		text: [firstName + ' ' + lastName]
+		text: firstName + ' ' + lastName
 	};
 	patient.name = [humanName];
 	patient.address = [address];

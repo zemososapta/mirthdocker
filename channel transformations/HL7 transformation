@@ -8,3 +8,7 @@ var patient = patientUtil($('gender'), $('birthDate'), $('ssn'), address, lastNa
 var messageHeader = msgHeaderUtil($('id'), $('source'), patient);
 
 msg = JSON.stringify(messageHeader);
+
+//send message to kafka
+
+kafkaAPI($('id'), msg);
