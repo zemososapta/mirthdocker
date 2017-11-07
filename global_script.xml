@@ -18,7 +18,7 @@ return;</string>
     <string>Deploy</string>
     <string>// This script executes once for each deploy or redeploy task
 // You only have access to the globalMap here to persist data
-var kafkaConnect = new Packages.org.zemoso.zededup.kafkaconnect.gateway.KafkaConnect();
+var kafkaConnect = new Packages.org.zemoso.zededup.kafkaproducer.gateway.KafkaConnect();
 globalMap.put(&apos;kafkaConnect&apos;,kafkaConnect);
 return;</string>
   </entry>

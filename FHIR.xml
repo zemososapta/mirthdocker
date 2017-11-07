@@ -3,7 +3,7 @@
   <nextMetaDataId>15</nextMetaDataId>
   <name>FHIR-Dedupe</name>
   <description></description>
-  <revision>6</revision>
+  <revision>99</revision>
   <sourceConnector version="3.5.0">
     <metaDataId>0</metaDataId>
     <name>sourceConnector</name>
@@ -461,9 +461,9 @@
       <supportsXML>true</supportsXML>
       <supportsJSON>true</supportsJSON>
       <systemInteractions>
-        <com.mirth.connect.connectors.fhir.shared.FhirRestfulInteraction>FHIR_HISTORY_SYSTEM</com.mirth.connect.connectors.fhir.shared.FhirRestfulInteraction>
         <com.mirth.connect.connectors.fhir.shared.FhirRestfulInteraction>FHIR_SEARCH_SYSTEM</com.mirth.connect.connectors.fhir.shared.FhirRestfulInteraction>
         <com.mirth.connect.connectors.fhir.shared.FhirRestfulInteraction>FHIR_TRANSACTION</com.mirth.connect.connectors.fhir.shared.FhirRestfulInteraction>
+        <com.mirth.connect.connectors.fhir.shared.FhirRestfulInteraction>FHIR_HISTORY_SYSTEM</com.mirth.connect.connectors.fhir.shared.FhirRestfulInteraction>
       </systemInteractions>
       <resourceProperties>
         <disabledInteractions/>
@@ -521,7 +521,7 @@
           <reattachAttachments>true</reattachAttachments>
         </destinationConnectorProperties>
         <driver>org.postgresql.Driver</driver>
-        <url>jdbc:postgresql://172.16.16.51:5432/zededup</url>
+        <url>jdbc:postgresql://172.16.16.44:5432/zededup</url>
         <username>zemoso</username>
         <password>zemoso123</password>
         <query>INSERT INTO mirth.message_audit (uuid, input_message, message_source, created_tstamp, created_by_id)
@@ -571,6 +571,15 @@ VALUES (${id},convert_to(${message.rawData}, &apos;UTF8&apos;),${source_name},cu
             <sequenceNumber>4</sequenceNumber>
             <variable>lastName</variable>
             <mapping>msg[&apos;name&apos;][0][&apos;family&apos;][0]</mapping>
+            <defaultValue></defaultValue>
+            <replacements/>
+            <scope>CHANNEL</scope>
+          </com.mirth.connect.plugins.mapper.MapperStep>
+          <com.mirth.connect.plugins.mapper.MapperStep>
+            <name>middleName</name>
+            <sequenceNumber>5</sequenceNumber>
+            <variable>middleName</variable>
+            <mapping>msg[&apos;name&apos;][0][&apos;given&apos;][1]</mapping>
             <defaultValue></defaultValue>
             <replacements/>
             <scope>CHANNEL</scope>
@@ -703,7 +712,7 @@ ICAgICAgfQogICAgfQogIF0KfQo=</inboundTemplate>
           <reattachAttachments>true</reattachAttachments>
         </destinationConnectorProperties>
         <driver>org.postgresql.Driver</driver>
-        <url>jdbc:postgresql://172.16.16.51:5432/zededup</url>
+        <url>jdbc:postgresql://172.16.16.44:5432/zededup</url>
         <username>zemoso</username>
         <password>zemoso123</password>
         <query>UPDATE mirth.message_audit
@@ -823,9 +832,10 @@ else
 	
 var lastName = makeUpper($(&apos;lastName&apos;).toLowerCase());
 var firstName = makeUpper($(&apos;firstName&apos;).toLowerCase());
+var middleName = makeUpper($(&apos;middleName&apos;).toLowerCase());
 var addressText = $(&apos;line&apos;)+&apos; ,&apos;+$(&apos;city&apos;)+&apos;, &apos;+$(&apos;state&apos;)+&apos;, &apos;+$(&apos;zip&apos;);
 var address = addressUtil($(&apos;use&apos;), addressText, $(&apos;line&apos;), $(&apos;city&apos;), $(&apos;state&apos;), $(&apos;zip&apos;));
-var patient = patientUtil($(&apos;gender&apos;), $(&apos;birthDate&apos;), ssn, address, lastName, firstName);
+var patient = patientUtil($(&apos;gender&apos;), $(&apos;birthDate&apos;), ssn, address, lastName, firstName, middleName);
 var messageHeader = msgHeaderUtil($(&apos;id&apos;), $(&apos;sourceName&apos;), patient);
 
 msg = JSON.stringify(messageHeader);
@@ -959,7 +969,7 @@ return;</undeployScript>
     <metadata>
       <enabled>true</enabled>
       <lastModified>
-        <time>1509087786470</time>
+        <time>1510042683207</time>
         <timezone>Asia/Kolkata</timezone>
       </lastModified>
       <pruningSettings>
@@ -970,9 +980,9 @@ return;</undeployScript>
       <codeTemplateLibrary version="3.5.0">
         <id>8a9b87fb-37b7-4d28-a7a6-7b7512202bad</id>
         <name>util library</name>
-        <revision>15</revision>
+        <revision>17</revision>
         <lastModified>
-          <time>1509087522382</time>
+          <time>1509538352652</time>
           <timezone>Asia/Kolkata</timezone>
         </lastModified>
         <description></description>
@@ -986,6 +996,129 @@ return;</undeployScript>
         </disabledChannelIds>
         <codeTemplates>
           <codeTemplate version="3.5.0">
+            <id>37285b41-b499-450c-8835-337b5cb68f6b</id>
+            <name>Function for making first letter upper case</name>
+            <revision>8</revision>
+            <lastModified>
+              <time>1510042878540</time>
+              <timezone>Asia/Kolkata</timezone>
+            </lastModified>
+            <contextSet>
+              <delegate>
+                <contextType>GLOBAL_POSTPROCESSOR</contextType>
+                <contextType>GLOBAL_UNDEPLOY</contextType>
+                <contextType>CHANNEL_POSTPROCESSOR</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>CHANNEL_ATTACHMENT</contextType>
+                <contextType>CHANNEL_DEPLOY</contextType>
+                <contextType>GLOBAL_PREPROCESSOR</contextType>
+                <contextType>GLOBAL_DEPLOY</contextType>
+                <contextType>CHANNEL_PREPROCESSOR</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>CHANNEL_BATCH</contextType>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>CHANNEL_UNDEPLOY</contextType>
+              </delegate>
+            </contextSet>
+            <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+              <type>FUNCTION</type>
+              <code>/**
+	This function make the first letter of a string capital and rest lower.
+
+	@param {String} name - First or Last name
+	@return {String} return First or Last name where first letter is capital
+*/
+function makeUpper(name) {	    
+		if(name != null &amp;&amp; name.length() &gt; 0)
+	    		return name.substring(0, 1).toUpperCase() + name.substring(1);
+	    	else
+	    		return &apos;&apos;;
+}</code>
+            </properties>
+          </codeTemplate>
+          <codeTemplate version="3.5.0">
+            <id>977641cf-8fac-4937-a7ba-a1f46db0c6b9</id>
+            <name>Function for masking SSN</name>
+            <revision>12</revision>
+            <lastModified>
+              <time>1509540151598</time>
+              <timezone>Asia/Kolkata</timezone>
+            </lastModified>
+            <contextSet>
+              <delegate>
+                <contextType>GLOBAL_POSTPROCESSOR</contextType>
+                <contextType>GLOBAL_UNDEPLOY</contextType>
+                <contextType>CHANNEL_POSTPROCESSOR</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
+                <contextType>CHANNEL_ATTACHMENT</contextType>
+                <contextType>CHANNEL_DEPLOY</contextType>
+                <contextType>GLOBAL_PREPROCESSOR</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>GLOBAL_DEPLOY</contextType>
+                <contextType>CHANNEL_PREPROCESSOR</contextType>
+                <contextType>CHANNEL_BATCH</contextType>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>CHANNEL_UNDEPLOY</contextType>
+              </delegate>
+            </contextSet>
+            <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
+              <type>FUNCTION</type>
+              <code>/**
+	This function mask last four digit of ssn
+	@param {String} ssn - Nine digit social security number
+	@return {String} return Masked ssn
+*/
+function maskSSN(ssn) {	
+	var length = ssn.length();
+	switch(length) {
+    case 0 :
+        return &apos;&apos; ;
+        break;
+    case 9 :
+    		for(var i = 0 ; i&lt;9 ; i++){
+    				if (!ssn.match(&quot;^[0-9]*$&quot;)) {
+    					logger.error(&quot;SSN: All are not numbers&quot;);
+    					return &apos;XXXXX0000&apos;;
+    				}
+    				else if ( ssn.match(&quot;^9\\d{8}$&quot;)){
+    					logger.error(&quot;SSN: number belongs to 900 series&quot;);
+    					return &apos;XXXXX0000&apos;; 
+    				}    				
+    				else if(ssn.match(&quot;^666\\d{6}$&quot;)){
+    					logger.error(&quot;SSN: number starts with 666&quot;);
+    					return &apos;XXXXX0000&apos;;    					
+    				}
+    				else if(ssn.match(&quot;\\d{5}0{4}$&quot;)){
+    					logger.error(&quot;SSN: number ends with 0000&quot;);
+    					return &apos;XXXXX0000&apos;;    					
+    				}
+    				else if(ssn.matches(&quot;([0-9])\\1$&quot;)){
+    					logger.error(&quot;SSN: All numbers are same&quot;);
+    					return &apos;XXXXX0000&apos;;
+    				}
+    				//else if(isConsecutive(ssn)){
+    				//	logger.error(&quot;SSN: Contains consecutive&quot;);
+    				//	return &apos;XXXXX0000&apos;;
+    				//}
+    				else {
+    					logger.info(&quot;SSN: Valid&quot;);
+    					return ssn.substring(0, length - 4) + &quot;XXXXX&quot;;
+    				}
+    				
+    		}        
+        break;
+    default:
+        return &apos;XXXXX0000&apos;;
+}
+
+}</code>
+            </properties>
+          </codeTemplate>
+          <codeTemplate version="3.5.0">
             <id>37e7e63e-f39a-40e3-a835-df95d07a1286</id>
             <name>Function to check param is null</name>
             <revision>11</revision>
@@ -995,21 +1128,21 @@ return;</undeployScript>
             </lastModified>
             <contextSet>
               <delegate>
-                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                <contextType>GLOBAL_POSTPROCESSOR</contextType>
+                <contextType>GLOBAL_UNDEPLOY</contextType>
+                <contextType>CHANNEL_POSTPROCESSOR</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
                 <contextType>CHANNEL_ATTACHMENT</contextType>
+                <contextType>CHANNEL_DEPLOY</contextType>
                 <contextType>GLOBAL_PREPROCESSOR</contextType>
                 <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                <contextType>GLOBAL_POSTPROCESSOR</contextType>
                 <contextType>GLOBAL_DEPLOY</contextType>
-                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
-                <contextType>CHANNEL_POSTPROCESSOR</contextType>
-                <contextType>DESTINATION_DISPATCHER</contextType>
-                <contextType>CHANNEL_DEPLOY</contextType>
-                <contextType>CHANNEL_BATCH</contextType>
-                <contextType>CHANNEL_UNDEPLOY</contextType>
                 <contextType>CHANNEL_PREPROCESSOR</contextType>
-                <contextType>GLOBAL_UNDEPLOY</contextType>
+                <contextType>CHANNEL_BATCH</contextType>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
                 <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>CHANNEL_UNDEPLOY</contextType>
               </delegate>
             </contextSet>
             <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -1031,50 +1164,6 @@ function isNotNull(arg1) {
             </properties>
           </codeTemplate>
           <codeTemplate version="3.5.0">
-            <id>977641cf-8fac-4937-a7ba-a1f46db0c6b9</id>
-            <name>Function for masking SSN</name>
-            <revision>7</revision>
-            <lastModified>
-              <time>1507547240831</time>
-              <timezone>Asia/Kolkata</timezone>
-            </lastModified>
-            <contextSet>
-              <delegate>
-                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
-                <contextType>CHANNEL_ATTACHMENT</contextType>
-                <contextType>GLOBAL_PREPROCESSOR</contextType>
-                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                <contextType>GLOBAL_POSTPROCESSOR</contextType>
-                <contextType>GLOBAL_DEPLOY</contextType>
-                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
-                <contextType>CHANNEL_POSTPROCESSOR</contextType>
-                <contextType>DESTINATION_DISPATCHER</contextType>
-                <contextType>CHANNEL_DEPLOY</contextType>
-                <contextType>CHANNEL_BATCH</contextType>
-                <contextType>CHANNEL_UNDEPLOY</contextType>
-                <contextType>CHANNEL_PREPROCESSOR</contextType>
-                <contextType>GLOBAL_UNDEPLOY</contextType>
-                <contextType>SOURCE_RECEIVER</contextType>
-              </delegate>
-            </contextSet>
-            <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
-              <type>FUNCTION</type>
-              <code>/**
-	This function mask last four digit of ssn
-	@param {String} ssn - Nine digit social security number
-	@return {String} return Masked ssn
-*/
-function maskSSN(ssn) {
-	var length = ssn.length();
-
-    if (length != 9) 
-    	return &apos;&apos; ;
-    else
-    	return ssn.substring(0, length - 4) + &quot;****&quot;;
-}</code>
-            </properties>
-          </codeTemplate>
-          <codeTemplate version="3.5.0">
             <id>7af604fe-fdc5-4b4d-a662-0af5c3bfbd30</id>
             <name>Function to create address </name>
             <revision>7</revision>
@@ -1084,21 +1173,21 @@ function maskSSN(ssn) {
             </lastModified>
             <contextSet>
               <delegate>
-                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                <contextType>GLOBAL_POSTPROCESSOR</contextType>
+                <contextType>GLOBAL_UNDEPLOY</contextType>
+                <contextType>CHANNEL_POSTPROCESSOR</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
                 <contextType>CHANNEL_ATTACHMENT</contextType>
+                <contextType>CHANNEL_DEPLOY</contextType>
                 <contextType>GLOBAL_PREPROCESSOR</contextType>
                 <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                <contextType>GLOBAL_POSTPROCESSOR</contextType>
                 <contextType>GLOBAL_DEPLOY</contextType>
-                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
-                <contextType>CHANNEL_POSTPROCESSOR</contextType>
-                <contextType>DESTINATION_DISPATCHER</contextType>
-                <contextType>CHANNEL_DEPLOY</contextType>
-                <contextType>CHANNEL_BATCH</contextType>
-                <contextType>CHANNEL_UNDEPLOY</contextType>
                 <contextType>CHANNEL_PREPROCESSOR</contextType>
-                <contextType>GLOBAL_UNDEPLOY</contextType>
+                <contextType>CHANNEL_BATCH</contextType>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
                 <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>CHANNEL_UNDEPLOY</contextType>
               </delegate>
             </contextSet>
             <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -1133,21 +1222,21 @@ function addressUtil(use,addressText,line,city,state,postalCode) {
             </lastModified>
             <contextSet>
               <delegate>
-                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                <contextType>GLOBAL_POSTPROCESSOR</contextType>
+                <contextType>GLOBAL_UNDEPLOY</contextType>
+                <contextType>CHANNEL_POSTPROCESSOR</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
                 <contextType>CHANNEL_ATTACHMENT</contextType>
+                <contextType>CHANNEL_DEPLOY</contextType>
                 <contextType>GLOBAL_PREPROCESSOR</contextType>
                 <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                <contextType>GLOBAL_POSTPROCESSOR</contextType>
                 <contextType>GLOBAL_DEPLOY</contextType>
-                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
-                <contextType>CHANNEL_POSTPROCESSOR</contextType>
-                <contextType>DESTINATION_DISPATCHER</contextType>
-                <contextType>CHANNEL_DEPLOY</contextType>
-                <contextType>CHANNEL_BATCH</contextType>
-                <contextType>CHANNEL_UNDEPLOY</contextType>
                 <contextType>CHANNEL_PREPROCESSOR</contextType>
-                <contextType>GLOBAL_UNDEPLOY</contextType>
+                <contextType>CHANNEL_BATCH</contextType>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
                 <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>CHANNEL_UNDEPLOY</contextType>
               </delegate>
             </contextSet>
             <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -1183,28 +1272,28 @@ function msgHeaderUtil(uuid,source,patient) {
           <codeTemplate version="3.5.0">
             <id>3792b93f-ba55-4b5b-937b-12fcfb1f5065</id>
             <name>Function to create patient object</name>
-            <revision>11</revision>
+            <revision>15</revision>
             <lastModified>
-              <time>1508843138784</time>
+              <time>1509536597605</time>
               <timezone>Asia/Kolkata</timezone>
             </lastModified>
             <contextSet>
               <delegate>
-                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                <contextType>GLOBAL_POSTPROCESSOR</contextType>
+                <contextType>GLOBAL_UNDEPLOY</contextType>
+                <contextType>CHANNEL_POSTPROCESSOR</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
                 <contextType>CHANNEL_ATTACHMENT</contextType>
+                <contextType>CHANNEL_DEPLOY</contextType>
                 <contextType>GLOBAL_PREPROCESSOR</contextType>
                 <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                <contextType>GLOBAL_POSTPROCESSOR</contextType>
                 <contextType>GLOBAL_DEPLOY</contextType>
-                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
-                <contextType>CHANNEL_POSTPROCESSOR</contextType>
-                <contextType>DESTINATION_DISPATCHER</contextType>
-                <contextType>CHANNEL_DEPLOY</contextType>
-                <contextType>CHANNEL_BATCH</contextType>
-                <contextType>CHANNEL_UNDEPLOY</contextType>
                 <contextType>CHANNEL_PREPROCESSOR</contextType>
-                <contextType>GLOBAL_UNDEPLOY</contextType>
+                <contextType>CHANNEL_BATCH</contextType>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
                 <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>CHANNEL_UNDEPLOY</contextType>
               </delegate>
             </contextSet>
             <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
@@ -1215,7 +1304,7 @@ function msgHeaderUtil(uuid,source,patient) {
 	@param {String} gender, birthDate, identifier, humanName description
 	@return {String} return Patient object
 */
-function patientUtil(gender,birthDate,ssn,address,lastName,firstName) {
+function patientUtil(gender,birthDate,ssn,address,lastName,firstName,middleName) {
 	var patient = {};
 	patient.resourceType = &quot;Patient&quot;;
 	patient.gender = gender;
@@ -1233,10 +1322,10 @@ function patientUtil(gender,birthDate,ssn,address,lastName,firstName) {
 		&quot;system&quot;: &quot;http://hl7.org/fhir/sid/us-ssn&quot;,     
      	&quot;value&quot;: maskSSN(ssn)
    	}];
+   	var name = [firstName, middleName];
 	var humanName = {
-		family: lastName,
-		given: firstName,
-		text: firstName + &apos; &apos; + lastName
+		family: [lastName],
+		given: name		
 	};
 	patient.name = [humanName];
 	patient.address = [address];
@@ -1245,42 +1334,52 @@ function patientUtil(gender,birthDate,ssn,address,lastName,firstName) {
             </properties>
           </codeTemplate>
           <codeTemplate version="3.5.0">
-            <id>37285b41-b499-450c-8835-337b5cb68f6b</id>
-            <name>Function for making first letter upper case</name>
+            <id>ca7c3886-9683-471c-a781-01c6ac403376</id>
+            <name>Function to find if the string have consecutive numbers</name>
             <revision>6</revision>
             <lastModified>
-              <time>1507547241205</time>
+              <time>1509539335044</time>
               <timezone>Asia/Kolkata</timezone>
             </lastModified>
             <contextSet>
               <delegate>
-                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
-                <contextType>CHANNEL_ATTACHMENT</contextType>
-                <contextType>GLOBAL_PREPROCESSOR</contextType>
-                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                <contextType>GLOBAL_POSTPROCESSOR</contextType>
-                <contextType>GLOBAL_DEPLOY</contextType>
-                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
-                <contextType>CHANNEL_POSTPROCESSOR</contextType>
                 <contextType>DESTINATION_DISPATCHER</contextType>
-                <contextType>CHANNEL_DEPLOY</contextType>
-                <contextType>CHANNEL_BATCH</contextType>
-                <contextType>CHANNEL_UNDEPLOY</contextType>
-                <contextType>CHANNEL_PREPROCESSOR</contextType>
-                <contextType>GLOBAL_UNDEPLOY</contextType>
+                <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
                 <contextType>SOURCE_RECEIVER</contextType>
               </delegate>
             </contextSet>
             <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
               <type>FUNCTION</type>
               <code>/**
-	This function make the first letter of a string capital and rest lower.
+	Method is created to find if the string is containing consecutive numbers.
 
-	@param {String} name - First or Last name
-	@return {String} return First or Last name where first letter is capital
+	@param {String} arg1 - arg the string to be tested
+	@return {String} return true or false 
 */
-function makeUpper(name) {	    
-	    return name.substring(0, 1).toUpperCase() + name.substring(1);
+function isConsecutive(arg) {
+	var num = [];
+	for(var i=0; i&lt;arg.length(); i++) 
+		{ 
+			logger.info(&quot;arg is &quot;+ arg[i]);
+			num[i] = parseInt(arg[i], 10); 
+		} 
+	logger.info(&quot;num is &quot;+ num);
+	num.sort();
+	logger.info(&quot;num is &quot;+ num);
+	var prev = num[0];
+	var count = 0;
+	for(var j = 1; j&lt;arg.length; j++){
+		curr = arg[j];
+		if(curr-prev == 1)
+			count++;
+	}
+	if(count == arg.length())
+		return true;
+	else
+		return false;
+	
 }</code>
             </properties>
           </codeTemplate>
@@ -1294,21 +1393,21 @@ function makeUpper(name) {
             </lastModified>
             <contextSet>
               <delegate>
-                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
+                <contextType>GLOBAL_POSTPROCESSOR</contextType>
+                <contextType>GLOBAL_UNDEPLOY</contextType>
+                <contextType>CHANNEL_POSTPROCESSOR</contextType>
+                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
+                <contextType>DESTINATION_DISPATCHER</contextType>
                 <contextType>CHANNEL_ATTACHMENT</contextType>
+                <contextType>CHANNEL_DEPLOY</contextType>
                 <contextType>GLOBAL_PREPROCESSOR</contextType>
                 <contextType>SOURCE_FILTER_TRANSFORMER</contextType>
-                <contextType>GLOBAL_POSTPROCESSOR</contextType>
                 <contextType>GLOBAL_DEPLOY</contextType>
-                <contextType>DESTINATION_FILTER_TRANSFORMER</contextType>
-                <contextType>CHANNEL_POSTPROCESSOR</contextType>
-                <contextType>DESTINATION_DISPATCHER</contextType>
-                <contextType>CHANNEL_DEPLOY</contextType>
-                <contextType>CHANNEL_BATCH</contextType>
-                <contextType>CHANNEL_UNDEPLOY</contextType>
                 <contextType>CHANNEL_PREPROCESSOR</contextType>
-                <contextType>GLOBAL_UNDEPLOY</contextType>
+                <contextType>CHANNEL_BATCH</contextType>
+                <contextType>DESTINATION_RESPONSE_TRANSFORMER</contextType>
                 <contextType>SOURCE_RECEIVER</contextType>
+                <contextType>CHANNEL_UNDEPLOY</contextType>
               </delegate>
             </contextSet>
             <properties class="com.mirth.connect.model.codetemplates.BasicCodeTemplateProperties">
